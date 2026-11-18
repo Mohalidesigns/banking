@@ -1,0 +1,26 @@
+/**
+ * Central Reset Demo Data action (Spec §17.4). Restores every mutable
+ * prototype-session repository to the initial fictional dataset. Only
+ * in-memory demo state is touched — nothing real is stored anywhere.
+ */
+import { examinationRepository } from '@/mocks/repositories/examinationRepository'
+import { evidenceRepository } from '@/mocks/repositories/evidenceRepository'
+import { findingRepository } from '@/mocks/repositories/findingRepository'
+import { libraryRepository } from '@/mocks/repositories/libraryRepository'
+import { notificationRepository } from '@/mocks/repositories/notificationRepository'
+import { planRepository } from '@/mocks/repositories/planRepository'
+import { remediationRepository } from '@/mocks/repositories/remediationRepository'
+import { riskAssessmentRepository } from '@/mocks/repositories/riskAssessmentRepository'
+import { workQueueRepository } from '@/mocks/repositories/workQueueRepository'
+
+export function resetAllDemoData(): void {
+  examinationRepository.reset()
+  evidenceRepository.reset()
+  findingRepository.reset()
+  libraryRepository.reset()
+  planRepository.reset()
+  remediationRepository.reset()
+  riskAssessmentRepository.reset()
+  workQueueRepository.reset()
+  notificationRepository.reset()
+}

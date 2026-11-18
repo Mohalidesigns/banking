@@ -1,20 +1,22 @@
 /**
- * Mock supervision repository (Spec §18.3). Phase 2A consumes read-only
- * slices for dashboards, profile tabs and queue counts; Phase 2B extends it
- * with examination/finding/remediation workflow mutations on the same data.
+ * Mock supervision repository (Spec §18.3). Phase 2A consumed read-only
+ * slices; Phase 2B delegates examinations, findings, corrective actions,
+ * risk assessments and plans to the mutable workflow repositories so every
+ * 2A screen (Command Centre, profile tabs, queue counts) stays live with
+ * 2B workflow mutations. Returns, alerts, enforcement and watchlist remain
+ * fixture-backed (their workflows land in Phases 3/5).
  */
 import {
-  CORRECTIVE_ACTIONS,
   EARLY_WARNING_ALERTS,
   ENFORCEMENT_CASES,
-  EXAMINATIONS,
-  FINDINGS,
-  RISK_ASSESSMENTS,
   RETURN_SUBMISSIONS,
-  SUPERVISORY_PLANS,
   WATCHLIST,
-  isOpenFinding,
 } from '@/mocks/fixtures/supervision.fixture'
+import { examinationRepository } from '@/mocks/repositories/examinationRepository'
+import { findingRepository } from '@/mocks/repositories/findingRepository'
+import { planRepository } from '@/mocks/repositories/planRepository'
+import { remediationRepository } from '@/mocks/repositories/remediationRepository'
+import { riskAssessmentRepository } from '@/mocks/repositories/riskAssessmentRepository'
 import type {
   CorrectiveAction,
   EarlyWarningAlert,
@@ -30,43 +32,48 @@ import type {
 const ACTIVE_EXAM_STATUSES = new Set(['In Progress', 'Fieldwork', 'Reporting'])
 const ACTIVE_FINDING_STATUSES = new Set(['Draft', 'Under Review', 'Confirmed', 'Remediation In Progress', 'Escalated'])
 
+export const isOpenFindingRecord = (f: SupervisoryFinding): boolean => f.status !== 'Closed'
+
 export const supervisionRepository = {
   examinations(): Examination[] {
-    return EXAMINATIONS.map((e) => ({ ...e }))
+    return examinationRepository.list()
   },
 
   examinationsByInstitution(institutionId: string): Examination[] {
-    return EXAMINATIONS.filter((e) => e.institutionId === institutionId)
-      .map((e) => ({ ...e }))
+    return examinationRepository
+      .list()
+      .filter((e) => e.institutionId === institutionId)
       .sort((a, b) => b.startDate.localeCompare(a.startDate))
   },
 
   examinationsInProgress(): Examination[] {
-    return EXAMINATIONS.filter((e) => ACTIVE_EXAM_STATUSES.has(e.status))
+    return examinationRepository.list().filter((e) => ACTIVE_EXAM_STATUSES.has(e.status))
   },
 
   findings(): SupervisoryFinding[] {
-    return FINDINGS.map((f) => ({ ...f }))
+    return findingRepository.base()
   },
 
   findingsByInstitution(institutionId: string): SupervisoryFinding[] {
-    return FINDINGS.filter((f) => f.institutionId === institutionId)
-      .map((f) => ({ ...f }))
+    return findingRepository
+      .base()
+      .filter((f) => f.institutionId === institutionId)
       .sort((a, b) => b.raisedDate.localeCompare(a.raisedDate))
   },
 
   openFindings(): SupervisoryFinding[] {
-    return FINDINGS.filter(isOpenFinding)
+    return findingRepository.base().filter(isOpenFindingRecord)
   },
 
   highPriorityFindings(): SupervisoryFinding[] {
-    return FINDINGS.filter(
-      (f) => isOpenFinding(f) && (f.riskRating === 'Critical' || f.riskRating === 'High'),
-    ).sort((a, b) => a.dueDate.localeCompare(b.dueDate))
+    return findingRepository
+      .base()
+      .filter((f) => isOpenFindingRecord(f) && (f.riskRating === 'Critical' || f.riskRating === 'High'))
+      .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
   },
 
   openFindingsByStatus(): SupervisoryFinding[] {
-    return FINDINGS.filter((f) => ACTIVE_FINDING_STATUSES.has(f.status))
+    return findingRepository.base().filter((f) => ACTIVE_FINDING_STATUSES.has(f.status))
   },
 
   returns(): ReturnSubmission[] {
@@ -96,23 +103,23 @@ export const supervisionRepository = {
   },
 
   riskAssessments(): RiskAssessment[] {
-    return RISK_ASSESSMENTS.map((r) => ({ ...r }))
+    return riskAssessmentRepository.base()
   },
 
   riskAssessmentsByInstitution(institutionId: string): RiskAssessment[] {
-    return RISK_ASSESSMENTS.filter((r) => r.institutionId === institutionId)
+    return riskAssessmentRepository.base().filter((r) => r.institutionId === institutionId)
   },
 
   plans(): SupervisoryPlan[] {
-    return SUPERVISORY_PLANS.map((p) => ({ ...p }))
+    return planRepository.base()
   },
 
   correctiveActions(): CorrectiveAction[] {
-    return CORRECTIVE_ACTIONS.map((c) => ({ ...c }))
+    return remediationRepository.base()
   },
 
   correctiveActionsByInstitution(institutionId: string): CorrectiveAction[] {
-    return CORRECTIVE_ACTIONS.filter((c) => c.institutionId === institutionId)
+    return remediationRepository.base().filter((c) => c.institutionId === institutionId)
   },
 
   enforcementCases(): EnforcementCase[] {

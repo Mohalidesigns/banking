@@ -1,4 +1,5 @@
 import { notificationRepository } from '@/mocks/repositories/notificationRepository'
+import { resetAllDemoData } from '@/mocks/repositories/demoDataReset'
 import type { NotificationService } from '@/services/contracts/NotificationService'
 
 const LATENCY_MS = 120
@@ -42,7 +43,10 @@ export class MockNotificationService implements NotificationService {
 
   async resetDemoData() {
     await latency()
-    notificationRepository.reset()
+    // Spec §17.4 Reset Demo Data: restores every mutable prototype-session
+    // repository (examinations, findings, evidence, plans, assessments,
+    // remediation, work queue, notifications) to the initial demo dataset.
+    resetAllDemoData()
     return notificationRepository.list()
   }
 }

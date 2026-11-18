@@ -1,4 +1,12 @@
 /** Shared data contracts (Spec §18.4). */
+import type { DemoRole } from '@/types/auth'
+
+/** Who is performing a workflow mutation — drives demo role gating (§19). */
+export interface ActorContext {
+  actorId: string
+  actorName: string
+  actorRole: DemoRole
+}
 
 export interface Paginated<T> {
   items: T[]

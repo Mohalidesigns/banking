@@ -26,9 +26,72 @@ const ALL_ACTIONS: DemoAction[] = [
   'reassign-work',
   'add-note',
   'reset-demo-data',
+  'create-examination',
+  'record-fieldwork',
+  'review-procedures',
+  'approve-results',
+  'request-information',
+  'manage-library',
+  'upload-evidence',
+  'review-evidence',
+  'raise-finding',
+  'review-finding',
+  'approve-finding',
+  'respond-finding',
+  'manage-remediation',
+  'validate-remediation',
+  'close-remediation',
+  'submit-assessment',
+  'approve-assessment',
+  'manage-plans',
+  'approve-plans',
 ]
 
 const WORK_ACTIONS: DemoAction[] = ['view', 'manage-work-queue', 'add-note']
+
+/** Fieldwork contribution (execute procedures, capture evidence, raise findings). */
+const FIELDWORK_ACTIONS: DemoAction[] = [
+  'record-fieldwork',
+  'upload-evidence',
+  'raise-finding',
+  'request-information',
+]
+
+/** Review tier: may review but never approve (Spec §19 canApprove = false). */
+const REVIEW_ACTIONS: DemoAction[] = [
+  'create-examination',
+  'record-fieldwork',
+  'review-procedures',
+  'request-information',
+  'manage-library',
+  'upload-evidence',
+  'review-evidence',
+  'raise-finding',
+  'review-finding',
+  'manage-remediation',
+  'validate-remediation',
+  'submit-assessment',
+]
+
+/** Approval tier: team lead and above may approve results/findings/closure. */
+const APPROVAL_ACTIONS: DemoAction[] = [
+  'create-examination',
+  'record-fieldwork',
+  'review-procedures',
+  'approve-results',
+  'request-information',
+  'manage-library',
+  'upload-evidence',
+  'review-evidence',
+  'raise-finding',
+  'review-finding',
+  'approve-finding',
+  'manage-remediation',
+  'validate-remediation',
+  'close-remediation',
+  'submit-assessment',
+  'manage-plans',
+]
 
 type ProfileSeed = Omit<RolePermissionProfile, 'role' | 'label'>
 
@@ -90,6 +153,9 @@ const seeds: Record<DemoRole, ProfileSeed> = {
       'manage-work-queue',
       'reassign-work',
       'add-note',
+      ...APPROVAL_ACTIONS,
+      'approve-assessment',
+      'approve-plans',
     ],
     scope: 'department',
     canApprove: true,
@@ -115,6 +181,7 @@ const seeds: Record<DemoRole, ProfileSeed> = {
       'manage-work-queue',
       'reassign-work',
       'add-note',
+      ...APPROVAL_ACTIONS,
     ],
     scope: 'team',
     canApprove: true,
@@ -124,7 +191,7 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'principal-examiner': {
     portal: false,
     visibleNavSections: ['overview', 'institutions', 'examinations'],
-    allowedActions: ['view', 'export', 'manage-work-queue', 'reassign-work', 'add-note'],
+    allowedActions: ['view', 'export', 'manage-work-queue', 'reassign-work', 'add-note', ...REVIEW_ACTIONS],
     scope: 'team',
     canApprove: false,
     canExport: true,
@@ -133,7 +200,7 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   examiner: {
     portal: false,
     visibleNavSections: ['overview', 'examinations'],
-    allowedActions: WORK_ACTIONS,
+    allowedActions: [...WORK_ACTIONS, ...FIELDWORK_ACTIONS],
     scope: 'team',
     canApprove: false,
     canExport: false,
@@ -151,7 +218,7 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'risk-analyst': {
     portal: false,
     visibleNavSections: ['overview', 'surveillance', 'institutions'],
-    allowedActions: ['view', 'export', 'add-note'],
+    allowedActions: ['view', 'export', 'add-note', 'submit-assessment', 'upload-evidence'],
     scope: 'portfolio',
     canApprove: false,
     canExport: true,
@@ -160,7 +227,7 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'cybersecurity-specialist': {
     portal: false,
     visibleNavSections: ['overview', 'examinations', 'specialist'],
-    allowedActions: ['view', 'export', 'add-note'],
+    allowedActions: ['view', 'export', 'add-note', 'record-fieldwork', 'upload-evidence', 'raise-finding'],
     scope: 'authority',
     canApprove: false,
     canExport: true,
@@ -169,7 +236,7 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'aml-specialist': {
     portal: false,
     visibleNavSections: ['overview', 'examinations', 'specialist'],
-    allowedActions: ['view', 'export', 'add-note'],
+    allowedActions: ['view', 'export', 'add-note', 'record-fieldwork', 'upload-evidence', 'raise-finding'],
     scope: 'authority',
     canApprove: false,
     canExport: true,
@@ -178,7 +245,7 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'legal-enforcement-officer': {
     portal: false,
     visibleNavSections: ['overview', 'institutions', 'action', 'regulatory'],
-    allowedActions: ['view', 'export', 'add-note'],
+    allowedActions: ['view', 'export', 'add-note', 'review-finding', 'manage-remediation'],
     scope: 'authority',
     canApprove: false,
     canExport: true,
@@ -214,11 +281,11 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   },
   'institution-administrator': {
     portal: true,
-    allowedActions: ['view', 'add-note'],
+    allowedActions: ['view', 'add-note', 'respond-finding', 'manage-remediation', 'upload-evidence'],
     scope: 'institution',
     canApprove: false,
     canExport: true,
-    restrictedAreas: ['All regulator supervision screens'],
+    restrictedAreas: ['All regulator supervision screens', 'Finding approval', 'Remediation closure'],
   },
   'institution-submitter': {
     portal: true,
@@ -230,11 +297,11 @@ const seeds: Record<DemoRole, ProfileSeed> = {
       '/portal/messages',
       '/portal/documents',
     ],
-    allowedActions: ['view'],
+    allowedActions: ['view', 'respond-finding', 'upload-evidence'],
     scope: 'institution',
     canApprove: false,
     canExport: false,
-    restrictedAreas: ['Organisation user administration'],
+    restrictedAreas: ['Organisation user administration', 'Finding approval', 'Remediation closure'],
   },
   'institution-viewer': {
     portal: true,

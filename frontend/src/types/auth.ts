@@ -77,7 +77,8 @@ export const INSTITUTION_ROLES: DemoRole[] = [
 
 export const isInstitutionRole = (role: DemoRole): boolean => INSTITUTION_ROLES.includes(role)
 
-/** Action keys gated per role in the demo (Spec §19 "Allowed page actions"). */
+/** Action keys gated per role in the demo (Spec §19 "Allowed page actions").
+ *  Phase 2B adds the examination/finding/remediation workflow actions. */
 export type DemoAction =
   | 'view'
   | 'create-institution'
@@ -90,6 +91,28 @@ export type DemoAction =
   | 'reassign-work'
   | 'add-note'
   | 'reset-demo-data'
+  // Examination operations (Spec §7)
+  | 'create-examination'
+  | 'record-fieldwork'
+  | 'review-procedures'
+  | 'approve-results'
+  | 'request-information'
+  | 'manage-library'
+  | 'upload-evidence'
+  | 'review-evidence'
+  // Findings & remediation (Spec §7.7–§7.8)
+  | 'raise-finding'
+  | 'review-finding'
+  | 'approve-finding'
+  | 'respond-finding'
+  | 'manage-remediation'
+  | 'validate-remediation'
+  | 'close-remediation'
+  // Risk-based supervision (Spec §6.2–§6.3)
+  | 'submit-assessment'
+  | 'approve-assessment'
+  | 'manage-plans'
+  | 'approve-plans'
 
 export type DemoScope = 'authority' | 'department' | 'team' | 'portfolio' | 'institution'
 

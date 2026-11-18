@@ -1,5 +1,7 @@
 import { supervisionRepository } from '@/mocks/repositories/supervisionRepository'
 import { workQueueRepository } from '@/mocks/repositories/workQueueRepository'
+import { findingRepository } from '@/mocks/repositories/findingRepository'
+import { evidenceRepository } from '@/mocks/repositories/evidenceRepository'
 import type {
   NavCounts,
   QueueCountsService,
@@ -90,6 +92,8 @@ export class MockQueueCountsService implements QueueCountsService {
       findings: supervisionRepository.openFindingsByStatus().length,
       overdueReturns: supervisionRepository.overdueReturns().length,
       enforcement: supervisionRepository.openEnforcementCases().length,
+      findingsReview: findingRepository.awaitingReview().length,
+      evidenceReview: evidenceRepository.pendingReview().length,
     }
   }
 }

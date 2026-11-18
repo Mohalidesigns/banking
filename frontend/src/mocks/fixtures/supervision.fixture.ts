@@ -254,7 +254,7 @@ export const FINDINGS: SupervisoryFinding[] = [
   fnd(62, 'FND-2026-062', INST_IDS.crestline, 'Agent network onboarding controls', '12% of sampled agents onboarded without completed background checks (demo sample).', 'Medium', 'Operations', 'Confirmed', -35, 10, 'Kwame Mensah', 'EXM-2026-005'),
   fnd(63, 'FND-2026-066', INST_IDS.crestline, 'API third-party risk register outdated', 'Third-party risk register missing two payment aggregators integrated in Q2 2026 (demo record).', 'Medium', 'Cybersecurity', 'Remediation In Progress', -28, 12, 'Kwame Mensah', 'EXM-2026-005', 'CAP-2026-008'),
   // Delta — 3 open
-  fnd(44, 'FND-2026-044', INST_IDS.delta, 'Loan appraisal remediation validation outstanding', 'Final validation of loan appraisal remediation evidence pending closure (demo record).', 'Medium', 'Credit', 'Remediation In Progress', -70, 2, 'Nkechi Balogun', undefined, 'CAP-2026-005'),
+  fnd(44, 'FND-2026-044', INST_IDS.delta, 'Loan appraisal remediation validation outstanding', 'Final validation of loan appraisal remediation evidence pending closure (demo record).', 'Medium', 'Credit', 'Remediation In Progress', -70, 2, 'Nkechi Balogun', 'EXM-2026-017', 'CAP-2026-005'),
   fnd(45, 'FND-2026-048', INST_IDS.delta, 'Micro-loan provisioning shortfall', 'Provision coverage on portfolio-at-risk buckets 30 days below the demo 100% standard.', 'High', 'Credit', 'Confirmed', -25, 18, 'Nkechi Balogun'),
   fnd(46, 'FND-2026-051', INST_IDS.delta, 'Branch cash limits exceeded', 'Three riverine branches exceeded approved cash holding limits in Q3 2026 (demo record).', 'Low', 'Operations', 'Under Review', -9, 33, 'Samuel Ike'),
   // Vanguard — 6 open
@@ -321,6 +321,7 @@ export const RETURN_SUBMISSIONS: ReturnSubmission[] = [
 export const EARLY_WARNING_ALERTS: EarlyWarningAlert[] = [
   {
     id: demoUuid(24, 11),
+    reference: 'EWA-2026-011',
     institutionId: INST_IDS.northstar,
     indicator: 'Liquidity Coverage Ratio',
     severity: 'warning',
@@ -333,6 +334,7 @@ export const EARLY_WARNING_ALERTS: EarlyWarningAlert[] = [
   },
   {
     id: demoUuid(24, 12),
+    reference: 'EWA-2026-008',
     institutionId: INST_IDS.vanguard,
     indicator: 'Capital Adequacy Ratio',
     severity: 'critical',
@@ -345,6 +347,7 @@ export const EARLY_WARNING_ALERTS: EarlyWarningAlert[] = [
   },
   {
     id: demoUuid(24, 13),
+    reference: 'EWA-2026-013',
     institutionId: INST_IDS.meridian,
     indicator: 'NPL Ratio',
     severity: 'warning',
@@ -357,6 +360,7 @@ export const EARLY_WARNING_ALERTS: EarlyWarningAlert[] = [
   },
   {
     id: demoUuid(24, 14),
+    reference: 'EWA-2026-005',
     institutionId: INST_IDS.delta,
     indicator: 'Deposit Concentration',
     severity: 'info',

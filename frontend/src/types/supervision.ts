@@ -15,6 +15,7 @@ export type ExaminationType =
   | 'Cybersecurity'
 
 export type ExaminationStatus =
+  | 'Draft'
   | 'Planned'
   | 'In Progress'
   | 'Fieldwork'
@@ -95,6 +96,9 @@ export type AlertStatus = 'Open' | 'Acknowledged' | 'Escalated' | 'Resolved'
 
 export interface EarlyWarningAlert {
   id: string
+  /** Human reference, e.g. EWA-2026-011 (added in Phase 2B for the
+   *  alert → targeted-examination link; optional for older records). */
+  reference?: string
   institutionId: string
   indicator: string
   severity: 'critical' | 'warning' | 'info'
@@ -249,4 +253,153 @@ export interface UpcomingItem {
   date: string
   statusLabel: string
   link: string
+}
+
+// ---------------------------------------------------------------------------
+// Risk assessment detail (Spec §6.2) — Phase 2B extends the 2A summary
+// ---------------------------------------------------------------------------
+
+/** Recommended supervisory intensity derived from the demo methodology. */
+export type SupervisoryIntensity = 'Routine' | 'Enhanced' | 'Intensive' | 'Intervention'
+
+export interface AssessmentMethodology {
+  id: string
+  name: string
+  version: string
+  status: 'Draft' | 'Approved' | 'Retired'
+  description: string
+  /** How the demo scoring works — never presented as a universal formula. */
+  scoringNote: string
+  /** Risk categories assessed under this methodology. */
+  categories: string[]
+}
+
+export interface AssessmentCategoryScore {
+  category: string
+  /** Inherent risk 1–5 */
+  inherent: number
+  /** Control effectiveness 1–5 (1 = strong controls) */
+  control: number
+  /** Residual risk 1–5 per the configured demo methodology matrix */
+  residual: number
+  /** Evidence supporting the inherent/control scores (demo references). */
+  evidenceRefs: string[]
+  narrative?: string
+  /** Supervisor override of the computed residual. */
+  overridden?: boolean
+  overrideReason?: string
+}
+
+export interface AssessmentReviewComment {
+  id: string
+  /** ISO 8601 */
+  at: string
+  reviewerName: string
+  text: string
+}
+
+export interface AssessmentApprovalEvent {
+  id: string
+  /** ISO 8601 */
+  at: string
+  actorName: string
+  action: 'Created' | 'Submitted' | 'Commented' | 'Returned' | 'Approved'
+  comment?: string
+}
+
+export interface RiskAssessmentDetail extends RiskAssessment {
+  /** e.g. RA-2026-004 */
+  reference: string
+  methodologyId: string
+  methodologyName: string
+  methodologyVersion: string
+  /** Assessment period (ISO dates). */
+  periodStart: string
+  periodEnd: string
+  categoryScores: AssessmentCategoryScore[]
+  supervisoryJudgement: string
+  recommendedIntensity: SupervisoryIntensity
+  reviewerName?: string
+  reviewComments: AssessmentReviewComment[]
+  approvalTrail: AssessmentApprovalEvent[]
+  /** Prior-period comparison shown on the detail screen. */
+  priorComparison?: {
+    year: number
+    overallRisk: RiskRating
+    compositeScore: number
+    note: string
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Supervisory plan detail (Spec §6.3)
+// ---------------------------------------------------------------------------
+
+export type PlanCycle = 'Annual' | 'Quarterly' | 'Event-Driven'
+
+export type PlanActivityType =
+  | 'Comprehensive examination'
+  | 'Targeted examination'
+  | 'Thematic review'
+  | 'Off-site review'
+  | 'Follow-up visit'
+  | 'Risk assessment'
+  | 'Management meeting'
+
+export type PlanActivityStatus = 'Planned' | 'In Progress' | 'Completed' | 'Deferred' | 'Cancelled'
+
+export interface PlanActivity {
+  id: string
+  type: PlanActivityType
+  title: string
+  institutionIds: string[]
+  teamId: string
+  teamName: string
+  /** Estimated supervisory effort in person-days (demo estimate). */
+  effortDays: number
+  /** ISO 8601 */
+  startDate: string
+  endDate: string
+  priority: Priority
+  status: PlanActivityStatus
+  progressPct: number
+  /** Linked examination reference once executed, e.g. EXM-2026-014. */
+  examinationRef?: string
+  deferralReason?: string
+}
+
+export interface PlanResourceAllocation {
+  teamId: string
+  teamName: string
+  allocatedDays: number
+  utilisationPct: number
+}
+
+export interface PlanChangeEvent {
+  id: string
+  /** ISO 8601 */
+  at: string
+  type: 'Change' | 'Deferral' | 'Addition'
+  description: string
+  byName: string
+}
+
+export interface PlanApprovalEvent {
+  id: string
+  /** ISO 8601 */
+  at: string
+  actorName: string
+  action: 'Submitted' | 'Approved' | 'Returned' | 'Amended'
+  comment?: string
+}
+
+export interface SupervisoryPlanDetail extends SupervisoryPlan {
+  cycle: PlanCycle
+  /** e.g. "Q4 2026" for quarterly plans. */
+  quarter?: string
+  activities: PlanActivity[]
+  resourceAllocation: PlanResourceAllocation[]
+  changes: PlanChangeEvent[]
+  approvalHistory: PlanApprovalEvent[]
+  coverageNote: string
 }

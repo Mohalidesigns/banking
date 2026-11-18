@@ -27,13 +27,18 @@ export interface SupervisionReadService {
   listWatchlist(): Promise<WatchlistEntry[]>
 }
 
-/** Sidebar actionable queue counts (Spec §3.2), wired to the mock data. */
+/** Sidebar actionable queue counts (Spec §3.2), wired to the mock data.
+ *  Phase 2B adds the findings-review and evidence-review queues. */
 export interface NavCounts {
   myWork: number
   earlyWarnings: number
   findings: number
   overdueReturns: number
   enforcement: number
+  /** Findings awaiting review (Draft + Under Review). */
+  findingsReview: number
+  /** Evidence items awaiting review. */
+  evidenceReview: number
 }
 
 export interface QueueCountsService {

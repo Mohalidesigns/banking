@@ -1,6 +1,8 @@
 /**
  * Mock My Work queue repository (Spec §5.3 / §17.4). Status, reassignment
  * and note mutations are local prototype state; reset restores the demo set.
+ * Phase 2B workflow services `push` new queue items (findings awaiting
+ * review, evidence awaiting review, …) so My Work picks up session activity.
  */
 import { WORK_ITEMS } from '@/mocks/fixtures/supervision.fixture'
 import type { WorkItem, WorkItemStatus } from '@/types/supervision'
@@ -51,6 +53,35 @@ export const workQueueRepository = {
     if (!item) return undefined
     item.notes.push({ id: nextId(), author, at: new Date().toISOString(), text })
     return { ...item, notes: [...item.notes] }
+  },
+
+  /**
+   * Phase 2B: workflow services enqueue new work items (e.g. a finding
+   * submitted for review) so My Work and the sidebar counts reflect
+   * prototype-session activity. Duplicate links for the same record and
+   * type are skipped.
+   */
+  push(item: Omit<WorkItem, 'id' | 'notes'> & { notes?: WorkItem['notes'] }): WorkItem {
+    const existing = records.find((w) => w.type === item.type && w.relatedRef && w.relatedRef === item.relatedRef && w.status !== 'Completed')
+    if (existing) return { ...existing, notes: [...existing.notes] }
+    const created: WorkItem = { ...item, id: nextId(), notes: item.notes ? [...item.notes] : [] }
+    records.unshift(created)
+    return { ...created, notes: [...created.notes] }
+  },
+
+  /** Complete any open queue item linked to a record reference (workflow done). */
+  completeByRef(relatedRef: string, type?: WorkItem['type']): void {
+    records.forEach((w) => {
+      if (w.relatedRef === relatedRef && (!type || w.type === type) && w.status !== 'Completed') {
+        w.status = 'Completed'
+        w.notes.push({
+          id: nextId(),
+          author: 'Prototype session',
+          at: new Date().toISOString(),
+          text: 'Automatically completed — the linked workflow step was actioned in this session (demo).',
+        })
+      }
+    })
   },
 
   reset(): void {
