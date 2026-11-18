@@ -24,6 +24,7 @@ import { ExaminationDetailPage } from '@/features/examinations/ExaminationDetail
 import { ExaminationRegisterPage } from '@/features/examinations/ExaminationRegisterPage'
 import { ExaminationWorkspacePage } from '@/features/examinations/ExaminationWorkspacePage'
 import { FieldworkPage } from '@/features/examinations/FieldworkPage'
+import { ExaminationLibraryPage } from '@/features/library/ExaminationLibraryPage'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { InstitutionPortalLayout } from '@/layouts/InstitutionPortalLayout'
 import { RegulatorLayout } from '@/layouts/RegulatorLayout'
@@ -182,12 +183,21 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Examination Calendar', phase: 2 } satisfies RouteHandle,
         element: <ExaminationRegisterPage initialView="calendar" initialTitle="Examination Calendar" />,
       },
-      { path: 'examination-programmes', ...moduleRoute('Examination Programmes', 2) },
+      {
+        path: 'examination-programmes',
+        handle: { breadcrumb: 'Examination Programmes', phase: 2 } satisfies RouteHandle,
+        element: <ExaminationLibraryPage initialStatus="Approved" initialTitle="Examination Programmes" />,
+      },
       {
         path: 'fieldwork',
         handle: { breadcrumb: 'Fieldwork Workspace', phase: 2 } satisfies RouteHandle,
         Component: FieldworkPage,
-      },      { path: 'examination-library', ...moduleRoute('Examination Library', 2) },
+      },
+      {
+        path: 'examination-library',
+        handle: { breadcrumb: 'Examination Library', phase: 2 } satisfies RouteHandle,
+        Component: ExaminationLibraryPage,
+      },
       { path: 'evidence', ...moduleRoute('Evidence Repository', 2) },
       { path: 'findings', ...moduleRoute('Supervisory Findings', 2) },
       { path: 'findings/:findingId', ...moduleRoute('Finding Detail', 2) },
