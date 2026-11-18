@@ -106,7 +106,8 @@ export interface InstitutionQuery {
   search?: string
   category?: InstitutionCategory | ''
   licenceStatus?: LicenceStatus | ''
-  riskRating?: RiskRating | ''
+  /** Single rating or comma-separated list (e.g. "Critical,High"). */
+  riskRating?: string
   teamId?: string
   region?: string
   sortBy?: string

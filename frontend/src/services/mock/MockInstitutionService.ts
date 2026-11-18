@@ -67,7 +67,10 @@ export class MockInstitutionService implements InstitutionService {
       }
       if (category && i.category !== category) return false
       if (licenceStatus && i.licenceStatus !== licenceStatus) return false
-      if (riskRating && i.riskRating !== riskRating) return false
+      if (riskRating) {
+        const allowed = riskRating.split(',').map((r) => r.trim())
+        if (!allowed.includes(i.riskRating)) return false
+      }
       if (teamId && i.supervisory.teamId !== teamId) return false
       if (region && i.region !== region) return false
       return true

@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router'
 import { ModulePlaceholder } from '@/components/navigation/ModulePlaceholder'
-import { DashboardWelcome } from '@/features/dashboard/DashboardWelcome'
+import { CommandCentrePage } from '@/features/dashboard/CommandCentrePage'
 import { NotFoundPage } from '@/features/errors/NotFoundPage'
 import { ForgotPasswordPage } from '@/features/auth/ForgotPasswordPage'
 import { LoginPage } from '@/features/auth/LoginPage'
@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
       {
         path: 'dashboard',
         handle: { breadcrumb: 'Command Centre', phase: 2 } satisfies RouteHandle,
-        Component: DashboardWelcome,
+        Component: CommandCentrePage,
       },
       { path: 'my-work', ...moduleRoute('My Work', 2) },
       { path: 'notifications', ...moduleRoute('Notifications', 6) },
