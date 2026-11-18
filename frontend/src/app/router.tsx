@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router'
 import { ModulePlaceholder } from '@/components/navigation/ModulePlaceholder'
 import { CommandCentrePage } from '@/features/dashboard/CommandCentrePage'
 import { NotFoundPage } from '@/features/errors/NotFoundPage'
+import { MyWorkPage } from '@/features/work/MyWorkPage'
 import { ForgotPasswordPage } from '@/features/auth/ForgotPasswordPage'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { PortalLoginPage } from '@/features/auth/PortalLoginPage'
@@ -50,7 +51,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Command Centre', phase: 2 } satisfies RouteHandle,
         Component: CommandCentrePage,
       },
-      { path: 'my-work', ...moduleRoute('My Work', 2) },
+      {
+        path: 'my-work',
+        handle: { breadcrumb: 'My Work', phase: 2 } satisfies RouteHandle,
+        Component: MyWorkPage,
+      },
       { path: 'notifications', ...moduleRoute('Notifications', 6) },
 
       // Institution management

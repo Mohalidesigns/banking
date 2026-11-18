@@ -126,3 +126,17 @@ export function RiskTypeChip({ type }: { type: RiskType }) {
     <span className={cx(badgeBase, 'px-3 py-1.5 text-[11px]', riskTypeTones[type])}>{type}</span>
   )
 }
+
+/** Priority badge (Spec §5.3 work queue). Semantic tint per DS §2.6. */
+import type { Priority } from '@/types/common'
+
+const priorityTones: Record<Priority, string> = {
+  Critical: 'bg-tint-red text-error',
+  High: 'bg-tint-orange text-warning',
+  Medium: 'bg-tint-yellow text-yellow',
+  Low: 'bg-tint-green text-success',
+}
+
+export function PriorityBadge({ priority }: { priority: Priority }) {
+  return <span className={cx(badgeBase, priorityTones[priority])}>{priority}</span>
+}
