@@ -25,6 +25,7 @@ import { ExaminationRegisterPage } from '@/features/examinations/ExaminationRegi
 import { ExaminationWorkspacePage } from '@/features/examinations/ExaminationWorkspacePage'
 import { FieldworkPage } from '@/features/examinations/FieldworkPage'
 import { ExaminationLibraryPage } from '@/features/library/ExaminationLibraryPage'
+import { EvidenceRepositoryPage } from '@/features/evidence/EvidenceRepositoryPage'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { InstitutionPortalLayout } from '@/layouts/InstitutionPortalLayout'
 import { RegulatorLayout } from '@/layouts/RegulatorLayout'
@@ -198,7 +199,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Examination Library', phase: 2 } satisfies RouteHandle,
         Component: ExaminationLibraryPage,
       },
-      { path: 'evidence', ...moduleRoute('Evidence Repository', 2) },
+      {
+        path: 'evidence',
+        handle: { breadcrumb: 'Evidence Repository', phase: 2 } satisfies RouteHandle,
+        Component: EvidenceRepositoryPage,
+      },
       { path: 'findings', ...moduleRoute('Supervisory Findings', 2) },
       { path: 'findings/:findingId', ...moduleRoute('Finding Detail', 2) },
       { path: 'remediation', ...moduleRoute('Follow-Up & Remediation', 2) },
