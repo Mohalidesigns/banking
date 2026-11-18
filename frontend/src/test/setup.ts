@@ -1,4 +1,10 @@
 import '@testing-library/jest-dom/vitest'
+import { cleanup } from '@testing-library/react'
+import { afterEach } from 'vitest'
+
+afterEach(() => {
+  cleanup()
+})
 
 // jsdom does not implement matchMedia; the responsive sidebar hook needs it.
 Object.defineProperty(window, 'matchMedia', {
