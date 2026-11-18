@@ -62,7 +62,8 @@ export interface NavItem {
   /** Real prototype route (Spec §4; sidebar-only items get dedicated routes). */
   path: string
   icon: LucideIcon
-  /** Demo queue counts (Spec §3.2). Wired to live mock data in later phases. */
+  /** Live actionable queue count (Spec §3.2), injected by the Sidebar from
+   *  the QueueCountsService — never hard-coded here. */
   count?: number
 }
 
@@ -83,7 +84,7 @@ export const REGULATOR_NAV: NavSection[] = [
     label: 'Overview',
     items: [
       { label: 'Supervisory Command Centre', path: '/app/dashboard', icon: LayoutDashboard },
-      { label: 'My Work', path: '/app/my-work', icon: Briefcase, count: 7 },
+      { label: 'My Work', path: '/app/my-work', icon: Briefcase },
       { label: 'Notifications', path: '/app/notifications', icon: Bell },
     ],
   },
@@ -104,7 +105,7 @@ export const REGULATOR_NAV: NavSection[] = [
       { label: 'Off-Site Surveillance', path: '/app/surveillance', icon: Radar },
       { label: 'Risk-Based Supervision', path: '/app/risk-based-supervision', icon: Crosshair },
       { label: 'Risk Assessments', path: '/app/risk-assessments', icon: Gauge },
-      { label: 'Early Warning Alerts', path: '/app/early-warnings', icon: TriangleExclamationPoint, count: 3 },
+      { label: 'Early Warning Alerts', path: '/app/early-warnings', icon: TriangleExclamationPoint },
       { label: 'Supervisory Plans', path: '/app/supervisory-plans', icon: CalendarDays },
     ],
   },
@@ -117,7 +118,7 @@ export const REGULATOR_NAV: NavSection[] = [
       { label: 'Examination Programmes', path: '/app/examination-programmes', icon: ListChecks },
       { label: 'Fieldwork Workspace', path: '/app/fieldwork', icon: FolderSearch },
       { label: 'Evidence Repository', path: '/app/evidence', icon: FolderOpen },
-      { label: 'Supervisory Findings', path: '/app/findings', icon: FileExclamationPoint, count: 12 },
+      { label: 'Supervisory Findings', path: '/app/findings', icon: FileExclamationPoint },
       { label: 'Follow-Up & Remediation', path: '/app/remediation', icon: Repeat },
     ],
   },
@@ -150,7 +151,7 @@ export const REGULATOR_NAV: NavSection[] = [
     items: [
       { label: 'Regulatory Frameworks', path: '/app/regulatory/frameworks', icon: Library },
       { label: 'Regulatory Obligations', path: '/app/regulatory/obligations', icon: ScrollText },
-      { label: 'Regulatory Returns', path: '/app/returns', icon: FileSpreadsheet, count: 5 },
+      { label: 'Regulatory Returns', path: '/app/returns', icon: FileSpreadsheet },
       { label: 'Submission Monitoring', path: '/app/submission-monitoring', icon: Radio },
       { label: 'Regulatory Correspondence', path: '/app/regulatory/correspondence', icon: Mail },
     ],
@@ -159,7 +160,7 @@ export const REGULATOR_NAV: NavSection[] = [
     id: 'action',
     label: 'Supervisory Action',
     items: [
-      { label: 'Enforcement Cases', path: '/app/enforcement', icon: Gavel, count: 2 },
+      { label: 'Enforcement Cases', path: '/app/enforcement', icon: Gavel },
       { label: 'Supervisory Directives', path: '/app/directives', icon: Megaphone },
       { label: 'Sanctions & Penalties', path: '/app/sanctions', icon: Ban },
       { label: 'Corrective Action Plans', path: '/app/corrective-action-plans', icon: ListTodo },

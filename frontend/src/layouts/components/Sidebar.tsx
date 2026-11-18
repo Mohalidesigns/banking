@@ -1,10 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { NavLink, useLocation } from 'react-router'
 import { ChevronDown, ShieldAlert } from 'lucide-react'
 import { BrandLogo } from '@/components/brand/BrandLogo'
 import { REGULATOR_NAV, type NavItem, type NavSection } from '@/config/navigation'
 import { visibleRegulatorNav } from '@/config/roles'
 import { useIsDesktop, useIsTabletOrUp } from '@/hooks/useMediaQuery'
+import { NAV_COUNT_PATHS, useNavCountStore } from '@/store/navCountStore'
 import { useSessionStore } from '@/store/sessionStore'
 import { DEMO_ROLE_LABELS } from '@/types/auth'
 import { cx } from '@/utils/cx'
@@ -109,7 +110,30 @@ function SidebarSection({ section, rail, onNavigate }: { section: NavSection; ra
 
 function SidebarContent({ rail, onNavigate }: { rail: boolean; onNavigate: () => void }) {
   const currentUser = useSessionStore((s) => s.currentUser)
-  const sections = currentUser ? visibleRegulatorNav(currentUser.role) : REGULATOR_NAV
+  const navCounts = useNavCountStore((s) => s.counts)
+  const loaded = useNavCountStore((s) => s.loaded)
+  const refreshCounts = useNavCountStore((s) => s.refresh)
+
+  // Live actionable queue counts (Spec §3.2) — fetched once per session load
+  // through the QueueCountsService, never hard-coded.
+  useEffect(() => {
+    if (!loaded) void refreshCounts()
+  }, [loaded, refreshCounts])
+
+  const baseSections = currentUser ? visibleRegulatorNav(currentUser.role) : REGULATOR_NAV
+  const sections = useMemo(
+    () =>
+      baseSections.map((section) => ({
+        ...section,
+        items: section.items.map((item) => {
+          const key = NAV_COUNT_PATHS[item.path]
+          const count = key && navCounts ? navCounts[key] : undefined
+          return { ...item, count: count && count > 0 ? count : undefined }
+        }),
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [baseSections, navCounts],
+  )
   return (
     <div className="flex h-full flex-col bg-primary">
       <div className={cx('border-b border-sidebar-divider', rail ? 'p-3' : 'p-5')}>
