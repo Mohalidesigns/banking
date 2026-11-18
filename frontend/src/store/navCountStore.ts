@@ -31,11 +31,14 @@ export const useNavCountStore = create<NavCountState>()((set, get) => ({
   },
 }))
 
-/** Nav path -> live count key mapping (actionable queues only). */
+/** Nav path -> live count key mapping (actionable queues only).
+ *  Phase 2B adds the evidence review queue; findings keeps the open-findings
+ *  count (findingsReview is surfaced on the findings screens themselves). */
 export const NAV_COUNT_PATHS: Record<string, keyof NavCounts> = {
   '/app/my-work': 'myWork',
   '/app/early-warnings': 'earlyWarnings',
   '/app/findings': 'findings',
+  '/app/evidence': 'evidenceReview',
   '/app/returns': 'overdueReturns',
   '/app/enforcement': 'enforcement',
 }

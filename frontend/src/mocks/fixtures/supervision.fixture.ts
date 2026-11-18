@@ -590,24 +590,24 @@ const wi = (
 export const WORK_ITEMS: WorkItem[] = [
   // Overdue
   wi(1, 'corrective-action', 'Validate CAP-2026-003 AML remediation evidence (overdue)', INST_IDS.meridian, 'CAP-2026-003', '/app/remediation', 'Critical', -2, 'Open', 'Amara Osei', AMARA),
-  wi(2, 'management-response', 'Assess management response to FND-2026-033 asset classification', INST_IDS.vanguard, 'FND-2026-033', '/app/findings', 'High', -5, 'Open', 'Amara Osei', AMARA),
+  wi(2, 'management-response', 'Assess management response to FND-2026-033 asset classification', INST_IDS.vanguard, 'FND-2026-033', `/app/findings/${demoUuid(22, 32)}`, 'High', -5, 'Open', 'Amara Osei', AMARA),
   wi(3, 'evidence-review', 'Review evidence pack for Delta follow-up sampling', INST_IDS.delta, 'EXM-2026-017', '/app/evidence', 'Medium', -1, 'In Progress', 'Amara Osei', AMARA, [
     { id: demoUuid(31, 1), author: 'Amara Osei', at: isoDateTime(-1, 10, 5), text: 'First 10 of 25 credit files reviewed; two exceptions noted. Demo note.' },
   ]),
   // Due today
-  wi(4, 'finding-review', 'Review draft finding FND-2026-109 (board risk reporting)', INST_IDS.meridian, 'FND-2026-109', '/app/findings', 'High', 0, 'Open', 'Amara Osei', AMARA),
-  wi(5, 'examination', 'Daily stand-up input for EXM-2026-014 fieldwork', INST_IDS.meridian, 'EXM-2026-014', '/app/examinations', 'High', 0, 'In Progress', 'Amara Osei', AMARA),
+  wi(4, 'finding-review', 'Review draft finding FND-2026-109 (board risk reporting)', INST_IDS.meridian, 'FND-2026-109', `/app/findings/${demoUuid(22, 104)}`, 'High', 0, 'Open', 'Amara Osei', AMARA),
+  wi(5, 'examination', 'Daily stand-up input for EXM-2026-014 fieldwork', INST_IDS.meridian, 'EXM-2026-014', `/app/examinations/${demoUuid(21, 14)}/workspace`, 'High', 0, 'In Progress', 'Amara Osei', AMARA),
   wi(6, 'information-request', 'Chase MPR-09 October return from Meridian', INST_IDS.meridian, 'MPR-09', '/app/returns', 'Critical', 0, 'Open', 'Amara Osei', AMARA),
   // Upcoming
-  wi(7, 'report-approval', 'Approve EXM-2026-005 cyber resilience draft report', INST_IDS.crestline, 'EXM-2026-005', '/app/examinations', 'Medium', 2, 'Open', 'Amara Osei', AMARA),
-  wi(8, 'procedure', 'Execute liquidity testing procedure — EXM-2026-024 scoping', INST_IDS.northstar, 'EXM-2026-024', '/app/examinations', 'Medium', 3, 'Open', 'Fatima Bello', '5a4b3c2d-1e0f-4a98-8776-6554433221a3'),
-  wi(9, 'finding-review', 'Confirm FND-2026-051 branch cash limit finding', INST_IDS.delta, 'FND-2026-051', '/app/findings', 'Low', 5, 'Open', 'Amara Osei', AMARA),
-  wi(10, 'examination', 'Team assignment review for EXM-2026-021 governance examination', INST_IDS.unity, 'EXM-2026-021', '/app/examinations', 'Medium', 7, 'Open', 'Chuka Eze', '5a4b3c2d-1e0f-4a98-8776-6554433221a4'),
-  wi(11, 'management-response', 'Assess Crestline response to FND-2026-066 API risk register', INST_IDS.crestline, 'FND-2026-066', '/app/findings', 'Medium', 9, 'Open', 'Amara Osei', AMARA),
-  wi(12, 'evidence-review', 'Review Vanguard capital restoration evidence batch 2', INST_IDS.vanguard, 'CAP-2026-007', '/app/evidence', 'Critical', 10, 'Open', 'Amara Osei', AMARA),
+  wi(7, 'report-approval', 'Approve EXM-2026-005 cyber resilience draft report', INST_IDS.crestline, 'EXM-2026-005', `/app/examinations/${demoUuid(21, 5)}`, 'Medium', 2, 'Open', 'Amara Osei', AMARA),
+  wi(8, 'procedure', 'Execute liquidity testing procedure — EXM-2026-024 scoping', INST_IDS.northstar, 'EXM-2026-024', `/app/examinations/${demoUuid(21, 24)}/workspace`, 'Medium', 3, 'Open', 'Fatima Bello', '5a4b3c2d-1e0f-4a98-8776-6554433221a3'),
+  wi(9, 'finding-review', 'Confirm FND-2026-051 branch cash limit finding', INST_IDS.delta, 'FND-2026-051', `/app/findings/${demoUuid(22, 46)}`, 'Low', 5, 'Open', 'Amara Osei', AMARA),
+  wi(10, 'examination', 'Team assignment review for EXM-2026-021 governance examination', INST_IDS.unity, 'EXM-2026-021', `/app/examinations/${demoUuid(21, 21)}`, 'Medium', 7, 'Open', 'Chuka Eze', '5a4b3c2d-1e0f-4a98-8776-6554433221a4'),
+  wi(11, 'management-response', 'Assess Crestline response to FND-2026-066 API risk register', INST_IDS.crestline, 'FND-2026-066', `/app/findings/${demoUuid(22, 63)}`, 'Medium', 9, 'Open', 'Amara Osei', AMARA),
+  wi(12, 'evidence-review', 'Review Vanguard capital restoration evidence batch 2', INST_IDS.vanguard, 'CAP-2026-007', `/app/evidence?highlight=${demoUuid(60, 9)}`, 'Critical', 10, 'Open', 'Amara Osei', AMARA),
   wi(13, 'report-approval', 'Sign off Q3 portfolio review pack for Director briefing', INST_IDS.aurora, undefined, '/app/reports', 'Low', 12, 'Open', 'Amara Osei', AMARA),
   // Completed (history)
-  wi(14, 'procedure', 'Complete CDD sampling procedure — EXM-2026-014', INST_IDS.meridian, 'EXM-2026-014', '/app/examinations', 'High', -4, 'Completed', 'Amara Osei', AMARA, [
+  wi(14, 'procedure', 'Complete CDD sampling procedure — EXM-2026-014', INST_IDS.meridian, 'EXM-2026-014', `/app/examinations/${demoUuid(21, 14)}/workspace`, 'High', -4, 'Completed', 'Amara Osei', AMARA, [
     { id: demoUuid(31, 2), author: 'Amara Osei', at: isoDateTime(-4, 15, 30), text: 'Sampling completed; exceptions escalated to draft findings. Demo note.' },
   ]),
   wi(15, 'corrective-action', 'Validate CAP-2026-005 loan appraisal remediation', INST_IDS.delta, 'CAP-2026-005', '/app/remediation', 'Medium', -5, 'Completed', 'Nkechi Balogun', demoUuid(12, 7)),

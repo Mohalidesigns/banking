@@ -574,6 +574,25 @@ export function CommandCentrePage() {
               Close
             </Button>
             <Button
+              variant="outline"
+              onClick={() => {
+                // Spec §6.4 → §7.2: convert the alert into a targeted
+                // examination — lands in the create wizard prefilled
+                // (EXM-2026-024 / EWA-2026-011 story pattern).
+                const alert = activeAlert
+                setActiveAlert(null)
+                if (alert) {
+                  navigate(
+                    `/app/examinations/new?institutionId=${encodeURIComponent(alert.institutionId)}&type=Targeted${
+                      alert.reference ? `&alertRef=${encodeURIComponent(alert.reference)}` : ''
+                    }`,
+                  )
+                }
+              }}
+            >
+              Initiate targeted examination
+            </Button>
+            <Button
               variant="primary"
               onClick={() => {
                 toast.success('Demo action completed', 'Alert acknowledgement simulated — saved in prototype session only.')
