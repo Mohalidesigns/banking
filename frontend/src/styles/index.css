@@ -70,6 +70,10 @@
   --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
   --animate-bell-ring: bell-ring 1.2s ease-in-out;
   --animate-slide-in: slide-in 300ms ease-out;
+  --animate-slide-in-left: slide-in-left 300ms ease-out;
+  --animate-dropdown-in: dropdown-in 200ms ease-out;
+  --animate-modal-in: modal-in 300ms ease-out;
+  --animate-fade-in: fade-in 300ms ease-out;
   --animate-toast-progress: toast-progress 5000ms linear forwards;
 }
 
@@ -118,12 +122,54 @@
   }
 }
 
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes toast-progress {
   from {
     width: 100%;
   }
   to {
     width: 0%;
+  }
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
