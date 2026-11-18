@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router'
 import { ToastHost } from '@/components/feedback/ToastHost'
+import { GlobalSearchOverlay } from '@/components/navigation/GlobalSearchOverlay'
 import { Sidebar } from '@/layouts/components/Sidebar'
 import { Topbar } from '@/layouts/components/Topbar'
 import { useSessionStore } from '@/store/sessionStore'
@@ -48,6 +49,7 @@ export function RegulatorLayout() {
           regulatory effect.
         </footer>
       </div>
+      <GlobalSearchOverlay />
       <ToastHost />
     </div>
   )
