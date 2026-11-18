@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+/* Brand fonts — bundled locally via Fontsource variable packages (no blocking external CDN). */
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/roboto-mono/wght.css';
