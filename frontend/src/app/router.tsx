@@ -20,7 +20,10 @@ import { PlanDetailPage } from '@/features/plans/PlanDetailPage'
 import { PlanWizardPage } from '@/features/plans/PlanWizardPage'
 import { SupervisoryPlansPage } from '@/features/plans/SupervisoryPlansPage'
 import { CreateExaminationPage } from '@/features/examinations/CreateExaminationPage'
+import { ExaminationDetailPage } from '@/features/examinations/ExaminationDetailPage'
 import { ExaminationRegisterPage } from '@/features/examinations/ExaminationRegisterPage'
+import { ExaminationWorkspacePage } from '@/features/examinations/ExaminationWorkspacePage'
+import { FieldworkPage } from '@/features/examinations/FieldworkPage'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { InstitutionPortalLayout } from '@/layouts/InstitutionPortalLayout'
 import { RegulatorLayout } from '@/layouts/RegulatorLayout'
@@ -164,12 +167,27 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Create Examination', phase: 2 } satisfies RouteHandle,
         Component: CreateExaminationPage,
       },
-      { path: 'examinations/:examinationId', ...moduleRoute('Examination Detail', 2) },
-      { path: 'examinations/:examinationId/workspace', ...moduleRoute('Fieldwork Workspace', 2) },
-      { path: 'examination-calendar', ...moduleRoute('Examination Calendar', 2) },
+      {
+        path: 'examinations/:examinationId',
+        handle: { breadcrumb: 'Examination Detail', phase: 2 } satisfies RouteHandle,
+        Component: ExaminationDetailPage,
+      },
+      {
+        path: 'examinations/:examinationId/workspace',
+        handle: { breadcrumb: 'Fieldwork Workspace', phase: 2 } satisfies RouteHandle,
+        Component: ExaminationWorkspacePage,
+      },
+      {
+        path: 'examination-calendar',
+        handle: { breadcrumb: 'Examination Calendar', phase: 2 } satisfies RouteHandle,
+        element: <ExaminationRegisterPage initialView="calendar" initialTitle="Examination Calendar" />,
+      },
       { path: 'examination-programmes', ...moduleRoute('Examination Programmes', 2) },
-      { path: 'fieldwork', ...moduleRoute('Fieldwork Workspace', 2) },
-      { path: 'examination-library', ...moduleRoute('Examination Library', 2) },
+      {
+        path: 'fieldwork',
+        handle: { breadcrumb: 'Fieldwork Workspace', phase: 2 } satisfies RouteHandle,
+        Component: FieldworkPage,
+      },      { path: 'examination-library', ...moduleRoute('Examination Library', 2) },
       { path: 'evidence', ...moduleRoute('Evidence Repository', 2) },
       { path: 'findings', ...moduleRoute('Supervisory Findings', 2) },
       { path: 'findings/:findingId', ...moduleRoute('Finding Detail', 2) },

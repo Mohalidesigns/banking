@@ -55,7 +55,14 @@ const ACTIVE_STATUSES: ExaminationStatus[] = ['In Progress', 'Fieldwork', 'Repor
 
 const monthLabel = (d: Date): string => d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
 
-export function ExaminationRegisterPage() {
+export function ExaminationRegisterPage({
+  initialView = 'table',
+  initialTitle,
+}: {
+  /** Route variant: /app/examination-calendar opens directly in calendar view. */
+  initialView?: 'table' | 'calendar' | 'kanban'
+  initialTitle?: string
+} = {}) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const actor = useActor()
@@ -65,7 +72,7 @@ export function ExaminationRegisterPage() {
   const [exams, setExams] = useState<ExaminationDetail[] | null>(null)
   const [institutions, setInstitutions] = useState<Institution[]>([])
   const [domains, setDomains] = useState<string[]>([])
-  const [view, setView] = useState<'table' | 'calendar' | 'kanban'>('table')
+  const [view, setView] = useState<'table' | 'calendar' | 'kanban'>(initialView)
   const [cursor, setCursor] = useState(() => {
     const now = new Date()
     return new Date(now.getFullYear(), now.getMonth(), 1)
@@ -338,7 +345,7 @@ export function ExaminationRegisterPage() {
   return (
     <div>
       <PageHeader
-        title="Examination Register"
+        title={initialTitle ?? 'Examination Register'}
         subtitle={
           <span className="flex flex-wrap items-center gap-x-2">
             <span>All supervisory examinations across the demo portfolio</span>
