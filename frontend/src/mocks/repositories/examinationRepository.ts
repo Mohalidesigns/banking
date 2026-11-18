@@ -139,15 +139,16 @@ const buildProcedures = (
     if (!programme || programme.status !== 'Approved') continue
     for (const template of programme.procedures) {
       if (input.excludedProcedureIds?.includes(template.id)) continue
+      const override = input.procedureOverrides?.[template.id]
       created.push(
         mkProcedure(examId, {
           programmeCode: programme.code,
           procCode: template.code,
-          ownerName: nextOwner(),
+          ownerName: override?.ownerName ?? nextOwner(),
           dueOffsetDays: (dueCursor += 3),
           status: 'Not Started',
           result: 'Not Tested',
-          priority: template.priority,
+          priority: override?.priority ?? template.priority,
         }),
       )
     }

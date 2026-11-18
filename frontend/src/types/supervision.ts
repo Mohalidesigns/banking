@@ -13,6 +13,12 @@ export type ExaminationType =
   | 'Follow-up'
   | 'AML/CFT'
   | 'Cybersecurity'
+  // Spec §7.2 step 1 full type list (added in Phase 2B)
+  | 'Maiden'
+  | 'Routine'
+  | 'Special'
+  | 'Spot Check'
+  | 'Joint'
 
 export type ExaminationStatus =
   | 'Draft'

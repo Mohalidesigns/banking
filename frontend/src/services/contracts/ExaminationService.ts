@@ -73,6 +73,8 @@ export interface CreateExaminationInput {
   programmeIds: string[]
   /** Library procedure template ids deselected in step 4 (empty = take all). */
   excludedProcedureIds?: string[]
+  /** Per-template owner/priority overrides set in wizard step 4. */
+  procedureOverrides?: Record<string, { ownerName?: string; priority?: Priority }>
   customProcedures?: CustomProcedureInput[]
   informationRequest?: {
     templateName?: string

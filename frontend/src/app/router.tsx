@@ -19,6 +19,8 @@ import { RiskBasedSupervisionPage } from '@/features/risk/RiskBasedSupervisionPa
 import { PlanDetailPage } from '@/features/plans/PlanDetailPage'
 import { PlanWizardPage } from '@/features/plans/PlanWizardPage'
 import { SupervisoryPlansPage } from '@/features/plans/SupervisoryPlansPage'
+import { CreateExaminationPage } from '@/features/examinations/CreateExaminationPage'
+import { ExaminationRegisterPage } from '@/features/examinations/ExaminationRegisterPage'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { InstitutionPortalLayout } from '@/layouts/InstitutionPortalLayout'
 import { RegulatorLayout } from '@/layouts/RegulatorLayout'
@@ -152,8 +154,16 @@ export const router = createBrowserRouter([
       },
 
       // Examination operations
-      { path: 'examinations', ...moduleRoute('Examination Register', 2) },
-      { path: 'examinations/new', ...moduleRoute('Create Examination', 2) },
+      {
+        path: 'examinations',
+        handle: { breadcrumb: 'Examination Register', phase: 2 } satisfies RouteHandle,
+        Component: ExaminationRegisterPage,
+      },
+      {
+        path: 'examinations/new',
+        handle: { breadcrumb: 'Create Examination', phase: 2 } satisfies RouteHandle,
+        Component: CreateExaminationPage,
+      },
       { path: 'examinations/:examinationId', ...moduleRoute('Examination Detail', 2) },
       { path: 'examinations/:examinationId/workspace', ...moduleRoute('Fieldwork Workspace', 2) },
       { path: 'examination-calendar', ...moduleRoute('Examination Calendar', 2) },
