@@ -1,4 +1,5 @@
 import type { Paginated } from '@/types/common'
+import type { Jurisdiction } from '@/types/auth'
 import type {
   ActivityEvent,
   Branch,
@@ -36,6 +37,10 @@ export interface InstitutionService {
   /** Unique institution code within the regulator (Spec §5.4 validation). */
   isCodeAvailable(code: string, exceptId?: string): Promise<boolean>
   listTeams(): Promise<SupervisoryTeamOption[]>
+  /** Regulator staff for lead-supervisor assignment (demo directory). */
+  listStaff(): Promise<Array<{ id: string; fullName: string; jobTitle: string }>>
+  /** All jurisdictions known to the prototype (registry column labels). */
+  listJurisdictions(): Promise<Jurisdiction[]>
 
   // Profile sub-resources (Spec §5.5)
   shareholders(institutionId: string): Promise<Shareholder[]>

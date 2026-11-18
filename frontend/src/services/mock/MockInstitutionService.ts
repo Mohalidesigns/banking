@@ -1,5 +1,6 @@
 import { institutionRepository } from '@/mocks/repositories/institutionRepository'
-import { SUPERVISORY_TEAMS } from '@/mocks/fixtures/people.fixture'
+import { authRepository } from '@/mocks/repositories/authRepository'
+import { SUPERVISORY_TEAMS, STAFF } from '@/mocks/fixtures/people.fixture'
 import type {
   InstitutionService,
   SupervisoryTeamOption,
@@ -154,6 +155,16 @@ export class MockInstitutionService implements InstitutionService {
       department: t.department,
       leadName: t.leadName,
     }))
+  }
+
+  async listJurisdictions() {
+    await latency()
+    return authRepository.listJurisdictions()
+  }
+
+  async listStaff() {
+    await latency()
+    return STAFF.map((s) => ({ id: s.id, fullName: s.fullName, jobTitle: s.jobTitle }))
   }
 
   async shareholders(institutionId: string) {

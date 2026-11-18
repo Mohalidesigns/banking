@@ -3,6 +3,7 @@ import { ModulePlaceholder } from '@/components/navigation/ModulePlaceholder'
 import { CommandCentrePage } from '@/features/dashboard/CommandCentrePage'
 import { NotFoundPage } from '@/features/errors/NotFoundPage'
 import { MyWorkPage } from '@/features/work/MyWorkPage'
+import { InstitutionRegistryPage } from '@/features/institutions/InstitutionRegistryPage'
 import { ForgotPasswordPage } from '@/features/auth/ForgotPasswordPage'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { PortalLoginPage } from '@/features/auth/PortalLoginPage'
@@ -59,7 +60,11 @@ export const router = createBrowserRouter([
       { path: 'notifications', ...moduleRoute('Notifications', 6) },
 
       // Institution management
-      { path: 'institutions', ...moduleRoute('Institution Registry', 2) },
+      {
+        path: 'institutions',
+        handle: { breadcrumb: 'Institution Registry', phase: 2 } satisfies RouteHandle,
+        Component: InstitutionRegistryPage,
+      },
       { path: 'institutions/:institutionId', ...moduleRoute('Institution Profile', 2) },
       { path: 'institutions/:institutionId/financials', ...moduleRoute('Financial Profile', 2) },
       { path: 'institutions/:institutionId/risk', ...moduleRoute('Institution Risk Profile', 2) },
