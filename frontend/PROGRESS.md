@@ -124,3 +124,151 @@ every chunk (role contract in `banking/.qwen/agents/uiux-engineer.md`).
   story) as fixtures + repositories + contracts per §18.3; reconcile
   DemoRole with §19; wire sidebar queue counts to live mock data.
 - Journey A must be demonstrable end-to-end at the end of Phase 2.
+
+---
+
+## Phase 2A — Data foundation, Command Centre, My Work, Institution Management (18 Nov 2026)
+
+First half of Spec §21 Phase 2. A separate 2B chunk owns risk assessments,
+supervisory plans, examinations (register/wizard/detail/workspace),
+examination library, evidence, findings and remediation (completing Journey A).
+
+**Built (10 units, one commit each):**
+
+1. **Libraries** — react-hook-form 7.92, zod 4.6, @hookform/resolvers 7.0,
+   recharts 3.11 (all React-19-compatible; pins recorded here per brief).
+2. **Coherent demo dataset (Spec §17.5/§18.3/§18.4)** — the ONE story-world:
+   8 fictional institutions (Meridian Commercial Bank MCB-001, Northstar
+   Merchant Bank NMB-002, Unity Non-Interest Bank UNIB-003, Crestline
+   Payment Bank CPB-004, Aurora Savings & Loans ASL-005, Delta
+   Microfinance DMB-006, Sentinel Custody & Trust SCT-007, Vanguard
+   Regional Bank VRB-008 — suspended/critical, in restructuring), 5 groups,
+   72 branches, ~57 directors, shareholders, documents, CAMELS-style
+   dimensions, 8 quarters of financials per institution, examinations
+   (incl. EXM-2026-014/009/021 from Phase-1 search), findings (open counts
+   match each Institution.openFindingsCount), returns, alerts, risk
+   assessments, plans, corrective actions, enforcement, watchlist, work
+   queue, activity timeline. UUID-shaped ids (`demoUuid` deterministic
+   helper), ISO dates (due/overdue generated relative to today so buckets
+   stay live), money as decimal strings. Types in `types/institution.ts` +
+   `types/supervision.ts`; repositories in `mocks/repositories`; contracts
+   `InstitutionService` (+Branch/Director), `DashboardService`,
+   `WorkQueueService`, `SupervisionReadService` (+`QueueCountsService`);
+   `NotificationService` extended with `push` + `resetDemoData`. Components
+   never import fixtures. Phase-1 fixtures reconciled: portal + search
+   records now reference the new UUIDs; data already contains every entity
+   2B needs. 2B story hooks: Meridian AML exam + overdue CAP-2026-003,
+   Northstar amber liquidity → targeted EXM-2026-024, Unity governance exam
+   planned, Crestline assessment in progress, Vanguard restructuring +
+   ENF-2026-002.
+3. **DemoRole reconciliation (§19)** — all 17 roles with ids/labels in
+   `types/auth.ts`, one demo identity each in `identity.fixture.ts`
+   (incl. 3 portal roles; CPB-004 added to portal sign-in), mock permission
+   profiles in `config/roles.ts` (visibleNavSections, visiblePortalNav,
+   allowedActions, scope, canApprove/canExport, restrictedAreas). Sidebar
+   and portal nav filter per role; role switcher lists all 17 grouped
+   regulator/institution, keeps the persistent "DEMO ROLE — NOT SECURE
+   AUTHENTICATION" indicator, and institution roles land in the portal
+   layout.
+4. **Supervisory Command Centre (§5.2)** — replaced `DashboardWelcome`
+   (deleted) at /app/dashboard: header with jurisdiction + reporting date +
+   period selector (quarter/YTD/trailing-12m changes window & deltas) +
+   Export (prototype CSV via `utils/exportCsv`) + Refresh demo data. 5 KPI
+   cards navigate to filtered lists (e.g. /app/institutions?risk=Critical,High).
+   Recharts donut (risk distribution, clickable segments + keyboard-accessible
+   legend), portfolio-by-category bars (clickable), prudential trend lines
+   (asset-weighted from snapshots), plan execution progress, alert queue with
+   detail drawer + demo acknowledge, high-priority findings, upcoming
+   exams/deadlines, activity timeline, watchlist — all from
+   `MockDashboardService`; everything labelled illustrative/demo.
+5. **My Work (§5.3)** — all eight item types, overdue/due-today/upcoming/
+   recently-completed sections, filters (search, type, priority, due,
+   status, institution), open/mark in-progress/complete/reassign/add-note
+   via `WorkQueueService` local state, actions gated by role permissions
+   (`manage-work-queue`, `reassign-work`).
+6. **Institution Registry (§5.4)** — DataTable (10 columns), search +
+   category/status/risk/team/region filters synced to the URL (so Command
+   Centre KPI links filter correctly), Add institution, mock import
+   (simulated, honest), CSV export, row menu (view/edit/assign
+   team/history). Create/edit form: 7 sections, RHF + Zod (required
+   identity fields, code format, date ordering via superRefine, licence
+   category required), async unique-code check on submit, unsaved-changes
+   ConfirmDialog.
+7. **Institution Profile (§5.5)** — /app/institutions/:institutionId plus
+   /financials, /risk, /examinations sub-routes (same workspace, tab from
+   URL segment; other tabs via ?tab=). Header: badges (licence/portfolio/
+   status), risk rating, lead supervisor, quick actions (request
+   information, create examination → /app/examinations/new?institutionId=,
+   add note → activity feed, export profile CSV). 13 tabs: Overview (KPIs,
+   risk summary, dimensions, trend chart, findings/returns/exams/alerts/
+   actions), Corporate Profile, Ownership & Group (shareholders table +
+   hierarchy visual + consolidated supervision), Board & Management
+   (fit-and-proper register), Financial Performance (trend chart + quarterly
+   table with demo threshold highlighting), Prudential Indicators (latest
+   snapshot vs demo thresholds), Risk Profile (CAMELS cards + assessments
+   with dimension scores), Examinations (read-only list, Phase 2B note),
+   Regulatory Returns (read-only table), Findings & Remediation (findings +
+   CAP progress), Enforcement, Documents (confidentiality labels),
+   Activity History. Unknown id → designed error state, no dead end.
+8. **Groups / Branch Network / Directors (§5.6)** — group register cards
+   with exposure/risk summary, structure diagram drawer, demo
+   add-relationship (session-only, labelled); branch register (DataTable,
+   institution/region/status filters + search) with detail drawer incl.
+   examination history; directors register (filters incl. fit-and-proper
+   status) with profile drawer carrying appointment/status history and
+   conflict declarations.
+9. **Sidebar live counts** — static numbers removed from
+   `config/navigation.ts`; `navCountStore` + `QueueCountsService` feed
+   My Work / Early Warnings / Findings / Regulatory Returns (overdue) /
+   Enforcement counts from the same repositories the screens read.
+10. **Tests + docs** — new Vitest+RTL suites: Command Centre KPI navigation
+    (3 nav assertions + demo labelling), registry URL risk filter + category
+    select filter + open-findings sorting (desc-first per TanStack),
+    institution form validation (schema date-ordering unit tests + modal
+    unique-code reject/accept + date-order block), role-based sidebar
+    visibility (director/examiner/read-only + persistent demo indicator).
+    Test setup gained ResizeObserver + createObjectURL stubs (Recharts/CSV
+    in jsdom). README rewritten for Phase 2A.
+
+**Verified (real output):**
+
+- `npm run build` → tsc clean; vite build ✓ (1.29 MB JS / 367 kB gzip —
+  Recharts added ~870 kB raw; chunk-size warning noted, code-splitting is a
+  Phase 7 hardening candidate).
+- `npm run lint` → oxlint: **0 errors, 12 warnings** — all React-Compiler
+  advisories: 9× `set-state-in-effect` (the standard async data-load pattern
+  `useEffect(() => { void load() }, [load])` in the new pages), 2×
+  `incompatible-library` (TanStack Table v8, pre-existing Phase 1), 1×
+  `refs` (DropdownMenu render-prop, pre-existing Phase 1). None affect
+  behaviour; documented per brief.
+- `npm test` → **9 files, 33 tests, all passing** (15 Phase-1 + 18 new).
+
+**Decisions / deviations:**
+
+- `z.coerce.number()` broke zodResolver input/output typing under TS7 —
+  numeric form fields kept as validated strings and converted on submit.
+- Institution ids migrated from Phase-1 slugs (`inst-meridian-…`) to
+  UUID-shaped ids per Spec §18.4; `search.fixture` and portal identities
+  updated in the same commit (global search + portal login verified by the
+  existing Phase-1 tests).
+- `listFor(assigneeId)` in the work-queue repository falls back to the whole
+  unfinished queue when a switched demo role owns no items, so My Work is
+  never empty during role demos (documented demo behaviour).
+- Notification fixture ref EXF-2026-014 corrected to FND-2026-118 so the
+  bell panel matches the findings dataset.
+- No new libraries beyond the brief's list (react-hook-form, zod,
+  @hookform/resolvers, recharts).
+
+**Next chunk owes (Phase 2B — completes Journey A, Spec §21/§22):**
+
+- Risk Assessments (/app/risk-assessments + risk-based-supervision),
+  Supervisory Plans, Examination Register / Create wizard / Detail /
+  Fieldwork Workspace (+calendar/programmes/fieldwork routes), Examination
+  Library, Evidence Repository, Findings (+detail), Follow-Up & Remediation.
+- Dataset is ready: extend `SupervisionReadService` family with workflow
+  mutations over the SAME fixtures (EXM-2026-014 fieldwork, FND-2026-101 →
+  CAP-2026-003, EXM-2026-021 planned, EXM-2026-024 targeted-from-alert).
+  Journey A step 1 (register a bank) already works via the Registry form;
+  steps 3–10 are 2B.
+- Profile tabs currently deep-link to placeholder examination/finding/
+  remediation routes — 2B replaces those elements, nothing else changes.

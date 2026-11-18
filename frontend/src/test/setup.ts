@@ -23,3 +23,18 @@ Object.defineProperty(window, 'matchMedia', {
 
 // jsdom does not implement scrollIntoView (used by focus management).
 Element.prototype.scrollIntoView ??= () => {}
+
+// jsdom does not implement ResizeObserver; Recharts ResponsiveContainer needs it.
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver
+}
+
+// jsdom does not implement createObjectURL (used by the prototype CSV export).
+if (typeof URL.createObjectURL === 'undefined') {
+  URL.createObjectURL = () => 'blob:demo'
+  URL.revokeObjectURL = () => {}
+}

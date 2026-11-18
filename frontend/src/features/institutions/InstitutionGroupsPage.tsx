@@ -14,7 +14,6 @@ import { can } from '@/config/roles'
 import { institutionService } from '@/services/mock/MockInstitutionService'
 import { useSessionStore } from '@/store/sessionStore'
 import type { Institution, InstitutionGroup } from '@/types/institution'
-import { formatDate } from '@/utils/datetime'
 
 /**
  * Institution Groups (Spec §5.6): group register, structure diagram,
@@ -271,7 +270,6 @@ export function InstitutionGroupsPage() {
           />
           <p className="rounded-lg bg-accent/5 px-3 py-2 text-[10px] leading-relaxed text-accent-dark">
             Prototype action — the relationship is stored in this session only and labelled as such.
-            Last demo dataset update: {formatDate(new Date().toISOString())}.
           </p>
         </div>
       </Modal>
