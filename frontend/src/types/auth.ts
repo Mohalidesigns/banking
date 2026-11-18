@@ -2,27 +2,114 @@
  * Authentication and demo-identity types.
  *
  * NOTE: the prototype deliberately has no real authentication (Spec §1.1).
- * DemoRole ids are provisional for Phase 1 and must be reconciled with the
- * Spec §19 demo-role matrix when that phase's screens are built.
+ * DemoRole ids are reconciled with the Spec §19 demo-role matrix (17 roles);
+ * ROLE_PROFILES in `src/config/roles.ts` carries the mock permission profile
+ * for each role. The role switcher always shows the persistent
+ * "DEMO ROLE — NOT SECURE AUTHENTICATION" indicator.
  */
 
 export type DemoRole =
-  | 'supervisor-general'
-  | 'lead-supervisor'
-  | 'offsite-analyst'
-  | 'examination-manager'
-  | 'enforcement-officer'
   | 'system-administrator'
-  | 'institution-user'
+  | 'director-of-supervision'
+  | 'deputy-director'
+  | 'assistant-director'
+  | 'supervisory-team-lead'
+  | 'principal-examiner'
+  | 'examiner'
+  | 'prudential-analyst'
+  | 'risk-analyst'
+  | 'cybersecurity-specialist'
+  | 'aml-specialist'
+  | 'legal-enforcement-officer'
+  | 'report-reviewer'
+  | 'read-only-supervisor'
+  | 'institution-administrator'
+  | 'institution-submitter'
+  | 'institution-viewer'
+
+/** Spec §19 role order for the role switcher. */
+export const DEMO_ROLE_ORDER: DemoRole[] = [
+  'system-administrator',
+  'director-of-supervision',
+  'deputy-director',
+  'assistant-director',
+  'supervisory-team-lead',
+  'principal-examiner',
+  'examiner',
+  'prudential-analyst',
+  'risk-analyst',
+  'cybersecurity-specialist',
+  'aml-specialist',
+  'legal-enforcement-officer',
+  'report-reviewer',
+  'read-only-supervisor',
+  'institution-administrator',
+  'institution-submitter',
+  'institution-viewer',
+]
 
 export const DEMO_ROLE_LABELS: Record<DemoRole, string> = {
-  'supervisor-general': 'Supervisor-General',
-  'lead-supervisor': 'Lead Supervisor',
-  'offsite-analyst': 'Off-Site Surveillance Analyst',
-  'examination-manager': 'Examination Manager',
-  'enforcement-officer': 'Enforcement & Legal Officer',
   'system-administrator': 'System Administrator',
-  'institution-user': 'Institution Portal User',
+  'director-of-supervision': 'Director of Supervision',
+  'deputy-director': 'Deputy Director',
+  'assistant-director': 'Assistant Director',
+  'supervisory-team-lead': 'Supervisory Team Lead',
+  'principal-examiner': 'Principal Examiner',
+  examiner: 'Examiner',
+  'prudential-analyst': 'Prudential Analyst',
+  'risk-analyst': 'Risk Analyst',
+  'cybersecurity-specialist': 'Cybersecurity Specialist',
+  'aml-specialist': 'AML Specialist',
+  'legal-enforcement-officer': 'Legal/Enforcement Officer',
+  'report-reviewer': 'Report Reviewer',
+  'read-only-supervisor': 'Read-Only Supervisor',
+  'institution-administrator': 'Institution Administrator',
+  'institution-submitter': 'Institution Submitter',
+  'institution-viewer': 'Institution Viewer',
+}
+
+/** Roles that live in the institution portal layout (Spec §19). */
+export const INSTITUTION_ROLES: DemoRole[] = [
+  'institution-administrator',
+  'institution-submitter',
+  'institution-viewer',
+]
+
+export const isInstitutionRole = (role: DemoRole): boolean => INSTITUTION_ROLES.includes(role)
+
+/** Action keys gated per role in the demo (Spec §19 "Allowed page actions"). */
+export type DemoAction =
+  | 'view'
+  | 'create-institution'
+  | 'edit-institution'
+  | 'assign-team'
+  | 'import-institutions'
+  | 'export'
+  | 'approve'
+  | 'manage-work-queue'
+  | 'reassign-work'
+  | 'add-note'
+  | 'reset-demo-data'
+
+export type DemoScope = 'authority' | 'department' | 'team' | 'portfolio' | 'institution'
+
+/** Mock permission profile per role (Spec §19). Frontend-only demo gating —
+ *  never a substitute for backend authorisation (Spec §18.6). */
+export interface RolePermissionProfile {
+  role: DemoRole
+  label: string
+  /** True for the three institution roles — portal layout, not regulator. */
+  portal: boolean
+  /** Visible regulator nav section ids; undefined = all sections. */
+  visibleNavSections?: string[]
+  /** Visible portal nav paths; undefined = all portal items. */
+  visiblePortalNav?: string[]
+  allowedActions: DemoAction[]
+  scope: DemoScope
+  canApprove: boolean
+  canExport: boolean
+  /** Restricted data areas shown in the role switcher (demo labelling). */
+  restrictedAreas: string[]
 }
 
 /** A supervisory context the demo user is authorised for. */

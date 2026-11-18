@@ -3,8 +3,10 @@ import { NavLink, useLocation } from 'react-router'
 import { ChevronDown, ShieldAlert } from 'lucide-react'
 import { BrandLogo } from '@/components/brand/BrandLogo'
 import { REGULATOR_NAV, type NavItem, type NavSection } from '@/config/navigation'
+import { visibleRegulatorNav } from '@/config/roles'
 import { useIsDesktop, useIsTabletOrUp } from '@/hooks/useMediaQuery'
 import { useSessionStore } from '@/store/sessionStore'
+import { DEMO_ROLE_LABELS } from '@/types/auth'
 import { cx } from '@/utils/cx'
 
 /**
@@ -106,6 +108,8 @@ function SidebarSection({ section, rail, onNavigate }: { section: NavSection; ra
 }
 
 function SidebarContent({ rail, onNavigate }: { rail: boolean; onNavigate: () => void }) {
+  const currentUser = useSessionStore((s) => s.currentUser)
+  const sections = currentUser ? visibleRegulatorNav(currentUser.role) : REGULATOR_NAV
   return (
     <div className="flex h-full flex-col bg-primary">
       <div className={cx('border-b border-sidebar-divider', rail ? 'p-3' : 'p-5')}>
@@ -118,12 +122,17 @@ function SidebarContent({ rail, onNavigate }: { rail: boolean; onNavigate: () =>
         )}
       </div>
       <nav aria-label="Primary" className="min-h-0 flex-1 overflow-y-auto py-2">
-        {REGULATOR_NAV.map((section) => (
+        {sections.map((section) => (
           <SidebarSection key={section.id} section={section} rail={rail} onNavigate={onNavigate} />
         ))}
       </nav>
       {!rail && (
         <div className="border-t border-sidebar-divider p-4">
+          {currentUser && (
+            <p className="mb-2 truncate px-1 text-[10px] font-semibold text-white/60">
+              {DEMO_ROLE_LABELS[currentUser.role]}
+            </p>
+          )}
           <p className="flex items-start gap-2 rounded-lg bg-accent/10 p-2.5 text-[9px] leading-snug font-semibold tracking-wide text-accent uppercase">
             <ShieldAlert className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden="true" />
             Demo role — not secure authentication

@@ -13,8 +13,46 @@ import { DropdownMenu, DropdownMenuItem } from '@/components/ui/DropdownMenu'
 import { UserAvatar } from '@/components/ui/UserAvatar'
 import { authService } from '@/services/mock/MockAuthService'
 import { useSessionStore } from '@/store/sessionStore'
-import { DEMO_ROLE_LABELS, type DemoUser } from '@/types/auth'
+import { DEMO_ROLE_LABELS, DEMO_ROLE_ORDER, type DemoUser } from '@/types/auth'
 import { cx } from '@/utils/cx'
+
+/** One row in the demo role switcher list (Spec §19). */
+function RoleSwitchItem({
+  user,
+  active,
+  portal,
+  onSwitch,
+}: {
+  user: DemoUser
+  active: boolean
+  portal?: boolean
+  onSwitch: () => void
+}) {
+  return (
+    <button
+      type="button"
+      role="menuitem"
+      disabled={active}
+      onClick={onSwitch}
+      className={cx(
+        'flex w-full cursor-pointer items-center gap-2.5 px-4 py-1.5 text-left transition-colors hover:bg-gray-100',
+        active && 'cursor-default bg-tint-blue/50 hover:bg-tint-blue/50',
+      )}
+    >
+      <UserAvatar initials={user.initials} name={user.fullName} size={24} />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-xs font-medium text-ink">{user.fullName}</span>
+        <span className="block truncate text-[10px] text-ink-secondary">
+          {DEMO_ROLE_LABELS[user.role]}
+          {portal && user.portal ? ` · ${user.portal.institutionCode}` : ''}
+        </span>
+      </span>
+      {active && (
+        <span className="text-[9px] font-semibold tracking-wide text-success uppercase">Active</span>
+      )}
+    </button>
+  )
+}
 
 /**
  * User avatar + dropdown (Spec §3.3). Includes the prototype-only
@@ -31,7 +69,13 @@ export function UserMenu() {
   useEffect(() => {
     let active = true
     void authService.listDemoUsers().then((users) => {
-      if (active) setDemoUsers(users.filter((u) => !u.portal))
+      if (active) {
+        setDemoUsers(
+          [...users].sort(
+            (a, b) => DEMO_ROLE_ORDER.indexOf(a.role) - DEMO_ROLE_ORDER.indexOf(b.role),
+          ),
+        )
+      }
     })
     return () => {
       active = false
@@ -39,6 +83,21 @@ export function UserMenu() {
   }, [])
 
   if (!currentUser) return null
+
+  const regulatorUsers = demoUsers.filter((u) => !u.portal)
+  const institutionUsers = demoUsers.filter((u) => u.portal)
+
+  const switchTo = (user: DemoUser, close: () => void) => {
+    void authService.switchDemoRole(user.role).then((result) => {
+      startSession(result)
+      close()
+      navigate(result.user.portal ? '/portal/dashboard' : '/app/dashboard')
+      toast.info(
+        'Demo role switched',
+        `Now demonstrating ${DEMO_ROLE_LABELS[user.role]} (${user.fullName}). Demo role — not secure authentication.`,
+      )
+    })
+  }
 
   return (
     <DropdownMenu
@@ -104,40 +163,27 @@ export function UserMenu() {
           >
             Security & Sessions
           </DropdownMenuItem>
-          <div className="border-t border-line py-1">
-            <p className="overline px-4 py-1.5">Switch demo role (prototype only)</p>
-            {demoUsers.map((user) => (
-              <button
+          <div className="max-h-80 overflow-y-auto border-t border-line py-1">
+            <p className="overline px-4 py-1.5">Regulator demo roles (prototype only)</p>
+            {regulatorUsers.map((user) => (
+              <RoleSwitchItem
                 key={user.id}
-                type="button"
-                role="menuitem"
-                disabled={user.id === currentUser.id}
-                onClick={() => {
-                  void authService.switchDemoRole(user.role).then((result) => {
-                    startSession(result)
-                    close()
-                    toast.info(
-                      'Demo role switched',
-                      `Now demonstrating ${DEMO_ROLE_LABELS[user.role]} (${user.fullName}). Demo role — not secure authentication.`,
-                    )
-                  })
-                }}
-                className={cx(
-                  'flex w-full cursor-pointer items-center gap-2.5 px-4 py-1.5 text-left transition-colors hover:bg-gray-100',
-                  user.id === currentUser.id && 'cursor-default bg-tint-blue/50 hover:bg-tint-blue/50',
-                )}
-              >
-                <UserAvatar initials={user.initials} name={user.fullName} size={24} />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-xs font-medium text-ink">{user.fullName}</span>
-                  <span className="block truncate text-[10px] text-ink-secondary">
-                    {DEMO_ROLE_LABELS[user.role]}
-                  </span>
-                </span>
-                {user.id === currentUser.id && (
-                  <span className="text-[9px] font-semibold tracking-wide text-success uppercase">Active</span>
-                )}
-              </button>
+                user={user}
+                active={user.id === currentUser.id}
+                onSwitch={() => switchTo(user, close)}
+              />
+            ))}
+            <p className="overline mt-1 px-4 py-1.5">
+              Institution roles — open the portal layout
+            </p>
+            {institutionUsers.map((user) => (
+              <RoleSwitchItem
+                key={user.id}
+                user={user}
+                active={user.id === currentUser.id}
+                onSwitch={() => switchTo(user, close)}
+                portal
+              />
             ))}
           </div>
           <div className="border-t border-line pt-1">

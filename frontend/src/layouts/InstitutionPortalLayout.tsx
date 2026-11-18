@@ -6,6 +6,7 @@ import { ToastHost } from '@/components/feedback/ToastHost'
 import { toast } from '@/components/feedback/toastStore'
 import { UserAvatar } from '@/components/ui/UserAvatar'
 import { PORTAL_NAV } from '@/config/navigation'
+import { visiblePortalNav } from '@/config/roles'
 import { authService } from '@/services/mock/MockAuthService'
 import { useSessionStore } from '@/store/sessionStore'
 import { cx } from '@/utils/cx'
@@ -30,6 +31,10 @@ export function InstitutionPortalLayout() {
   }
 
   const institution = currentUser.portal
+  // Per-role portal navigation (Spec §19 mock permission profiles).
+  const portalNav = visiblePortalNav(currentUser.role).length
+    ? visiblePortalNav(currentUser.role)
+    : PORTAL_NAV
 
   const signOut = () => {
     void authService.signOut().then(() => {
@@ -41,7 +46,7 @@ export function InstitutionPortalLayout() {
 
   const nav = (
     <nav aria-label="Portal" className="flex h-full flex-col gap-0.5 overflow-y-auto p-3">
-      {PORTAL_NAV.map((item) => {
+      {portalNav.map((item) => {
         const Icon = item.icon
         return (
           <NavLink

@@ -54,7 +54,7 @@ export class MockAuthService implements AuthService {
     if (!user?.portal) {
       throw new AuthError(
         'unknown-institution',
-        'Institution code not recognised. Try MCB-001 (Meridian Commercial Bank) or NMB-002 (Northstar Merchant Bank).',
+        'Institution code not recognised. Try MCB-001 (Meridian Commercial Bank), NMB-002 (Northstar Merchant Bank) or CPB-004 (Crestline Payment Bank).',
       )
     }
     return sessionFor(user)

@@ -78,7 +78,7 @@ export class MockWorkQueueService implements WorkQueueService {
 
   async listColleagues() {
     await latency()
-    return STAFF.filter((s) => !s.jobTitle.includes('Retired')).map((s) => ({
+    return STAFF.map((s) => ({
       id: s.id,
       fullName: s.fullName,
       jobTitle: s.jobTitle,

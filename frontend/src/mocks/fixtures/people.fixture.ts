@@ -59,7 +59,7 @@ export const STAFF: StaffMember[] = [
   { id: demoUuid(12, 11), fullName: 'Hauwa Sadiq', initials: 'HS', jobTitle: 'AML Specialist', email: 'hauwa.sadiq@meridia-central.gov', teamId: SUPERVISORY_TEAMS[2].id },
   { id: demoUuid(12, 12), fullName: 'Lerato Mokoena', initials: 'LM', jobTitle: 'Assistant Director, Specialised Institutions', email: 'lerato.mokoena@meridia-central.gov', teamId: SUPERVISORY_TEAMS[2].id },
   { id: demoUuid(12, 13), fullName: 'Samuel Ike', initials: 'SI', jobTitle: 'Report Reviewer', email: 'samuel.ike@meridia-central.gov', teamId: SUPERVISORY_TEAMS[2].id },
-  { id: demoUuid(12, 14), fullName: 'Tunde Bakare', initials: 'TB', jobTitle: 'Deputy Director (Retired demo persona)', email: 'tunde.bakare@meridia-central.gov', teamId: SUPERVISORY_TEAMS[0].id },
+  { id: demoUuid(12, 14), fullName: 'Tunde Bakare', initials: 'TB', jobTitle: 'Deputy Director, Banking Supervision', email: 'tunde.bakare@meridia-central.gov', teamId: SUPERVISORY_TEAMS[0].id },
 ]
 
 export const staffByName = (name: string): StaffMember | undefined =>
