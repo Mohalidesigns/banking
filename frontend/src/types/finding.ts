@@ -64,6 +64,8 @@ export interface FindingDetail extends SupervisoryFinding {
   breachClassification: BreachClassification
   /** Demo regulatory reference, e.g. "MBA/AML/2023 §4.1". */
   regulatoryReference: string
+  /** Responsible owner at the institution (Spec §7.7 column). */
+  institutionOwnerName?: string
   /** Role of the responsible owner at the institution. */
   institutionOwnerRole: string
   /** Other supervisory domains touched by this finding. */

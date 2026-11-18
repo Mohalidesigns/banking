@@ -118,6 +118,7 @@ export const findingRepository = {
       severityRationale: input.severityRationale,
       breachClassification: input.breachClassification,
       regulatoryReference: input.regulatoryReference,
+      institutionOwnerName: input.institutionOwnerName,
       institutionOwnerRole: input.institutionOwnerRole,
       crossDomainLinks: [...input.crossDomainLinks],
       evidenceLinks: input.evidenceLinks.map((e) => ({ ...e })),

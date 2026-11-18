@@ -361,6 +361,7 @@ export const buildFindingDetail = (f: SupervisoryFinding): FindingDetail => {
     severityRationale: seed.severityRationale,
     breachClassification: seed.breachClassification,
     regulatoryReference: seed.regulatoryReference,
+    institutionOwnerName: seed.managementResponses?.[0]?.respondedByName,
     institutionOwnerRole: seed.institutionOwnerRole,
     crossDomainLinks: seed.crossDomainLinks,
     evidenceLinks: seed.evidenceLinks,

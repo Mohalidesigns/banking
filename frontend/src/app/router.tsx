@@ -26,6 +26,9 @@ import { ExaminationWorkspacePage } from '@/features/examinations/ExaminationWor
 import { FieldworkPage } from '@/features/examinations/FieldworkPage'
 import { ExaminationLibraryPage } from '@/features/library/ExaminationLibraryPage'
 import { EvidenceRepositoryPage } from '@/features/evidence/EvidenceRepositoryPage'
+import { FindingDetailPage } from '@/features/findings/FindingDetailPage'
+import { FindingsRegisterPage } from '@/features/findings/FindingsRegisterPage'
+import { RemediationPage } from '@/features/remediation/RemediationPage'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { InstitutionPortalLayout } from '@/layouts/InstitutionPortalLayout'
 import { RegulatorLayout } from '@/layouts/RegulatorLayout'
@@ -204,9 +207,21 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Evidence Repository', phase: 2 } satisfies RouteHandle,
         Component: EvidenceRepositoryPage,
       },
-      { path: 'findings', ...moduleRoute('Supervisory Findings', 2) },
-      { path: 'findings/:findingId', ...moduleRoute('Finding Detail', 2) },
-      { path: 'remediation', ...moduleRoute('Follow-Up & Remediation', 2) },
+      {
+        path: 'findings',
+        handle: { breadcrumb: 'Supervisory Findings', phase: 2 } satisfies RouteHandle,
+        Component: FindingsRegisterPage,
+      },
+      {
+        path: 'findings/:findingId',
+        handle: { breadcrumb: 'Finding Detail', phase: 2 } satisfies RouteHandle,
+        Component: FindingDetailPage,
+      },
+      {
+        path: 'remediation',
+        handle: { breadcrumb: 'Follow-Up & Remediation', phase: 2 } satisfies RouteHandle,
+        Component: RemediationPage,
+      },
 
       // Prudential supervision
       { path: 'prudential/capital', ...moduleRoute('Capital Adequacy', 3) },
