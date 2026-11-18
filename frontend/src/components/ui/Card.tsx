@@ -29,16 +29,21 @@ export function Card({ hoverable = false, className, children, ...rest }: CardPr
 /** Card header per DS §8.3: 16px/20px padding, bottom border, 14px/600 navy title. */
 export function CardHeader({
   title,
+  subtitle,
   action,
   className,
 }: {
   title: ReactNode
+  subtitle?: ReactNode
   action?: ReactNode
   className?: string
 }) {
   return (
     <div className={cx('flex items-center justify-between gap-3 border-b border-line px-5 py-4', className)}>
-      <div className="section-title min-w-0 truncate">{title}</div>
+      <div className="min-w-0">
+        <div className="section-title truncate">{title}</div>
+        {subtitle && <p className="mt-0.5 text-xs text-ink-secondary">{subtitle}</p>}
+      </div>
       {action && <div className="shrink-0 text-xs font-medium text-primary-surface">{action}</div>}
     </div>
   )

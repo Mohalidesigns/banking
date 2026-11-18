@@ -94,11 +94,13 @@ export function ErrorState({
   title = 'Something went wrong',
   message = 'This demo view could not load its data. No real service was called.',
   onRetry,
+  retryLabel = 'Try again',
   className,
 }: {
   title?: string
   message?: string
   onRetry?: () => void
+  retryLabel?: string
   className?: string
 }) {
   return (
@@ -113,7 +115,7 @@ export function ErrorState({
       <p className="mx-auto mb-4 max-w-sm text-sm text-ink-secondary">{message}</p>
       {onRetry && (
         <Button variant="outline" size="sm" onClick={onRetry} iconLeft={<RotateCcw className="h-3.5 w-3.5" />}>
-          Try again
+          {retryLabel}
         </Button>
       )}
     </div>

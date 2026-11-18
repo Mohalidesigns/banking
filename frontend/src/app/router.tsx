@@ -12,6 +12,10 @@ import { ForgotPasswordPage } from '@/features/auth/ForgotPasswordPage'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { PortalLoginPage } from '@/features/auth/PortalLoginPage'
 import { ResetPasswordPage } from '@/features/auth/ResetPasswordPage'
+import { RiskAssessmentDetailPage } from '@/features/risk/RiskAssessmentDetailPage'
+import { RiskAssessmentsPage } from '@/features/risk/RiskAssessmentsPage'
+import { RiskAssessmentWizardPage } from '@/features/risk/RiskAssessmentWizardPage'
+import { RiskBasedSupervisionPage } from '@/features/risk/RiskBasedSupervisionPage'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { InstitutionPortalLayout } from '@/layouts/InstitutionPortalLayout'
 import { RegulatorLayout } from '@/layouts/RegulatorLayout'
@@ -107,8 +111,26 @@ export const router = createBrowserRouter([
 
       // Surveillance & risk
       { path: 'surveillance', ...moduleRoute('Off-Site Surveillance', 3) },
-      { path: 'risk-based-supervision', ...moduleRoute('Risk-Based Supervision', 2) },
-      { path: 'risk-assessments', ...moduleRoute('Risk Assessments', 2) },
+      {
+        path: 'risk-based-supervision',
+        handle: { breadcrumb: 'Risk-Based Supervision', phase: 2 } satisfies RouteHandle,
+        Component: RiskBasedSupervisionPage,
+      },
+      {
+        path: 'risk-assessments',
+        handle: { breadcrumb: 'Risk Assessments', phase: 2 } satisfies RouteHandle,
+        Component: RiskAssessmentsPage,
+      },
+      {
+        path: 'risk-assessments/new',
+        handle: { breadcrumb: 'New Risk Assessment', phase: 2 } satisfies RouteHandle,
+        Component: RiskAssessmentWizardPage,
+      },
+      {
+        path: 'risk-assessments/:assessmentId',
+        handle: { breadcrumb: 'Risk Assessment Detail', phase: 2 } satisfies RouteHandle,
+        Component: RiskAssessmentDetailPage,
+      },
       { path: 'early-warnings', ...moduleRoute('Early Warning Alerts', 3) },
       { path: 'supervisory-plans', ...moduleRoute('Supervisory Plans', 2) },
 
