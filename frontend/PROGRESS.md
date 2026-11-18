@@ -272,3 +272,61 @@ examination library, evidence, findings and remediation (completing Journey A).
   steps 3–10 are 2B.
 - Profile tabs currently deep-link to placeholder examination/finding/
   remediation routes — 2B replaces those elements, nothing else changes.
+
+## Phase 2B — Core supervisory journey (18–19 Nov 2026)
+
+Units 1–9 were built and committed (`b6be13a`…`e4d4517`) by the chunk
+agent, which then died on a model-request timeout during unit 10. All
+commits and the four new test files survived; the lead completed unit 10
+(test-fix, docs, gate) directly.
+
+**Built:**
+- Domain extension — examination/finding/remediation/assessment/plan
+  workflow types, fixtures (incl. `storyRefs.ts` anchors), repositories
+  and role-gated workflow-mutation contracts (`b6be13a`).
+- Risk-Based Supervision — register, 8-step wizard, detail with 5×5 heat
+  map, portfolio intensity view (`4725874`).
+- Supervisory Plans — list/calendar register, 7-step wizard, plan detail
+  with timeline and execution controls (`159b8c1`).
+- Examination Register (table/calendar/kanban) + 6-step create wizard
+  (`91a9dec`); Examination Detail (11 tabs) + three-panel Fieldwork
+  Workspace (`947c841`).
+- Examination Library — hierarchy browser, versioned templates, editor
+  (`af2eb7e`). Evidence Repository — register, simulated upload, detail
+  drawer (`428b238`). Findings five-Cs + Remediation with
+  regulator-gated closure (`e742783`).
+- Cross-wiring — alert→targeted-examination conversion, live queue
+  counts, My Work deep-links (`e4d4517`). Journey A (§22) is
+  demonstrable end-to-end on EXM-2026-014 → FND-2026-101 → CAP-2026-003.
+
+**Bug found during lead verification and fixed (`Modal.tsx`):** the
+focus/keydown effect depended on `[open, onClose]` and callers pass inline
+`onClose` arrows, so every parent re-render (each keystroke of a
+*controlled* form inside a modal) re-ran the effect and moved focus to the
+first focusable element — the X close button. Typing a space then
+activated it and silently closed the dialog (this broke the raise-finding
+flow). Fixed by holding `onClose` in a ref and running the effect only on
+`[open]`. RHF-based forms never hit this because registered inputs are
+uncontrolled. Regression-covered by `ExaminationWorkspacePage.test.tsx`.
+
+**Verification (lead-run, 19 Nov 2026):**
+- `npm run build` → tsc clean, ✓ built (chunk >500 kB advisory unchanged —
+  Recharts; code-splitting deferred to Phase 7).
+- `npm run lint` → 0 errors, 39 warnings (React-Compiler advisories:
+  `set-state-in-effect` on the new pages' async-load pattern + the 3
+  pre-existing Phase-1 ones).
+- `npm test` → **13 files, 50 tests, all passing** (33 prior + 17 new:
+  risk-assessment wizard, examination workflow mutations incl.
+  raise-from-procedure linking, role-gating matrix, workspace fieldwork
+  flow).
+
+**Next chunk owes (Phase 3 — surveillance, returns, prudential; Spec §21):**
+- Off-Site Surveillance (§6.1), Early Warning Alert detail flows (§6.4),
+  Regulatory Returns dashboard/submission detail/template designer
+  (§11.1–11.3), Capital / Credit / Liquidity / Stress Testing (§8.1–8.4),
+  Prudential Indicators (§8.5). Acceptance: Journey B (§22).
+- Dataset already carries returns/alerts/prudential references; extend
+  fixtures+repositories+contracts the same way (components never import
+  fixtures). Swap the remaining Phase-3 `moduleRoute(...)` elements in
+  `src/app/router.tsx`; Command Centre alert drawer and profile tabs
+  already deep-link into these routes.

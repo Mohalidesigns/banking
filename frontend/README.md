@@ -42,7 +42,7 @@ Session state (demo user, jurisdiction, sidebar/nav-group state) persists
 in `localStorage` under `atheris-reg-prototype-session`. Clear that key to
 reset the demo session.
 
-## What is built (Phase 1 + Phase 2A)
+## What is built (Phase 1 + Phase 2)
 
 - **App shell** — navy sidebar with the full Spec §3.2 nav tree (role-aware,
   with live actionable queue counts), topbar with global search (⌘K),
@@ -74,13 +74,45 @@ reset the demo session.
   registers with filters, group structure diagram, demo relationship
   management, branch detail drawer with examination history, fit-and-proper
   person register with appointment/status history.
+- **Risk-Based Supervision** (`/app/risk-assessments`,
+  `/app/risk-based-supervision`) — assessment register (methodology/version,
+  inherent / control-effectiveness / residual), 8-step create wizard with
+  evidence and supervisory judgement, detail with 5×5 risk heat map,
+  category scores, prior-period comparison, approval trail and recommended
+  supervisory intensity; portfolio intensity view.
+- **Supervisory Plans** (`/app/supervisory-plans`) — annual/quarterly/
+  event-driven register with list and calendar views, 7-step plan wizard,
+  plan detail with timeline, coverage, execution controls and approval
+  history.
+- **Examinations** (`/app/examinations`) — register with table / calendar /
+  kanban-by-stage views and seven filters; 6-step create wizard (basic
+  info, scope, team, programme from approved library templates only,
+  information request, review + submit); detail with 11 tabs; three-panel
+  **Fieldwork Workspace** (procedure tree · test form with pass/fail/
+  partial/N-A/not-tested results and unsaved-state protection · evidence,
+  comments and review panel) with role-gated submit / return-for-rework /
+  approve.
+- **Examination Library** (`/app/examination-library`) — jurisdiction →
+  category → domain → type → programme → procedure hierarchy browser,
+  versioned templates with draft/review/approved/retired lifecycle and a
+  template editor.
+- **Evidence Repository** (`/app/evidence`) — register with confidentiality
+  classification and review status, simulated upload with metadata, detail
+  drawer with procedure/finding links, version and access history.
+- **Findings & Remediation** (`/app/findings`, `/app/remediation`) —
+  findings register, five-Cs finding form prefilled from procedure
+  exceptions, detail with management response / corrective actions /
+  approval trail; remediation register with milestones, evidence,
+  extension requests and **regulator-gated closure** (institution roles
+  can never close).
 - **Coherent demo dataset** — eight fictional institutions (Meridian
   Commercial Bank, Northstar Merchant Bank, Unity Non-Interest Bank,
   Crestline Payment Bank, Aurora Savings & Loans, Delta Microfinance,
   Sentinel Custody & Trust, Vanguard Regional Bank) plus examinations,
   findings, returns, alerts, risk assessments, plans, corrective actions,
-  enforcement cases and a work queue telling one story (Spec §17.5). The
-  dataset already contains the entities Phase 2B screens will render.
+  enforcement cases and a work queue telling one story (Spec §17.5).
+  Journey A (§22) runs end-to-end on linked anchors: EXM-2026-014 →
+  FND-2026-101 → CAP-2026-003.
 
 ## Stack
 
@@ -107,7 +139,7 @@ src/
 ├── app/            router.tsx, handle.ts (route metadata)
 ├── components/
 │   ├── brand/      BrandLogo
-│   ├── charts/     chartTheme, RiskDonut, PortfolioCategoryBar, PrudentialTrendChart
+│   ├── charts/     chartTheme, RiskDonut, PortfolioCategoryBar, PrudentialTrendChart, RiskHeatMap
 │   ├── ui/         Button, Card, StatCard, Badges, Modal, ConfirmDialog,
 │   │               Drawer, Tabs, Progress, PageHeader, DropdownMenu, UserAvatar
 │   ├── forms/      TextInput, TextArea, Select, Checkbox, Toggle
@@ -115,18 +147,24 @@ src/
 │   ├── navigation/ Breadcrumbs, GlobalSearchOverlay (⌘K), ModulePlaceholder
 │   └── feedback/   ToastHost + toastStore, EmptyState/LoadingSkeleton/ErrorState
 ├── config/         navigation.ts (Spec §3.2 nav tree), roles.ts (§19 profiles)
-├── features/       auth/, dashboard/, institutions/, work/, errors/
+├── features/       auth/, dashboard/, institutions/, work/, risk/, plans/,
+│                   examinations/, library/, evidence/, findings/,
+│                   remediation/, errors/
 ├── hooks/          useMediaQuery (responsive shell)
 ├── layouts/        RegulatorLayout, AuthLayout, InstitutionPortalLayout
 ├── mocks/          fixtures/ + repositories/ (never imported by components)
 ├── services/
 │   ├── contracts/  AuthService, NotificationService, SearchService,
 │   │               InstitutionService (+Branch/Director), DashboardService,
-│   │               WorkQueueService, SupervisionReadService (+QueueCounts)
+│   │               WorkQueueService, SupervisionReadService (+QueueCounts),
+│   │               ExaminationService, FindingService, EvidenceService,
+│   │               LibraryService, PlanService, RiskAssessmentService,
+│   │               RemediationService
 │   └── mock/       Mock* implementations over the repositories
 ├── store/          sessionStore, notificationStore, uiStore, navCountStore
 ├── styles/         tokens.css, index.css
-└── types/          auth.ts, common.ts, institution.ts, supervision.ts
+└── types/          auth.ts, common.ts, institution.ts, supervision.ts,
+                    examination.ts, finding.ts
 ```
 
 **Rule (Spec §18.3):** components import service *interfaces* from
@@ -140,15 +178,18 @@ A future `Api*Service` (Spring Boot) slots in without redesigning screens.
 - **<768px:** sidebar becomes an overlay drawer (topbar menu trigger,
   Escape/backdrop closes); grids stack; tables scroll horizontally.
 
-## Known boundaries after Phase 2A
+## Known boundaries after Phase 2
 
-- Risk assessments, supervisory plans, examinations (register/wizard/detail/
-  workspace), examination library, evidence, findings and remediation still
-  render designed placeholders — Phase 2B builds them over the same dataset.
-  Profile tabs and Command Centre links to those modules are read-only.
+- Off-site surveillance, regulatory returns, prudential screens (capital,
+  credit, liquidity, stress testing) and the early-warning detail flows
+  still render designed placeholders — Phase 3 builds them. The
+  alert→targeted-examination conversion already works from the Command
+  Centre alert drawer.
 - Global search and dashboard deep-links to Phase 3+ modules (returns,
-  early warnings, enforcement) land on placeholders until their phase.
+  enforcement) land on placeholders until their phase.
 - Portal screens remain Phase 6 placeholders; portal roles only switch the
   layout and navigation visibility.
+- The JS bundle exceeds 500 kB (Recharts weight); code-splitting is
+  scheduled for the Phase 7 hardening pass.
 
 See `PROGRESS.md` for the phase-by-phase build log.
