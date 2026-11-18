@@ -16,6 +16,9 @@ import { RiskAssessmentDetailPage } from '@/features/risk/RiskAssessmentDetailPa
 import { RiskAssessmentsPage } from '@/features/risk/RiskAssessmentsPage'
 import { RiskAssessmentWizardPage } from '@/features/risk/RiskAssessmentWizardPage'
 import { RiskBasedSupervisionPage } from '@/features/risk/RiskBasedSupervisionPage'
+import { PlanDetailPage } from '@/features/plans/PlanDetailPage'
+import { PlanWizardPage } from '@/features/plans/PlanWizardPage'
+import { SupervisoryPlansPage } from '@/features/plans/SupervisoryPlansPage'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { InstitutionPortalLayout } from '@/layouts/InstitutionPortalLayout'
 import { RegulatorLayout } from '@/layouts/RegulatorLayout'
@@ -132,7 +135,21 @@ export const router = createBrowserRouter([
         Component: RiskAssessmentDetailPage,
       },
       { path: 'early-warnings', ...moduleRoute('Early Warning Alerts', 3) },
-      { path: 'supervisory-plans', ...moduleRoute('Supervisory Plans', 2) },
+      {
+        path: 'supervisory-plans',
+        handle: { breadcrumb: 'Supervisory Plans', phase: 2 } satisfies RouteHandle,
+        Component: SupervisoryPlansPage,
+      },
+      {
+        path: 'supervisory-plans/new',
+        handle: { breadcrumb: 'New Supervisory Plan', phase: 2 } satisfies RouteHandle,
+        Component: PlanWizardPage,
+      },
+      {
+        path: 'supervisory-plans/:planId',
+        handle: { breadcrumb: 'Plan Detail', phase: 2 } satisfies RouteHandle,
+        Component: PlanDetailPage,
+      },
 
       // Examination operations
       { path: 'examinations', ...moduleRoute('Examination Register', 2) },
