@@ -4,6 +4,7 @@ import { CommandCentrePage } from '@/features/dashboard/CommandCentrePage'
 import { NotFoundPage } from '@/features/errors/NotFoundPage'
 import { MyWorkPage } from '@/features/work/MyWorkPage'
 import { InstitutionRegistryPage } from '@/features/institutions/InstitutionRegistryPage'
+import { InstitutionProfilePage } from '@/features/institutions/InstitutionProfilePage'
 import { ForgotPasswordPage } from '@/features/auth/ForgotPasswordPage'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { PortalLoginPage } from '@/features/auth/PortalLoginPage'
@@ -65,10 +66,26 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Institution Registry', phase: 2 } satisfies RouteHandle,
         Component: InstitutionRegistryPage,
       },
-      { path: 'institutions/:institutionId', ...moduleRoute('Institution Profile', 2) },
-      { path: 'institutions/:institutionId/financials', ...moduleRoute('Financial Profile', 2) },
-      { path: 'institutions/:institutionId/risk', ...moduleRoute('Institution Risk Profile', 2) },
-      { path: 'institutions/:institutionId/examinations', ...moduleRoute('Examination History', 2) },
+      {
+        path: 'institutions/:institutionId',
+        handle: { breadcrumb: 'Institution Profile', phase: 2 } satisfies RouteHandle,
+        Component: InstitutionProfilePage,
+      },
+      {
+        path: 'institutions/:institutionId/financials',
+        handle: { breadcrumb: 'Financial Profile', phase: 2 } satisfies RouteHandle,
+        Component: InstitutionProfilePage,
+      },
+      {
+        path: 'institutions/:institutionId/risk',
+        handle: { breadcrumb: 'Institution Risk Profile', phase: 2 } satisfies RouteHandle,
+        Component: InstitutionProfilePage,
+      },
+      {
+        path: 'institutions/:institutionId/examinations',
+        handle: { breadcrumb: 'Examination History', phase: 2 } satisfies RouteHandle,
+        Component: InstitutionProfilePage,
+      },
       { path: 'institution-groups', ...moduleRoute('Institution Groups', 2) },
       { path: 'branch-network', ...moduleRoute('Branch Network', 2) },
       { path: 'directors', ...moduleRoute('Directors & Key Officers', 2) },

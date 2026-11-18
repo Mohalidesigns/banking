@@ -192,6 +192,20 @@ export class MockInstitutionService implements InstitutionService {
     return institutionRepository.activity(institutionId)
   }
 
+  async addNote(institutionId: string, text: string, author: string) {
+    await latency()
+    const inst = institutionRepository.byId(institutionId)
+    if (!inst) throw new Error(`Institution ${institutionId} not found in the demo dataset.`)
+    institutionRepository.addActivity({
+      institutionId,
+      type: 'note',
+      title: `Supervisory note added — ${inst.tradingName}`,
+      detail: text,
+      actor: author,
+      at: new Date().toISOString(),
+    })
+  }
+
   async listGroups() {
     await latency()
     return institutionRepository.groups()

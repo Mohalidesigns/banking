@@ -49,6 +49,8 @@ export interface InstitutionService {
   financials(institutionId: string): Promise<FinancialSnapshot[]>
   /** Activity for one institution, or authority-wide when omitted. */
   activity(institutionId?: string): Promise<ActivityEvent[]>
+  /** Quick action: add a supervisory note (prototype-session activity). */
+  addNote(institutionId: string, text: string, author: string): Promise<void>
 
   // Groups (Spec §5.6)
   listGroups(): Promise<InstitutionGroup[]>
