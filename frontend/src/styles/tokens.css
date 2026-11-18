@@ -1,0 +1,86 @@
+/**
+ * Atheris Reg — inherited thirdLine design tokens (Design System v2.0).
+ * Single declaration point for every exact visual value.
+ * Tailwind utilities are generated from these variables via the @theme
+ * mapping in index.css (e.g. --tld-primary -> bg-primary / text-primary).
+ *
+ * Naming convention: `--tld-*` (thirdLine design) prefix avoids collisions
+ * with the Tailwind theme namespace while keeping DS names recognisable.
+ */
+
+:root {
+  /* 2.1 Primary palette */
+  --tld-primary: #1a365d;
+  --tld-primary-light: #2a4a7f;
+  --tld-primary-dark: #0f2340;
+  --tld-primary-surface: #2d5f9a;
+
+  /* 2.2 Accent & brand */
+  --tld-accent: #d4af37;
+  --tld-accent-light: #e2c458;
+  --tld-accent-dark: #b8962e;
+
+  /* 2.3 Semantic colours */
+  --tld-success: #2d7d46;
+  --tld-success-light: #38a169;
+  --tld-warning: #dd6b20;
+  --tld-warning-light: #ed8936;
+  --tld-error: #c53030;
+  --tld-error-light: #e53e3e;
+  --tld-info: #319795;
+
+  /* 2.4 Extended semantic colours */
+  --tld-purple: #6b46c1;
+  --tld-purple-bg: #faf5ff;
+  --tld-yellow: #b7791f;
+  --tld-yellow-bg: #fffff0;
+
+  /* 2.5 Neutrals */
+  --tld-bg: #f7fafc;
+  --tld-card: #ffffff;
+  --tld-text-primary: #2d3748;
+  --tld-text-secondary: #718096;
+  --tld-text-tertiary: #a0aec0;
+  --tld-text-heading: #1a365d;
+  --tld-border: #e2e8f0;
+  --tld-border-light: #f0f0f0;
+  --tld-divider-sidebar: rgba(255, 255, 255, 0.1);
+
+  /* 2.6 Tinted backgrounds (pair with matching text colour) */
+  --tld-tint-blue: #ebf4ff; /* text: --tld-primary */
+  --tld-tint-green: #f0fff4; /* text: --tld-success */
+  --tld-tint-orange: #fffaf0; /* text: --tld-warning */
+  --tld-tint-red: #fff5f5; /* text: --tld-error */
+  --tld-tint-purple: #faf5ff; /* text: --tld-purple */
+  --tld-tint-yellow: #fffff0; /* text: --tld-yellow */
+
+  /* 2.7 Gradients */
+  --tld-gradient-logo: linear-gradient(135deg, #d4af37, #b8962e);
+  --tld-gradient-avatar: linear-gradient(135deg, #1a365d, #2d5f9a);
+  --tld-gradient-ai-header: linear-gradient(135deg, #1a365d, #2d5f9a);
+  --tld-gradient-error-bar: linear-gradient(180deg, #c53030, #e53e3e);
+  --tld-gradient-warning-bar: linear-gradient(180deg, #dd6b20, #ed8936);
+
+  /* 2.8 Risk heat-map scale (5x5) */
+  --tld-heat-very-low: #48bb78; /* 1-4 */
+  --tld-heat-low: #ecc94b; /* 5-9 */
+  --tld-heat-medium: #ed8936; /* 10-14 */
+  --tld-heat-high: #e53e3e; /* 15-19 */
+  --tld-heat-critical: #9b2c2c; /* 20-25 */
+
+  /* 4.3 Layout dimensions */
+  --tld-sidebar-width: 250px;
+  --tld-sidebar-collapsed-width: 72px;
+  --tld-topbar-height: 56px;
+
+  /* 6. Shadows & elevation */
+  --tld-shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --tld-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --tld-shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  /* 9. Standard transitions */
+  --tld-transition-button: all 150ms ease-in-out;
+  --tld-transition-nav: all 200ms ease;
+  --tld-transition-card: transform 200ms ease, box-shadow 200ms ease;
+  --tld-transition-progress: width 500ms ease;
+}

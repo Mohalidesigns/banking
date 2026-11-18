@@ -1,5 +1,216 @@
 @import 'tailwindcss';
+@import './tokens.css';
 
 /* Brand fonts — bundled locally via Fontsource variable packages (no blocking external CDN). */
 @import '@fontsource-variable/inter/wght.css';
 @import '@fontsource-variable/roboto-mono/wght.css';
+
+/**
+ * Tailwind v4 theme mapping.
+ * `inline` resolves the var() at usage time, so utilities such as
+ * `bg-primary`, `text-ink-secondary`, `border-line`, `bg-tint-green`,
+ * `shadow-card` and `text-heat-critical` all reference the exact
+ * thirdLine token values declared once in tokens.css.
+ */
+@theme inline {
+  /* Typography (DS §3.1) */
+  --font-sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Roboto Mono Variable', ui-monospace, monospace;
+
+  /* Colours (DS §2) */
+  --color-primary: var(--tld-primary);
+  --color-primary-light: var(--tld-primary-light);
+  --color-primary-dark: var(--tld-primary-dark);
+  --color-primary-surface: var(--tld-primary-surface);
+  --color-accent: var(--tld-accent);
+  --color-accent-light: var(--tld-accent-light);
+  --color-accent-dark: var(--tld-accent-dark);
+  --color-success: var(--tld-success);
+  --color-success-light: var(--tld-success-light);
+  --color-warning: var(--tld-warning);
+  --color-warning-light: var(--tld-warning-light);
+  --color-error: var(--tld-error);
+  --color-error-light: var(--tld-error-light);
+  --color-info: var(--tld-info);
+  --color-purple: var(--tld-purple);
+  --color-purple-bg: var(--tld-purple-bg);
+  --color-yellow: var(--tld-yellow);
+  --color-yellow-bg: var(--tld-yellow-bg);
+  --color-page: var(--tld-bg);
+  --color-card: var(--tld-card);
+  --color-ink: var(--tld-text-primary);
+  --color-ink-secondary: var(--tld-text-secondary);
+  --color-ink-tertiary: var(--tld-text-tertiary);
+  --color-heading: var(--tld-text-heading);
+  --color-line: var(--tld-border);
+  --color-line-light: var(--tld-border-light);
+  --color-sidebar-divider: var(--tld-divider-sidebar);
+
+  /* Tinted backgrounds (DS §2.6) */
+  --color-tint-blue: var(--tld-tint-blue);
+  --color-tint-green: var(--tld-tint-green);
+  --color-tint-orange: var(--tld-tint-orange);
+  --color-tint-red: var(--tld-tint-red);
+  --color-tint-purple: var(--tld-tint-purple);
+  --color-tint-yellow: var(--tld-tint-yellow);
+
+  /* Risk heat-map scale (DS §2.8) */
+  --color-heat-very-low: var(--tld-heat-very-low);
+  --color-heat-low: var(--tld-heat-low);
+  --color-heat-medium: var(--tld-heat-medium);
+  --color-heat-high: var(--tld-heat-high);
+  --color-heat-critical: var(--tld-heat-critical);
+
+  /* Elevation (DS §6) */
+  --shadow-subtle: var(--tld-shadow-subtle);
+  --shadow-card: var(--tld-shadow-card);
+  --shadow-elevated: var(--tld-shadow-elevated);
+
+  /* Animations (DS §9) */
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+  --animate-bell-ring: bell-ring 1.2s ease-in-out;
+  --animate-slide-in: slide-in 300ms ease-out;
+  --animate-toast-progress: toast-progress 5000ms linear forwards;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bell-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  }
+  20% {
+    transform: rotate(-14deg);
+  }
+  30% {
+    transform: rotate(10deg);
+  }
+  40% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-page font-sans text-ink antialiased;
+    font-size: 13px; /* DS §3.2 body text */
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--tld-text-heading);
+    line-height: 1.2;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--tld-primary);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* DS §2.7 gradients */
+  .tld-gradient-logo {
+    background: var(--tld-gradient-logo);
+  }
+  .tld-gradient-avatar {
+    background: var(--tld-gradient-avatar);
+  }
+  .tld-gradient-ai-header {
+    background: var(--tld-gradient-ai-header);
+  }
+
+  /* DS §8.3 card hover lift */
+  .card-hover {
+    transition: var(--tld-transition-card);
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--tld-shadow-elevated);
+  }
+
+  /* DS §3.2 type-scale helpers */
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--tld-text-heading);
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tld-text-heading);
+  }
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--tld-text-heading);
+  }
+  .overline {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--tld-text-secondary);
+  }
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* DS §12 / Spec §2.7 — reduced-motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
