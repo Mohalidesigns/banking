@@ -30,7 +30,7 @@ export const NOTIFICATIONS: Notification[] = [
     category: 'review-required',
     severity: 'info',
     title: 'Finding awaiting review — Unity Non-Interest Bank examination',
-    body: 'Draft finding EXF-2026-014 (governance domain) is ready for lead supervisor review. Demo data.',
+    body: 'Draft finding FND-2026-118 (governance domain) is ready for lead supervisor review. Demo data.',
     createdAt: '2026-11-17T11:05:00Z',
     read: false,
     link: '/app/findings',

@@ -16,6 +16,11 @@ export interface PageRequest {
   sortDir?: 'asc' | 'desc'
 }
 
+/** Risk rating scale used across the prototype (DS §8.7). */
+export type RiskRating = 'Critical' | 'High' | 'Medium' | 'Low'
+
+export type Priority = 'Critical' | 'High' | 'Medium' | 'Low'
+
 /** Notification categories per Spec §16. */
 export type NotificationCategory =
   | 'task-assigned'

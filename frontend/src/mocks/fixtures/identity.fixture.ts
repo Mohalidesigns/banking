@@ -2,6 +2,7 @@
  * Demo identity fixtures (Spec §17.5 — fictional institutions and people).
  * Fixtures are ONLY consumed by mock repositories, never by components.
  */
+import { demoUuid } from '@/mocks/fixtures/demoIds'
 import type { DemoUser, Jurisdiction } from '@/types/auth'
 
 export const JURISDICTIONS: Jurisdiction[] = [
@@ -91,7 +92,8 @@ export const DEMO_USERS: DemoUser[] = [
     role: 'institution-user',
     jurisdictionIds: [],
     portal: {
-      institutionId: 'inst-meridian-commercial-bank',
+      // Mirrors INST_IDS.meridian (institutions.fixture) without a circular import.
+      institutionId: demoUuid(1, 1),
       institutionCode: 'MCB-001',
       institutionName: 'Meridian Commercial Bank',
     },
@@ -105,7 +107,8 @@ export const DEMO_USERS: DemoUser[] = [
     role: 'institution-user',
     jurisdictionIds: [],
     portal: {
-      institutionId: 'inst-northstar-merchant-bank',
+      // Mirrors INST_IDS.northstar (institutions.fixture) without a circular import.
+      institutionId: demoUuid(1, 2),
       institutionCode: 'NMB-002',
       institutionName: 'Northstar Merchant Bank',
     },

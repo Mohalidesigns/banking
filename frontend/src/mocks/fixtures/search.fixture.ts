@@ -1,108 +1,70 @@
 /**
- * Searchable demo entities (Spec §17.5 — one coherent fictional dataset;
- * the same institutions recur across modules). Consumed only by the mock
- * search repository.
+ * Searchable demo entities (Spec §17.5 — derived from the one coherent
+ * dataset so global search always matches the live records). Consumed only
+ * by the mock search service.
  */
+import { INSTITUTIONS } from '@/mocks/fixtures/institutions.fixture'
+import {
+  ENFORCEMENT_CASES,
+  EXAMINATIONS,
+  FINDINGS,
+  RETURN_SUBMISSIONS,
+} from '@/mocks/fixtures/supervision.fixture'
 import type { SearchResultItem } from '@/services/contracts/SearchService'
 
+const instName = (id: string): string =>
+  INSTITUTIONS.find((i) => i.id === id)?.tradingName ?? 'Unknown institution'
+
 export const SEARCH_RECORDS: SearchResultItem[] = [
-  // Institutions
-  {
-    id: 'inst-meridian-commercial-bank',
+  ...INSTITUTIONS.map((i): SearchResultItem => ({
+    id: i.id,
     group: 'Institutions',
-    title: 'Meridian Commercial Bank',
-    subtitle: 'MCB-001 · Commercial bank · Fictional demo institution',
-    path: '/app/institutions/inst-meridian-commercial-bank',
-  },
-  {
-    id: 'inst-northstar-merchant-bank',
-    group: 'Institutions',
-    title: 'Northstar Merchant Bank',
-    subtitle: 'NMB-002 · Merchant bank · Fictional demo institution',
-    path: '/app/institutions/inst-northstar-merchant-bank',
-  },
-  {
-    id: 'inst-unity-non-interest-bank',
-    group: 'Institutions',
-    title: 'Unity Non-Interest Bank',
-    subtitle: 'UNIB-003 · Non-interest bank · Fictional demo institution',
-    path: '/app/institutions/inst-unity-non-interest-bank',
-  },
-  {
-    id: 'inst-crestline-payment-bank',
-    group: 'Institutions',
-    title: 'Crestline Payment Bank',
-    subtitle: 'CPB-004 · Payment service bank · Fictional demo institution',
-    path: '/app/institutions/inst-crestline-payment-bank',
-  },
-  // Examinations
-  {
-    id: 'exm-2026-014',
+    title: i.tradingName,
+    subtitle: `${i.code} · ${i.category} · Fictional demo institution`,
+    path: `/app/institutions/${i.id}`,
+  })),
+  ...EXAMINATIONS.map((e): SearchResultItem => ({
+    id: e.id,
     group: 'Examinations',
-    title: 'EXM-2026-014 — AML/CFT thematic examination',
-    subtitle: 'Meridian Commercial Bank · Fieldwork in progress · Demo record',
-    path: '/app/examinations/exm-2026-014',
-  },
-  {
-    id: 'exm-2026-009',
-    group: 'Examinations',
-    title: 'EXM-2026-009 — Capital adequacy review',
-    subtitle: 'Northstar Merchant Bank · Completed · Demo record',
-    path: '/app/examinations/exm-2026-009',
-  },
-  {
-    id: 'exm-2026-021',
-    group: 'Examinations',
-    title: 'EXM-2026-021 — Corporate governance examination',
-    subtitle: 'Unity Non-Interest Bank · Planned · Demo record',
-    path: '/app/examinations/exm-2026-021',
-  },
-  // Findings
-  {
-    id: 'fnd-2026-101',
+    title: `${e.reference} — ${e.type} examination`,
+    subtitle: `${instName(e.institutionId)} · ${e.status} · Demo record`,
+    path: `/app/examinations/${e.id}`,
+  })),
+  ...FINDINGS.map((f): SearchResultItem => ({
+    id: f.id,
     group: 'Findings',
-    title: 'FND-2026-101 — AML transaction monitoring gaps',
-    subtitle: 'Meridian Commercial Bank · High risk · Demo record',
-    path: '/app/findings/fnd-2026-101',
-  },
-  {
-    id: 'fnd-2026-087',
-    group: 'Findings',
-    title: 'FND-2026-087 — Liquidity reporting delays',
-    subtitle: 'Northstar Merchant Bank · Medium risk · Demo record',
-    path: '/app/findings/fnd-2026-087',
-  },
-  // Returns
-  {
-    id: 'sub-mpr09-meridian-2026-10',
+    title: `${f.reference} — ${f.title}`,
+    subtitle: `${instName(f.institutionId)} · ${f.riskRating} risk · Demo record`,
+    path: `/app/findings/${f.id}`,
+  })),
+  ...RETURN_SUBMISSIONS.map((r): SearchResultItem => ({
+    id: r.id,
     group: 'Returns',
-    title: 'MPR-09 Capital adequacy return — October 2026',
-    subtitle: 'Meridian Commercial Bank · Overdue · Demo record',
-    path: '/app/returns/sub-mpr09-meridian-2026-10',
-  },
-  {
-    id: 'sub-qsl03-crestline-2026-q3',
-    group: 'Returns',
-    title: 'QSL-03 Quarterly liquidity return — Q3 2026',
-    subtitle: 'Crestline Payment Bank · Submitted · Demo record',
-    path: '/app/returns/sub-qsl03-crestline-2026-q3',
-  },
-  // Directives
+    title: `${r.returnCode} ${r.returnName} — ${r.period}`,
+    subtitle: `${instName(r.institutionId)} · ${r.status} · Demo record`,
+    path: `/app/returns/${r.id}`,
+  })),
   {
     id: 'dir-2026-004',
     group: 'Directives',
     title: 'DIR-2026-004 — Corrective directive: AML remediation',
-    subtitle: 'Meridian Commercial Bank · Open · Demo record',
+    subtitle: `${instName(INSTITUTIONS[0].id)} · Open · Demo record`,
     path: '/app/directives',
   },
   {
     id: 'dir-2026-002',
     group: 'Directives',
     title: 'DIR-2026-002 — Liquidity buffer directive',
-    subtitle: 'Northstar Merchant Bank · Monitoring · Demo record',
+    subtitle: `${instName(INSTITUTIONS[1].id)} · Monitoring · Demo record`,
     path: '/app/directives',
   },
-  // Reports
+  ...ENFORCEMENT_CASES.map((c): SearchResultItem => ({
+    id: c.id,
+    group: 'Directives',
+    title: `${c.reference} — ${c.title}`,
+    subtitle: `${instName(c.institutionId)} · ${c.status} · Demo record`,
+    path: `/app/enforcement/${c.id}`,
+  })),
   {
     id: 'rpt-fsib-2026-q3',
     group: 'Reports',

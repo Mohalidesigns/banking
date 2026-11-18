@@ -29,6 +29,18 @@ export const notificationRepository = {
     })
   },
 
+  /** Raise a demo notification (prototype session only). */
+  push(notification: Omit<Notification, 'id' | 'createdAt' | 'read'>): Notification {
+    const created: Notification = {
+      ...notification,
+      id: `ntf-${Date.now().toString(16)}-${Math.floor(Math.random() * 1e6).toString(16)}`,
+      createdAt: new Date().toISOString(),
+      read: false,
+    }
+    records.unshift(created)
+    return created
+  },
+
   /** Prototype-only: restore the initial demo dataset. */
   reset(): void {
     records.length = 0

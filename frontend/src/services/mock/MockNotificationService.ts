@@ -33,6 +33,18 @@ export class MockNotificationService implements NotificationService {
     notificationRepository.markAllRead()
     return notificationRepository.list()
   }
+
+  async push(input: Parameters<NotificationService['push']>[0]) {
+    await latency()
+    notificationRepository.push(input)
+    return notificationRepository.list()
+  }
+
+  async resetDemoData() {
+    await latency()
+    notificationRepository.reset()
+    return notificationRepository.list()
+  }
 }
 
 export const notificationService: NotificationService = new MockNotificationService()

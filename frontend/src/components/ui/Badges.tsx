@@ -61,7 +61,8 @@ export function StatusBadge({
   return <span className={cx(badgeBase, statusTones[resolved])}>{label}</span>
 }
 
-export type RiskRating = 'Critical' | 'High' | 'Medium' | 'Low'
+export type { RiskRating } from '@/types/common'
+import type { RiskRating } from '@/types/common'
 
 const riskTones: Record<RiskRating, { bg: string; dot: string }> = {
   Critical: { bg: 'bg-tint-red text-error', dot: 'bg-error' },
