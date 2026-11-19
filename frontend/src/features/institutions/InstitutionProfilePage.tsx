@@ -734,8 +734,25 @@ export function InstitutionProfilePage() {
       ) : (
         <EmptyState title="No prudential snapshots" description="This demo institution has no financial snapshots yet." />
       )}
-      <p className="mt-3 text-[10px] text-ink-tertiary">
-        Period {latest?.periodLabel ?? '—'} · deep indicator analytics arrive with Off-Site Surveillance (Phase 3). Illustrative demo figures.
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <Button size="sm" variant="outline" onClick={() => navigate(`/app/prudential/capital?institution=${encodeURIComponent(institutionId)}`)}>
+          Capital adequacy →
+        </Button>
+        <Button size="sm" variant="outline" onClick={() => navigate(`/app/prudential/credit?institution=${encodeURIComponent(institutionId)}`)}>
+          Credit & asset quality →
+        </Button>
+        <Button size="sm" variant="outline" onClick={() => navigate(`/app/prudential/liquidity?institution=${encodeURIComponent(institutionId)}`)}>
+          Liquidity & treasury →
+        </Button>
+        <Button size="sm" variant="outline" onClick={() => navigate('/app/prudential/indicators')}>
+          Indicator catalogue →
+        </Button>
+        <Button size="sm" variant="outline" onClick={() => navigate('/app/prudential/stress-testing')}>
+          Stress testing →
+        </Button>
+      </div>
+      <p className="mt-2 text-[10px] text-ink-tertiary">
+        Period {latest?.periodLabel ?? '—'} · deep links open the prudential screens (Phase 3B) for this institution. Illustrative demo figures.
       </p>
     </SectionCard>
   )

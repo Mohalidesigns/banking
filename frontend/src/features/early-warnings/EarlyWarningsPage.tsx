@@ -74,6 +74,14 @@ const ANALYSTS = ['Fatima Bello', 'Daniel Adeyemi', 'Zainab Lawal', 'Nkechi Balo
 
 const DEMO_NOTE = 'All alert thresholds are configurable mock values, labelled illustrative until approved regulatory rules are loaded (Spec §6.4).'
 
+/** Alert indicator names → prudential catalogue codes (Phase 3B deep links). */
+const INDICATOR_CODE_BY_NAME: Record<string, string> = {
+  'Liquidity Coverage Ratio': 'LCR',
+  'Capital Adequacy Ratio': 'CAR',
+  'NPL Ratio': 'NPL',
+  'Deposit Concentration': 'DC',
+}
+
 export function EarlyWarningsPage() {
   const [searchParams] = useSearchParams()
   const alertParam = searchParams.get('alert')
@@ -490,7 +498,21 @@ function AlertDetailView({ alertId }: { alertId: string }) {
         <div className="flex flex-col gap-4 xl:col-span-2">
           {/* Trigger + values */}
           <Card>
-            <CardHeader title="Trigger explanation" subtitle={`Rule ${a.ruleCode} · version ${a.ruleVersion}`} />
+            <CardHeader
+              title="Trigger explanation"
+              subtitle={`Rule ${a.ruleCode} · version ${a.ruleVersion}`}
+              action={
+                INDICATOR_CODE_BY_NAME[a.indicator] ? (
+                  <button
+                    type="button"
+                    className="cursor-pointer text-xs font-medium text-primary-surface hover:underline"
+                    onClick={() => navigate(`/app/prudential/indicators?indicator=${INDICATOR_CODE_BY_NAME[a.indicator]}`)}
+                  >
+                    Indicator detail ({INDICATOR_CODE_BY_NAME[a.indicator]}) →
+                  </button>
+                ) : undefined
+              }
+            />
             <CardBody>
               <p className="text-xs leading-relaxed text-ink">{a.triggerExplanation}</p>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">

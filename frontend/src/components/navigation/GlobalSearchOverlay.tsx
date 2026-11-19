@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router'
 import {
+  Activity,
   Building,
   ClipboardList,
   Clock,
@@ -20,8 +21,8 @@ import { useUIStore } from '@/store/uiStore'
 /**
  * Global search command overlay (Spec §3.4): keyboard shortcut hint, recent
  * searches, results grouped by Institutions / Examinations / Findings /
- * Returns / Directives / Reports, select navigates to the detail page,
- * no-result state and clear action. Mock results only.
+ * Returns / Directives / Reports / Prudential, select navigates to the
+ * detail page, no-result state and clear action. Mock results only.
  */
 const groupIcons: Record<SearchEntityGroup, typeof Building> = {
   Institutions: Building,
@@ -30,6 +31,7 @@ const groupIcons: Record<SearchEntityGroup, typeof Building> = {
   Returns: FileSpreadsheet,
   Directives: Gavel,
   Reports: FileText,
+  Prudential: Activity,
 }
 
 export function GlobalSearchOverlay() {

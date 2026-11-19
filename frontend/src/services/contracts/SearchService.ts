@@ -9,6 +9,7 @@ export type SearchEntityGroup =
   | 'Returns'
   | 'Directives'
   | 'Reports'
+  | 'Prudential'
 
 export interface SearchResultItem {
   id: string
@@ -30,4 +31,5 @@ export const SEARCH_GROUP_ORDER: SearchEntityGroup[] = [
   'Returns',
   'Directives',
   'Reports',
+  'Prudential',
 ]

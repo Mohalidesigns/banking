@@ -281,6 +281,23 @@ export function CommandCentrePage() {
               Asset-weighted portfolio averages across the supervised demo population.{' '}
               {DEMO_FIGURES_NOTE}
             </p>
+            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 border-t border-line-light pt-2">
+              <button type="button" className="cursor-pointer text-[11px] font-medium text-primary-surface hover:underline" onClick={() => navigate('/app/prudential/capital')}>
+                Capital adequacy →
+              </button>
+              <button type="button" className="cursor-pointer text-[11px] font-medium text-primary-surface hover:underline" onClick={() => navigate('/app/prudential/credit')}>
+                Credit & asset quality →
+              </button>
+              <button type="button" className="cursor-pointer text-[11px] font-medium text-primary-surface hover:underline" onClick={() => navigate('/app/prudential/liquidity')}>
+                Liquidity & treasury →
+              </button>
+              <button type="button" className="cursor-pointer text-[11px] font-medium text-primary-surface hover:underline" onClick={() => navigate('/app/prudential/indicators')}>
+                Prudential indicators →
+              </button>
+              <button type="button" className="cursor-pointer text-[11px] font-medium text-primary-surface hover:underline" onClick={() => navigate('/app/prudential/stress-testing')}>
+                Stress testing →
+              </button>
+            </div>
           </CardBody>
         </Card>
         <Card>
