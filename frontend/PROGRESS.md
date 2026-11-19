@@ -390,3 +390,119 @@ lead finished unit 8 (test-query fixes, docs, gate) directly.
   fixtures+repositories+contracts the same way, keep the one-story rule.
 - After 3B: Phase 4 specialist domains per Spec §21.
 
+---
+
+## Phase 3B — Prudential supervision (19 Nov 2026)
+
+Built on the pre-committed 3B type layer (`a28f449`,
+`src/types/prudential.ts` — §8.1–§8.5 contracts). Completes Journey B
+step 4; all five remaining Phase-3 `moduleRoute(...)` placeholders are
+swapped. Nine units, one commit each (`e8b063d`…docs).
+
+**Built:**
+- **Data layer** (`e8b063d`) — `prudential.fixture.ts` (capital
+  submissions/breaches/adjustments, credit loan-book seeds + sector mix +
+  top borrowers + large exposures + related-party + restructured +
+  collateral + loan samples, liquidity seeds + funding maturity + liquid
+  assets + currency exposure + treasury transactions, stress scenarios +
+  seeded runs + severity factors + sensitivity seed, nine-indicator
+  catalogue + threshold history + latest seeds), `prudentialRepository`
+  (mutable session state + reset, snapshot-derived readings, stress run
+  calculator), `PrudentialService` contracts (CapitalAdequacy / CreditQuality
+  / LiquidityTreasury / StressTesting / IndicatorCatalogue) and
+  role-gated `MockPrudentialService`. Four new `DemoAction`s
+  (`review-prudential`, `approve-prudential`, `run-stress-test`,
+  `manage-indicator-thresholds`) wired through `config/roles.ts` tiers;
+  registered in `demoDataReset`; `storyRefs.ts` gained prudential anchors.
+  One story: SUB-2026-0143 (Vanguard capital, rejected, + a November
+  resubmission awaiting review) ↔ EWA-2026-008 ↔ ENF-2026-002;
+  SUB-2026-0144 (Northstar MPR-04, LCR 104.2) → EXC-2026-011 →
+  EWA-2026-011 → EXM-2026-024; SUB-2026-0145 (Meridian QAR-02, NPL 6.9) →
+  EWA-2026-013; Delta PC 92 → EXC-2026-018.
+- **Capital Adequacy** (`7a9668e`, §8.1) — KPI cards, composition donut,
+  CET1/Tier1/Tier2/CAR trend, RWA breakdown, deductions, stress summary,
+  exception list, submissions/breaches/adjustments tables; submission
+  detail modal (formula, definition, source-submission deep link, period,
+  rule version, calculation breakdown, reviewer status); start-review /
+  accept / reject and breach-status workflows role-gated; `?institution=`
+  per-institution capital detail.
+- **Credit & Asset Quality** (`63df4bb`, §8.2) — KPI cards + seven tabs
+  (Portfolio Overview, Loan Classification, Impairment & Provisioning,
+  Large Exposures, Related-Party Lending, Collateral, Credit Examination)
+  with sector/classification/ageing/provision charts and the loan sample
+  review drawer (gated `record-fieldwork` conclusions); evidence chips
+  deep-link via the new `?search=` on the Evidence Repository.
+- **Liquidity & Treasury** (`a195a61`, §8.3) — KPI cards + seven tabs
+  (Overview, Funding Profile, ALM, Treasury Operations, FX, Stress
+  Testing, Exceptions) with liquidity trend, maturity ladder, liquid-asset
+  composition, deposit-concentration and currency charts, the treasury
+  examination workspace (gated examiner results) and the Northstar LCR
+  story links.
+- **Stress Testing** (`23075e5`, §8.4) — scenario library with assumptions
+  modal, run register, institution selection + demo run calculator,
+  baseline-vs-stressed results, sensitivity grid, submit→approve/reject
+  reviewer workflow; every result labelled illustrative (never official).
+  `?run=RUN-…` deep-links a run.
+- **Prudential Indicators** (`bc64a52`, §8.5) — configurable catalogue
+  (nine indicators) + detail with formula breakdown, portfolio history
+  chart against threshold reference lines, threshold version history and
+  story-anchored readings; threshold editor gated by
+  `manage-indicator-thresholds` and versions the demo rule.
+  `?indicator=CODE` deep-links an indicator.
+- **Cross-wiring** (`cfc16bc`) — Command Centre prudential-trend card and
+  Institution-profile prudential tab now deep-link into all five screens;
+  alert-detail links to the matching indicator; global search gained a
+  Prudential group (five screens + CAR/LCR/NPL story indicators); early
+  warnings resolve `?reference=EWA-…`; returns resolve `?search=`.
+- **Tests + docs** (`808ed46`, `a993f1d`, docs) —
+  `prudentialWorkflow.test.ts` (15 service-level tests: capital review/
+  decision tiers, loan-sample + treasury conclusions, stress lifecycle and
+  calculator, indicator thresholds + story readings) and five page-flow
+  suites (capital, credit, liquidity, stress, indicators) covering KPI
+  rendering, story anchors, tab navigation, workflow mutations and §19
+  role gating (analyst vs lead vs examiner vs read-only).
+
+**Bug found and fixed (`Drawer.tsx`, `808ed46`):** the same latent defect
+the lead fixed in `Modal.tsx` during 2B — the focus/keydown effect
+depended on `[open, onClose]` and callers pass inline `onClose` arrows, so
+every re-render of a *controlled* form inside a drawer re-ran the effect
+and moved focus to the first focusable (the X close button); the next
+typed space activated it and silently closed the drawer. This broke the
+loan-sample and treasury conclusion flows. Fixed by holding `onClose` in a
+ref and running the effect only on `[open]`. Regression-covered by
+`CreditAssetQualityPage.test.tsx`.
+
+**Verified (real output, 19 Nov 2026):**
+- `npm run build` → tsc clean; ✓ built (>500 kB Recharts advisory
+  unchanged, deferred to Phase 7).
+- `npm run lint` → oxlint: **0 errors, 53 warnings** — all React-Compiler
+  advisories: the pre-existing 3 (2× TanStack `incompatible-library`,
+  1× DropdownMenu `refs`) plus `set-state-in-effect` on the new pages'
+  standard async-load pattern (same class documented since 2A/2B/3A).
+- `npm test` → **23 files, 119 tests, all passing** (82 prior + 37 new).
+
+**Decisions / deviations:**
+- No new libraries — Recharts, TanStack Table, RHF/Zod already present.
+- Indicator readings for NSFR/PC/DC/FXOP/LEV use seeded four-period demo
+  histories (`SEED_HISTORY_OVERRIDES` where the story needs exact values);
+  CAR/LCR/NPL derive from the full eight-quarter snapshot series.
+- Northstar's Q3 2026 snapshot `liquidityRatioPct` is exactly 104.2, so
+  the LCR reading and the EWA-2026-011 / EXC-2026-011 anchors reconcile
+  with the 3A surveillance data without duplication.
+- Institution roles are refused every prudential mutation
+  (`assertRegulator`), matching the §7.8 hard rule.
+
+**Next chunk owes (Phase 4 — specialist domains, Spec §21/§9):**
+- Six specialist supervision domains (governance, ERM, cyber, AML,
+  operations, consumer protection) using the consistent §9 page pattern
+  (dashboard · assessment register · assessment/exam detail · checklist &
+  procedures · evidence · findings · report · history), plus Frameworks,
+  Obligations and Correspondence. Swap the `specialist/*` and
+  `regulatory/frameworks|obligations|correspondence` `moduleRoute(...)`
+  placeholders.
+- Extend fixtures+repositories+contracts the same way (components never
+  import fixtures); the Meridian AML story (EXM-2026-014 → FND-2026-101 →
+  CAP-2026-003) and the Crestline cyber exam (EXM-2026-005) are ready
+  anchors for the AML and cybersecurity domains.
+- Consider the Phase-7 code-splitting pass if the bundle keeps growing.
+

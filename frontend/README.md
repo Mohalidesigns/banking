@@ -42,7 +42,7 @@ Session state (demo user, jurisdiction, sidebar/nav-group state) persists
 in `localStorage` under `atheris-reg-prototype-session`. Clear that key to
 reset the demo session.
 
-## What is built (Phase 1 + Phase 2 + Phase 3A)
+## What is built (Phase 1 + Phase 2 + Phase 3A + Phase 3B)
 
 - **App shell** — navy sidebar with the full Spec §3.2 nav tree (role-aware,
   with live actionable queue counts), topbar with global search (⌘K),
@@ -120,7 +120,48 @@ reset the demo session.
   columns plus alert detail (trigger explanation, source return deep-link,
   trend, rule version, related assessments, escalation history, linked
   action) and acknowledge / assign / escalate / dismiss / convert-to-
-  examination workflow (§6.4).
+  examination workflow (§6.4). `?reference=EWA-…` deep links resolve to the
+  alert detail.
+- **Capital Adequacy** (`/app/prudential/capital`) — §8.1 KPI cards
+  (regulatory capital, RWA, portfolio CAR, buffer/shortfall), capital
+  composition donut, CET1/Tier 1/Tier 2 trend, RWA breakdown, deductions,
+  capital stress summary, exception list, and submissions / breaches /
+  adjustments tables. Submission detail modal carries formula, definition,
+  source-submission deep link, period, rule version, calculation breakdown
+  and reviewer status; start-review / accept / reject and breach status
+  moves are role-gated. `?institution=` opens the per-institution capital
+  detail (composition, trend, CAR calculation, breaches, stress summary).
+- **Credit & Asset Quality** (`/app/prudential/credit`) — §8.2 KPI cards and
+  the seven tabs (Portfolio Overview, Loan Classification, Impairment &
+  Provisioning, Large Exposures, Related-Party Lending, Collateral, Credit
+  Examination) with sector/classification/ageing/provision-movement charts,
+  top borrowers, restructured loans and the loan sample review workspace
+  (examiner conclusions gated by `record-fieldwork`). Story: Meridian's two
+  large exposures under watch (EWA-2026-013), Vanguard related-party
+  breaches from EXM-2026-012 → FND-2026-033.
+- **Liquidity & Treasury** (`/app/prudential/liquidity`) — §8.3 KPI cards
+  (HQLA, LCR, NSFR, deposit concentration, FX open position) and the seven
+  tabs (Overview, Funding Profile, ALM, Treasury Operations, FX, Stress
+  Testing, Exceptions) with liquidity trend, funding maturity ladder,
+  liquid-asset composition, deposit-concentration and currency-exposure
+  charts, the treasury examination workspace (gated examiner results) and
+  the Northstar LCR story links (SUB-2026-0144 → EXC-2026-011 →
+  EWA-2026-011 → EXM-2026-024).
+- **Stress Testing** (`/app/prudential/stress-testing`) — §8.4 scenario
+  library with assumptions, institution selection, demo run calculator,
+  baseline-vs-stressed capital/liquidity/credit results, sensitivity grid
+  and the submit → approve/reject reviewer workflow. Every calculation is
+  labelled illustrative and never presented as an official regulatory
+  stress-test result. `?run=RUN-…` deep-links a run.
+- **Prudential Indicators** (`/app/prudential/indicators`) — §8.5
+  configurable catalogue (nine demo indicators: code, definition, formula,
+  unit, applicable types, thresholds, frequency, effective date, source
+  return fields, validation rules) plus indicator detail with formula
+  breakdown, portfolio history chart against threshold reference lines,
+  threshold version history and story-anchored readings (e.g. Northstar
+  LCR Q3 2026 = 104.2 → EWA-2026-011). Threshold edits are gated by
+  `manage-indicator-thresholds` and bump the demo rule version.
+  `?indicator=CODE` deep-links an indicator.
 - **Coherent demo dataset** — eight fictional institutions (Meridian
   Commercial Bank, Northstar Merchant Bank, Unity Non-Interest Bank,
   Crestline Payment Bank, Aurora Savings & Loans, Delta Microfinance,
@@ -128,10 +169,13 @@ reset the demo session.
   findings, returns, alerts, risk assessments, plans, corrective actions,
   enforcement cases and a work queue telling one story (Spec §17.5).
   Journey A (§22) runs end-to-end on linked anchors: EXM-2026-014 →
-  FND-2026-101 → CAP-2026-003. Journey B steps 1–3 and 5–7 run on the
-  returns/alerts anchors: SUB-2026-0144 (Northstar MPR-04, LCR 104.2) →
-  EWA-2026-011 → EXM-2026-024; EWA-2026-008 links enforcement case
-  ENF-2026-002.
+  FND-2026-101 → CAP-2026-003. **Journey B (§22) is complete end-to-end:**
+  SUB-2026-0144 (Northstar MPR-04, LCR 104.2) → validation warnings →
+  EXC-2026-011 → EWA-2026-011 → analyst assignment → EXM-2026-024, with
+  step 4 (prudential indicators) served by the LCR detail reading anchored
+  to the same story; EWA-2026-008 links enforcement case ENF-2026-002 and
+  the Vanguard capital breach rows (SUB-2026-0143 rejected, November
+  resubmission awaiting review).
 
 ## Stack
 
@@ -169,7 +213,8 @@ src/
 ├── features/       auth/, dashboard/, institutions/, work/, risk/, plans/,
 │                   examinations/, library/, evidence/, findings/,
 │                   remediation/, returns/, surveillance/, early-warnings/,
-│                   errors/
+│                   prudential/ (capital, credit, liquidity, stress-testing,
+│                   indicators), errors/
 ├── hooks/          useMediaQuery (responsive shell)
 ├── layouts/        RegulatorLayout, AuthLayout, InstitutionPortalLayout
 ├── mocks/          fixtures/ + repositories/ (never imported by components)
@@ -179,12 +224,15 @@ src/
 │   │               WorkQueueService, SupervisionReadService (+QueueCounts),
 │   │               ExaminationService, FindingService, EvidenceService,
 │   │               LibraryService, PlanService, RiskAssessmentService,
-│   │               RemediationService, ReturnsService, SurveillanceService
+│   │               RemediationService, ReturnsService, SurveillanceService,
+│   │               PrudentialService (CapitalAdequacy/CreditQuality/
+│   │               LiquidityTreasury/StressTesting/IndicatorCatalogue)
 │   └── mock/       Mock* implementations over the repositories
 ├── store/          sessionStore, notificationStore, uiStore, navCountStore
 ├── styles/         tokens.css, index.css
 └── types/          auth.ts, common.ts, institution.ts, supervision.ts,
-                    examination.ts, finding.ts, returns.ts, surveillance.ts
+                    examination.ts, finding.ts, returns.ts, surveillance.ts,
+                    prudential.ts (§8.1–§8.5 domain contracts)
 ```
 
 **Rule (Spec §18.3):** components import service *interfaces* from
@@ -198,13 +246,18 @@ A future `Api*Service` (Spring Boot) slots in without redesigning screens.
 - **<768px:** sidebar becomes an overlay drawer (topbar menu trigger,
   Escape/backdrop closes); grids stack; tables scroll horizontally.
 
-## Known boundaries after Phase 3A
+## Known boundaries after Phase 3B
 
-- Prudential screens (capital, credit, liquidity, stress testing,
-  prudential indicators — Spec §8) still render designed placeholders —
-  Phase 3B builds them, completing Journey B step 4.
-- Global search and dashboard deep-links to Phase 4+ modules (enforcement
-  and later) land on placeholders until their phase.
+- All five prudential screens (Spec §8.1–§8.5) are live; **Journey B (§22)
+  is demonstrable end-to-end**. Stress-test outputs are illustrative demo
+  calculations and are labelled as never being official regulatory results.
+- Global search and dashboard deep-links to Phase 4+ modules (specialist
+  domains, enforcement detail and later) land on designed placeholders
+  until their phase; capital-breach chips pointing at `ENF-…` land on the
+  Enforcement placeholder (Phase 5).
+- Indicator readings for NSFR/PC/DC/FXOP/LEV use seeded four-period demo
+  histories; only CAR/LCR/NPL derive from the full eight-quarter snapshot
+  series.
 - Portal screens remain Phase 6 placeholders; portal roles only switch the
   layout and navigation visibility.
 - The JS bundle exceeds 500 kB (Recharts weight); code-splitting is
