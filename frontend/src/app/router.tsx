@@ -32,6 +32,7 @@ import { RemediationPage } from '@/features/remediation/RemediationPage'
 import { CapitalAdequacyPage } from '@/features/prudential/CapitalAdequacyPage'
 import { CreditAssetQualityPage } from '@/features/prudential/CreditAssetQualityPage'
 import { LiquidityTreasuryPage } from '@/features/prudential/LiquidityTreasuryPage'
+import { StressTestingPage } from '@/features/prudential/StressTestingPage'
 import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
 import { ReturnSubmissionDetailPage } from '@/features/returns/ReturnSubmissionDetailPage'
 import { SurveillancePage } from '@/features/surveillance/SurveillancePage'
@@ -254,7 +255,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Liquidity & Treasury', phase: 3 } satisfies RouteHandle,
         Component: LiquidityTreasuryPage,
       },
-      { path: 'prudential/stress-testing', ...moduleRoute('Stress Testing', 3) },
+      {
+        path: 'prudential/stress-testing',
+        handle: { breadcrumb: 'Stress Testing', phase: 3 } satisfies RouteHandle,
+        Component: StressTestingPage,
+      },
       { path: 'prudential/indicators', ...moduleRoute('Prudential Indicators', 3) },
 
       // Specialist supervision
