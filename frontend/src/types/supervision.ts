@@ -271,7 +271,7 @@ export interface WatchlistEntry {
 /** Upcoming examination / deadline rows on the Command Centre. */
 export interface UpcomingItem {
   id: string
-  kind: 'examination' | 'return-deadline' | 'assessment' | 'plan-milestone'
+  kind: 'examination' | 'return-deadline' | 'assessment' | 'plan-milestone' | 'obligation-review'
   title: string
   institutionId?: string
   /** ISO 8601 */

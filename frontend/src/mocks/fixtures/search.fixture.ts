@@ -5,6 +5,11 @@
  */
 import { INSTITUTIONS } from '@/mocks/fixtures/institutions.fixture'
 import {
+  REGULATORY_CORRESPONDENCE,
+  REGULATORY_FRAMEWORKS,
+  REGULATORY_OBLIGATIONS,
+} from '@/mocks/fixtures/regulatory.fixture'
+import {
   ENFORCEMENT_CASES,
   EXAMINATIONS,
   FINDINGS,
@@ -136,4 +141,48 @@ export const SEARCH_RECORDS: SearchResultItem[] = [
     subtitle: `Prudential indicator · ${instName(INSTITUTIONS[0].id)} amber story (EWA-2026-013)`,
     path: '/app/prudential/indicators?indicator=NPL',
   },
+  // Regulatory administration (Phase 4A) — screens plus the framework,
+  // obligation and correspondence story records (§10).
+  {
+    id: 'reg-frameworks',
+    group: 'Regulatory',
+    title: 'Regulatory Frameworks',
+    subtitle: 'Framework library · Illustrative demo module',
+    path: '/app/regulatory/frameworks',
+  },
+  {
+    id: 'reg-obligations',
+    group: 'Regulatory',
+    title: 'Regulatory Obligations',
+    subtitle: 'Obligation register · Illustrative demo module',
+    path: '/app/regulatory/obligations',
+  },
+  {
+    id: 'reg-correspondence',
+    group: 'Regulatory',
+    title: 'Regulatory Correspondence',
+    subtitle: 'Official correspondence register · Illustrative demo module',
+    path: '/app/regulatory/correspondence',
+  },
+  ...REGULATORY_FRAMEWORKS.map((f): SearchResultItem => ({
+    id: f.id,
+    group: 'Regulatory',
+    title: `${f.code} — ${f.name}`,
+    subtitle: `${f.category} · ${f.status} · Demo framework`,
+    path: `/app/regulatory/frameworks?framework=${encodeURIComponent(f.code)}`,
+  })),
+  ...REGULATORY_OBLIGATIONS.map((o): SearchResultItem => ({
+    id: o.id,
+    group: 'Regulatory',
+    title: `${o.reference} — ${o.title}`,
+    subtitle: `${o.responsibleDepartment} · ${o.frequency} · Demo obligation`,
+    path: `/app/regulatory/obligations?obligation=${encodeURIComponent(o.reference)}`,
+  })),
+  ...REGULATORY_CORRESPONDENCE.map((c): SearchResultItem => ({
+    id: c.id,
+    group: 'Regulatory',
+    title: `${c.reference} — ${c.subject}`,
+    subtitle: `${instName(c.institutionId)} · ${c.type} · ${c.status} · Demo correspondence`,
+    path: `/app/regulatory/correspondence?correspondence=${encodeURIComponent(c.reference)}`,
+  })),
 ]

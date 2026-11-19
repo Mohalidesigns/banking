@@ -972,7 +972,19 @@ export function InstitutionProfilePage() {
   )
 
   const documentsTab = (
-    <SectionCard title={`Documents (${documents.length})`}>
+    <SectionCard
+      title={`Documents (${documents.length})`}
+      action={
+        <Button
+          variant="ghost"
+          iconLeft={<Mail className="h-3.5 w-3.5" />}
+          title="Open the correspondence register filtered to this institution (§10.3)"
+          onClick={() => navigate(`/app/regulatory/correspondence?institution=${encodeURIComponent(institutionId)}`)}
+        >
+          Regulatory correspondence
+        </Button>
+      }
+    >
       <div className="overflow-x-auto">
         <table className="w-full min-w-[680px] text-left">
           <thead>

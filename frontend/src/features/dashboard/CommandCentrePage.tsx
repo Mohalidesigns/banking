@@ -11,6 +11,7 @@ import {
   FileSpreadsheet,
   Gauge,
   RotateCcw,
+  ScrollText,
   TriangleExclamationPoint,
 } from 'lucide-react'
 import { PortfolioCategoryBar } from '@/components/charts/PortfolioCategoryBar'
@@ -47,6 +48,7 @@ const upcomingIcon = {
   'return-deadline': FileSpreadsheet,
   assessment: Gauge,
   'plan-milestone': CalendarDays,
+  'obligation-review': ScrollText,
 } as const
 
 const severityClasses = {

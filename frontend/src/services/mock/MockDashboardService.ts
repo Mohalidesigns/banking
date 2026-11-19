@@ -1,4 +1,5 @@
 import { institutionRepository } from '@/mocks/repositories/institutionRepository'
+import { regulatoryRepository } from '@/mocks/repositories/regulatoryRepository'
 import { supervisionRepository } from '@/mocks/repositories/supervisionRepository'
 import type {
   AlertRow,
@@ -17,6 +18,7 @@ const latency = () => new Promise<void>((resolve) => setTimeout(resolve, LATENCY
 const MS_PER_DAY = 86_400_000
 const today = () => new Date()
 const isoToday = () => today().toISOString().slice(0, 10)
+const isoInDays = (n: number) => new Date(today().getTime() + n * MS_PER_DAY).toISOString().slice(0, 10)
 const daysIn = (period: DashboardPeriod): number =>
   period === 'quarter' ? 90 : period === 'ytd' ? Math.ceil((today().getTime() - new Date(`${today().getFullYear()}-01-01`).getTime()) / MS_PER_DAY) : 365
 
@@ -189,6 +191,19 @@ export class MockDashboardService implements DashboardService {
           date: a.dueDate,
           statusLabel: a.status,
           link: '/app/risk-assessments',
+        })),
+      // Phase 4A — obligation reviews that are overdue or due within 7 days
+      // (§10.2 register deep-link; keeps the Command Centre on the one story).
+      ...regulatoryRepository
+        .listObligations()
+        .filter((o) => o.nextReviewDate <= isoInDays(7))
+        .map((o): UpcomingItem => ({
+          id: o.id,
+          kind: 'obligation-review',
+          title: `${o.reference} — ${o.title}`,
+          date: o.nextReviewDate,
+          statusLabel: o.nextReviewDate < isoToday() ? 'Review overdue' : 'Review due',
+          link: `/app/regulatory/obligations?obligation=${encodeURIComponent(o.reference)}`,
         })),
     ]
       .sort((a, b) => a.date.localeCompare(b.date))
