@@ -330,3 +330,63 @@ uncontrolled. Regression-covered by `ExaminationWorkspacePage.test.tsx`.
   fixtures). Swap the remaining Phase-3 `moduleRoute(...)` elements in
   `src/app/router.tsx`; Command Centre alert drawer and profile tabs
   already deep-link into these routes.
+
+## Phase 3A — Returns, off-site surveillance, early warnings (19–20 Nov 2026)
+
+Built on the pre-committed 3A type layer (`41a8b9e`). Units 1–7 were
+committed by the chunk agent (`c27a11f`…`7de1311`), which then died on a
+provider content-filter false positive (`data_inspection_failed`) during
+unit 8 — the third infra death on this chunk's surveillance/AML text. It
+left four test files untracked plus one uncommitted repository fix; the
+lead finished unit 8 (test-query fixes, docs, gate) directly.
+
+**Built:**
+- Data layer — returns/surveillance/alert fixtures, repositories,
+  `ReturnsService` + `SurveillanceService` contracts and role-gated mock
+  services; `storyRefs.ts` extended with return + alert anchors
+  (SUB-2026-0144 → EWA-2026-011 → EXM-2026-024; EWA-2026-008 ↔
+  ENF-2026-002); `return-validation` wired into workQueueRepository +
+  navCountStore (`c27a11f`).
+- Returns dashboard (§11.1) — six filter KPI cards, register/calendar/
+  compliance/type/exception views (`894ce12`).
+- Return template designer (§11.2) — definitions view, field-schema
+  add/edit/reorder/remove, demo validation rules, approval lifecycle
+  (`dabf2d6`).
+- Return submission detail (§11.3) — seven tabs, demo validation re-run,
+  reconciliation, role-gated review decisions (`6f3b8cd`).
+- Off-site surveillance (§6.1) — overview dashboard, exception table,
+  watchlist, peer comparisons, institution surveillance detail with
+  analyst reviews + decision history (`434c48f`).
+- Early warning alerts (§6.4) — register with §6.4 columns, alert detail
+  (trigger, source return, trend, rule version, assessments, escalation
+  history, linked action), acknowledge/assign/escalate/dismiss/convert
+  workflow (`dcb2498`).
+- Cross-wiring — router swaps for surveillance, early-warnings, returns,
+  submission detail and submission-monitoring; profile alerts deep-link to
+  alert detail (`7de1311`).
+- Unit 8 (lead) — 4 test files (returns dashboard/detail flows, early-
+  warnings flows, returns + early-warning workflow mutation and gating
+  tests); fixed 6 ambiguous test queries (text rendered in both detail
+  header and body → `getAllByText`/`findAllByText`; gating test re-render
+  needed explicit `unmount()` — RTL cleanup only runs between tests);
+  committed the agent's salvaged `returnsRepository` field-order fix
+  (append after max order, not `fields.length`, so reordered schemas keep
+  unique orders).
+
+**Verification (lead-run, 20 Nov 2026):**
+- `npm run build` → tsc clean, ✓ built (>500 kB Recharts advisory
+  unchanged, deferred to Phase 7).
+- `npm run lint` → 0 errors, 46 warnings (React-Compiler advisories: +7
+  `set-state-in-effect` on the new pages' async-load pattern, same class
+  as documented in 2A/2B).
+- `npm test` → **17 files, 82 tests, all passing** (50 prior + 32 new).
+
+**Next chunk owes (Phase 3B — prudential, completes Journey B step 4):**
+- Capital (§8.1), Credit (§8.2), Liquidity (§8.3), Stress Testing (§8.4),
+  Prudential Indicators (§8.5) — swap the remaining Phase-3
+  `moduleRoute(...)` placeholders.
+- The dataset already carries prudential references (SUB-2026-0143
+  Vanguard capital return, trend charts on profile/dashboard); extend
+  fixtures+repositories+contracts the same way, keep the one-story rule.
+- After 3B: Phase 4 specialist domains per Spec §21.
+

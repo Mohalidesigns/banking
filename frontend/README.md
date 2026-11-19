@@ -42,7 +42,7 @@ Session state (demo user, jurisdiction, sidebar/nav-group state) persists
 in `localStorage` under `atheris-reg-prototype-session`. Clear that key to
 reset the demo session.
 
-## What is built (Phase 1 + Phase 2)
+## What is built (Phase 1 + Phase 2 + Phase 3A)
 
 - **App shell** — navy sidebar with the full Spec §3.2 nav tree (role-aware,
   with live actionable queue counts), topbar with global search (⌘K),
@@ -105,6 +105,22 @@ reset the demo session.
   approval trail; remediation register with milestones, evidence,
   extension requests and **regulator-gated closure** (institution roles
   can never close).
+- **Regulatory Returns** (`/app/returns`, `/app/submission-monitoring`) —
+  dashboard with six filter KPI cards and register / calendar / compliance /
+  by-type / exception views (§11.1); template designer with definitions
+  list, field-schema add/edit/reorder/remove, demo validation rules and
+  draft→review→approved lifecycle (§11.2); submission detail with seven
+  tabs, demo validation re-run, reconciliation and role-gated review
+  decisions (§11.3). `return-validation` items feed My Work and the live
+  nav counts.
+- **Off-Site Surveillance** (`/app/surveillance`) — overview dashboard,
+  exception table, watchlist, peer comparisons and per-institution
+  surveillance detail with analyst reviews and decision history (§6.1).
+- **Early Warning Alerts** (`/app/early-warnings`) — register with the §6.4
+  columns plus alert detail (trigger explanation, source return deep-link,
+  trend, rule version, related assessments, escalation history, linked
+  action) and acknowledge / assign / escalate / dismiss / convert-to-
+  examination workflow (§6.4).
 - **Coherent demo dataset** — eight fictional institutions (Meridian
   Commercial Bank, Northstar Merchant Bank, Unity Non-Interest Bank,
   Crestline Payment Bank, Aurora Savings & Loans, Delta Microfinance,
@@ -112,7 +128,10 @@ reset the demo session.
   findings, returns, alerts, risk assessments, plans, corrective actions,
   enforcement cases and a work queue telling one story (Spec §17.5).
   Journey A (§22) runs end-to-end on linked anchors: EXM-2026-014 →
-  FND-2026-101 → CAP-2026-003.
+  FND-2026-101 → CAP-2026-003. Journey B steps 1–3 and 5–7 run on the
+  returns/alerts anchors: SUB-2026-0144 (Northstar MPR-04, LCR 104.2) →
+  EWA-2026-011 → EXM-2026-024; EWA-2026-008 links enforcement case
+  ENF-2026-002.
 
 ## Stack
 
@@ -149,7 +168,8 @@ src/
 ├── config/         navigation.ts (Spec §3.2 nav tree), roles.ts (§19 profiles)
 ├── features/       auth/, dashboard/, institutions/, work/, risk/, plans/,
 │                   examinations/, library/, evidence/, findings/,
-│                   remediation/, errors/
+│                   remediation/, returns/, surveillance/, early-warnings/,
+│                   errors/
 ├── hooks/          useMediaQuery (responsive shell)
 ├── layouts/        RegulatorLayout, AuthLayout, InstitutionPortalLayout
 ├── mocks/          fixtures/ + repositories/ (never imported by components)
@@ -159,12 +179,12 @@ src/
 │   │               WorkQueueService, SupervisionReadService (+QueueCounts),
 │   │               ExaminationService, FindingService, EvidenceService,
 │   │               LibraryService, PlanService, RiskAssessmentService,
-│   │               RemediationService
+│   │               RemediationService, ReturnsService, SurveillanceService
 │   └── mock/       Mock* implementations over the repositories
 ├── store/          sessionStore, notificationStore, uiStore, navCountStore
 ├── styles/         tokens.css, index.css
 └── types/          auth.ts, common.ts, institution.ts, supervision.ts,
-                    examination.ts, finding.ts
+                    examination.ts, finding.ts, returns.ts, surveillance.ts
 ```
 
 **Rule (Spec §18.3):** components import service *interfaces* from
@@ -178,15 +198,13 @@ A future `Api*Service` (Spring Boot) slots in without redesigning screens.
 - **<768px:** sidebar becomes an overlay drawer (topbar menu trigger,
   Escape/backdrop closes); grids stack; tables scroll horizontally.
 
-## Known boundaries after Phase 2
+## Known boundaries after Phase 3A
 
-- Off-site surveillance, regulatory returns, prudential screens (capital,
-  credit, liquidity, stress testing) and the early-warning detail flows
-  still render designed placeholders — Phase 3 builds them. The
-  alert→targeted-examination conversion already works from the Command
-  Centre alert drawer.
-- Global search and dashboard deep-links to Phase 3+ modules (returns,
-  enforcement) land on placeholders until their phase.
+- Prudential screens (capital, credit, liquidity, stress testing,
+  prudential indicators — Spec §8) still render designed placeholders —
+  Phase 3B builds them, completing Journey B step 4.
+- Global search and dashboard deep-links to Phase 4+ modules (enforcement
+  and later) land on placeholders until their phase.
 - Portal screens remain Phase 6 placeholders; portal roles only switch the
   layout and navigation visibility.
 - The JS bundle exceeds 500 kB (Recharts weight); code-splitting is
