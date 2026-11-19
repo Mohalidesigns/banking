@@ -14,6 +14,13 @@ import {
   STRESS_RUNS,
 } from '@/mocks/fixtures/prudential.fixture'
 import {
+  CORRESPONDENCE_ID_BY_REF,
+  FRAMEWORK_ID_BY_CODE,
+  OBLIGATION_ID_BY_REF,
+  REGULATORY_REQUIREMENTS,
+  REGULATORY_STORY,
+} from '@/mocks/fixtures/regulatory.fixture'
+import {
   CORRECTIVE_ACTIONS,
   EARLY_WARNING_ALERTS,
   FINDINGS,
@@ -83,4 +90,33 @@ export const STORY = {
   northstarFundingRunId: STRESS_RUN_ID_BY_REF['RUN-2026-004'],
   /** Vanguard related-party loan sample escalated to FND-2026-033 (Spec §8.2). */
   vanguardLoanSampleId: LOAN_SAMPLE_ID_BY_REF['LNG-2026-011'],
+  // Phase 4A — regulatory administration anchors (Spec §10): the AML
+  // framework/requirement behind EXM-2026-014, the STR and MPR-09
+  // obligations, and the Crestline cyber draft used by the correspondence
+  // compose/review/approve/send-demo workflow.
+  ...REGULATORY_STORY,
 } as const
+
+// Phase 4A — regulatory administration ref lookups (Spec §10).
+
+/** Regulatory framework code (MBA/…) -> framework id. */
+export { FRAMEWORK_ID_BY_CODE }
+
+/** Obligation reference (OBL-…) -> obligation id. */
+export { OBLIGATION_ID_BY_REF }
+
+/** Correspondence reference (COR-…) -> correspondence id. */
+export { CORRESPONDENCE_ID_BY_REF }
+
+/** Framework id -> code, for building citation keys. */
+const FRAMEWORK_CODE_BY_ID: Record<string, string> = Object.fromEntries(
+  Object.entries(FRAMEWORK_ID_BY_CODE).map(([code, id]) => [id, code]),
+)
+
+/** Requirement id by "CODE §ref" citation (e.g. "MBA/AML/2023 §6.3"). */
+export const REQUIREMENT_ID_BY_CITATION: Record<string, string> = Object.fromEntries(
+  REGULATORY_REQUIREMENTS.map((r) => [
+    `${FRAMEWORK_CODE_BY_ID[r.frameworkId] ?? ''} ${r.reference}`.trim(),
+    r.id,
+  ]),
+)

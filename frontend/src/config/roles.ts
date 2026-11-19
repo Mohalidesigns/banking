@@ -54,6 +54,11 @@ const ALL_ACTIONS: DemoAction[] = [
   'approve-prudential',
   'run-stress-test',
   'manage-indicator-thresholds',
+  // Phase 4A — regulatory administration (Spec §10)
+  'manage-frameworks',
+  'manage-obligations',
+  'manage-correspondence',
+  'approve-correspondence',
 ]
 
 const WORK_ACTIONS: DemoAction[] = ['view', 'manage-work-queue', 'add-note']
@@ -87,6 +92,9 @@ const REVIEW_ACTIONS: DemoAction[] = [
   // Phase 3B — prudential review tier (never approves: §19 canApprove = false)
   'review-prudential',
   'run-stress-test',
+  // Phase 4A — examiners draft/review correspondence (e.g. information
+  // requests raised during fieldwork) but never approve or send.
+  'manage-correspondence',
 ]
 
 /** Approval tier: team lead and above may approve results/findings/closure. */
@@ -120,6 +128,12 @@ const APPROVAL_ACTIONS: DemoAction[] = [
   'approve-prudential',
   'run-stress-test',
   'manage-indicator-thresholds',
+  // Phase 4A — approval tier maintains frameworks/obligations and runs the
+  // correspondence approve/send-demo workflow (Spec §10.3).
+  'manage-frameworks',
+  'manage-obligations',
+  'manage-correspondence',
+  'approve-correspondence',
 ]
 
 type ProfileSeed = Omit<RolePermissionProfile, 'role' | 'label'>
@@ -294,11 +308,21 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'legal-enforcement-officer': {
     portal: false,
     visibleNavSections: ['overview', 'institutions', 'action', 'regulatory'],
-    allowedActions: ['view', 'export', 'add-note', 'review-finding', 'manage-remediation'],
+    allowedActions: [
+      'view',
+      'export',
+      'add-note',
+      'review-finding',
+      'manage-remediation',
+      // Phase 4A — legal drafts/reviews enforcement-related correspondence and
+      // maintains the framework library, but never approves outgoing letters.
+      'manage-correspondence',
+      'manage-frameworks',
+    ],
     scope: 'authority',
     canApprove: false,
     canExport: true,
-    restrictedAreas: ['Examination fieldwork', 'Institution editing'],
+    restrictedAreas: ['Examination fieldwork', 'Institution editing', 'Correspondence approval', 'Obligation register maintenance'],
   },
   'report-reviewer': {
     portal: false,

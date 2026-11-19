@@ -125,6 +125,11 @@ export type DemoAction =
   | 'approve-prudential'
   | 'run-stress-test'
   | 'manage-indicator-thresholds'
+  // Regulatory administration (Spec §10, Phase 4A)
+  | 'manage-frameworks'
+  | 'manage-obligations'
+  | 'manage-correspondence'
+  | 'approve-correspondence'
 
 export type DemoScope = 'authority' | 'department' | 'team' | 'portfolio' | 'institution'
 
