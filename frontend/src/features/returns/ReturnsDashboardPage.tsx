@@ -113,7 +113,7 @@ export function ReturnsDashboardPage({
     statusParam === 'overdue' ? 'Overdue' : (statusParam ?? ''),
   )
   const [fReview, setFReview] = useState(searchParams.get('review') ?? '')
-  const [fValidation, setFValidation] = useState('')
+  const [fValidation, setFValidation] = useState(searchParams.get('validation') ?? '')
   /** Template designer (Spec §11.2) renders inside this route: ?template=<id>. */
   const [designerId, setDesignerId] = useState<string | null>(
     searchParams.get('view') === 'designer' ? searchParams.get('template') : null,

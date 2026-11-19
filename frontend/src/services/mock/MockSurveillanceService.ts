@@ -24,6 +24,7 @@ import type {
   PeerComparisonRow,
   PrudentialException,
   SourceDataRow,
+  SupervisoryDecisionEvent,
   SurveillanceAlertNote,
   SurveillanceOverview,
   SurveillanceQuery,
@@ -349,6 +350,27 @@ class MockSurveillanceService implements SurveillanceService {
     assertRegulator(actor, 'manage-alerts')
     await latency()
     return surveillanceRepository.recordReviewDecision(id, decision, note, actor)
+  }
+
+  async recordDecision(
+    institutionId: string,
+    action: SupervisoryDecisionEvent['action'],
+    detail: string,
+    actor: ActorContext,
+  ) {
+    assertRegulator(actor, 'manage-alerts')
+    await latency()
+    const created = surveillanceRepository.recordDecision(institutionId, action, detail, actor)
+    if (action === 'Clarification requested') {
+      notificationRepository.push({
+        category: 'information-request-deadline',
+        severity: 'info',
+        title: 'Clarification requested (demo)',
+        body: `${detail} — recorded in the supervisory decision history (demo notification).`,
+        link: `/app/surveillance?institution=${institutionId}`,
+      })
+    }
+    return created
   }
 
   async setExceptionStatus(

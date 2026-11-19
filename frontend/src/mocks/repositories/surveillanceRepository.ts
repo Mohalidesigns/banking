@@ -230,6 +230,24 @@ export const surveillanceRepository = {
     return list.map((d) => ({ ...d })).sort((a, b) => b.at.localeCompare(a.at))
   },
 
+  recordDecision(
+    institutionId: string,
+    action: SupervisoryDecisionEvent['action'],
+    detail: string,
+    actor: ActorContext,
+  ): SupervisoryDecisionEvent {
+    const created: SupervisoryDecisionEvent = {
+      id: seq(),
+      institutionId,
+      at: new Date().toISOString(),
+      actorName: actor.actorName,
+      action,
+      detail,
+    }
+    decisions.unshift(created)
+    return { ...created }
+  },
+
   reset(): void {
     alerts.length = 0
     EARLY_WARNING_ALERTS.map(buildAlertDetail).forEach((a) => alerts.push(cloneAlert(a)))

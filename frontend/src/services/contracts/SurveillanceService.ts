@@ -30,6 +30,13 @@ export interface SurveillanceService {
   listDecisions(institutionId?: string): Promise<SupervisoryDecisionEvent[]>
   createAnalystReview(input: CreateAnalystReviewInput, actor: ActorContext): Promise<AnalystReview>
   recordReviewDecision(id: string, decision: string, note: string, actor: ActorContext): Promise<AnalystReview | undefined>
+  /** Generic supervisory decision (e.g. "Clarification requested") recorded against an institution. */
+  recordDecision(
+    institutionId: string,
+    action: SupervisoryDecisionEvent['action'],
+    detail: string,
+    actor: ActorContext,
+  ): Promise<SupervisoryDecisionEvent>
   setExceptionStatus(
     id: string,
     status: PrudentialException['status'],
