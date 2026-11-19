@@ -187,7 +187,8 @@ export const returnsRepository = {
       unit: input.unit,
       required: input.required,
       helpText: input.helpText,
-      order: d.fields.length,
+      // Orders are unique per template — append after the current maximum.
+      order: d.fields.reduce((max, f) => Math.max(max, f.order), -1) + 1,
       validationRules: [],
     }
     d.fields.push(field)
