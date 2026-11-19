@@ -29,6 +29,7 @@ import { EvidenceRepositoryPage } from '@/features/evidence/EvidenceRepositoryPa
 import { FindingDetailPage } from '@/features/findings/FindingDetailPage'
 import { FindingsRegisterPage } from '@/features/findings/FindingsRegisterPage'
 import { RemediationPage } from '@/features/remediation/RemediationPage'
+import { CapitalAdequacyPage } from '@/features/prudential/CapitalAdequacyPage'
 import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
 import { ReturnSubmissionDetailPage } from '@/features/returns/ReturnSubmissionDetailPage'
 import { SurveillancePage } from '@/features/surveillance/SurveillancePage'
@@ -236,7 +237,11 @@ export const router = createBrowserRouter([
       },
 
       // Prudential supervision
-      { path: 'prudential/capital', ...moduleRoute('Capital Adequacy', 3) },
+      {
+        path: 'prudential/capital',
+        handle: { breadcrumb: 'Capital Adequacy', phase: 3 } satisfies RouteHandle,
+        Component: CapitalAdequacyPage,
+      },
       { path: 'prudential/credit', ...moduleRoute('Credit & Asset Quality', 3) },
       { path: 'prudential/liquidity', ...moduleRoute('Liquidity & Treasury', 3) },
       { path: 'prudential/stress-testing', ...moduleRoute('Stress Testing', 3) },

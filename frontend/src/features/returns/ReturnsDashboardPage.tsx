@@ -106,7 +106,8 @@ export function ReturnsDashboardPage({
   const [view, setView] = useState<ReturnsViewId>(
     initialView ?? ((searchParams.get('view') as ReturnsViewId) || 'register'),
   )
-  const [search, setSearch] = useState('')
+  // ?search= deep links (e.g. SUB-2026-0143 chips on the prudential screens).
+  const [search, setSearch] = useState(searchParams.get('search') ?? '')
   const [fInstitution, setFInstitution] = useState(searchParams.get('institutionId') ?? '')
   const [fReturnCode, setFReturnCode] = useState(searchParams.get('returnCode') ?? '')
   const [fStatus, setFStatus] = useState(

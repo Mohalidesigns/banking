@@ -77,8 +77,49 @@ const DEMO_NOTE = 'All alert thresholds are configurable mock values, labelled i
 export function EarlyWarningsPage() {
   const [searchParams] = useSearchParams()
   const alertParam = searchParams.get('alert')
+  const referenceParam = searchParams.get('reference')
 
-  return alertParam ? <AlertDetailView alertId={alertParam} /> : <AlertRegisterView />
+  if (alertParam) return <AlertDetailView alertId={alertParam} />
+  if (referenceParam) return <AlertReferenceRedirect reference={referenceParam} />
+  return <AlertRegisterView />
+}
+
+/**
+ * Resolves ?reference=EWA-… deep links (e.g. from capital breach chips) to
+ * the alert id and redirects into the detail view; unknown references land
+ * on a designed empty state, never a dead end (Phase 3B cross-wiring).
+ */
+function AlertReferenceRedirect({ reference }: { reference: string }) {
+  const [, setSearchParams] = useSearchParams()
+  const [notFound, setNotFound] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    void (async () => {
+      const alert = await earlyWarningService.getByReference(reference)
+      if (cancelled) return
+      if (alert) setSearchParams({ alert: alert.id }, { replace: true })
+      else setNotFound(true)
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [reference, setSearchParams])
+
+  if (notFound) {
+    return (
+      <Card>
+        <CardBody>
+          <EmptyState
+            title="Alert not found"
+            description={`No demo early-warning alert matches ${reference} — it may be from a previous prototype session.`}
+            action={{ label: 'Back to alert register', onClick: () => setSearchParams({}, { replace: true }) }}
+          />
+        </CardBody>
+      </Card>
+    )
+  }
+  return <LoadingSkeleton variant="text" rows={8} />
 }
 
 // ---------------------------------------------------------------------------
