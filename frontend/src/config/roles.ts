@@ -50,6 +50,10 @@ const ALL_ACTIONS: DemoAction[] = [
   'manage-return-templates',
   'create-analyst-review',
   'manage-alerts',
+  'review-prudential',
+  'approve-prudential',
+  'run-stress-test',
+  'manage-indicator-thresholds',
 ]
 
 const WORK_ACTIONS: DemoAction[] = ['view', 'manage-work-queue', 'add-note']
@@ -80,6 +84,9 @@ const REVIEW_ACTIONS: DemoAction[] = [
   'review-submission',
   'create-analyst-review',
   'manage-alerts',
+  // Phase 3B — prudential review tier (never approves: §19 canApprove = false)
+  'review-prudential',
+  'run-stress-test',
 ]
 
 /** Approval tier: team lead and above may approve results/findings/closure. */
@@ -107,6 +114,12 @@ const APPROVAL_ACTIONS: DemoAction[] = [
   'manage-return-templates',
   'create-analyst-review',
   'manage-alerts',
+  // Phase 3B — approval tier accepts/rejects prudential submissions, approves
+  // stress runs and maintains the indicator threshold catalogue.
+  'review-prudential',
+  'approve-prudential',
+  'run-stress-test',
+  'manage-indicator-thresholds',
 ]
 
 type ProfileSeed = Omit<RolePermissionProfile, 'role' | 'label'>
@@ -233,11 +246,15 @@ const seeds: Record<DemoRole, ProfileSeed> = {
       'review-submission',
       'create-analyst-review',
       'manage-alerts',
+      // Phase 3B — prudential analyst reviews and runs stress scenarios but
+      // never approves submissions, stress runs or threshold changes.
+      'review-prudential',
+      'run-stress-test',
     ],
     scope: 'portfolio',
     canApprove: false,
     canExport: true,
-    restrictedAreas: ['Examination fieldwork', 'Enforcement actions', 'Return acceptance/rejection'],
+    restrictedAreas: ['Examination fieldwork', 'Enforcement actions', 'Return acceptance/rejection', 'Prudential approvals', 'Indicator threshold changes'],
   },
   'risk-analyst': {
     portal: false,

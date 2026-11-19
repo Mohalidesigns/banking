@@ -9,6 +9,11 @@
  * UUID-shaped ids so cross-links never drift.
  */
 import {
+  CAPITAL_BREACHES,
+  LOAN_SAMPLES,
+  STRESS_RUNS,
+} from '@/mocks/fixtures/prudential.fixture'
+import {
   CORRECTIVE_ACTIONS,
   EARLY_WARNING_ALERTS,
   FINDINGS,
@@ -41,6 +46,16 @@ export const EXCEPTION_ID_BY_REF: Record<string, string> = Object.fromEntries(
   PRUDENTIAL_EXCEPTIONS.map((e) => [e.reference, e.id]),
 )
 
+/** Stress run reference (RUN-…) -> run id (Phase 3B). */
+export const STRESS_RUN_ID_BY_REF: Record<string, string> = Object.fromEntries(
+  STRESS_RUNS.map((r) => [r.reference, r.id]),
+)
+
+/** Loan sample reference (LNG-…) -> sample id (Phase 3B). */
+export const LOAN_SAMPLE_ID_BY_REF: Record<string, string> = Object.fromEntries(
+  LOAN_SAMPLES.map((l) => [l.reference, l.id]),
+)
+
 /** Named Phase-3A story anchors (Journey B steps 1–3 and 5–7). */
 export const STORY = {
   /** Northstar MPR-04 October 2026 — LCR 104.2% warnings, in review (Journey B step 2–3). */
@@ -57,4 +72,15 @@ export const STORY = {
   vanguardCarAlertId: ALERT_ID_BY_REF['EWA-2026-008'],
   /** Meridian NPL amber alert → EXM-2026-014 scope. */
   meridianNplAlertId: ALERT_ID_BY_REF['EWA-2026-013'],
+  // Phase 3B — prudential anchors (Spec §8, Journey B step 4).
+  /** Vanguard red CAR breach ↔ EWA-2026-008 ↔ ENF-2026-002 (Spec §8.1). */
+  vanguardCarBreachId: CAPITAL_BREACHES.find(
+    (b) => b.measure === 'CAR' && b.relatedRefs.includes('ENF-2026-002'),
+  )?.id,
+  /** Approved severe-scenario portfolio run (Spec §8.4). */
+  severePortfolioRunId: STRESS_RUN_ID_BY_REF['RUN-2026-003'],
+  /** Northstar idiosyncratic funding run awaiting review (Spec §8.4). */
+  northstarFundingRunId: STRESS_RUN_ID_BY_REF['RUN-2026-004'],
+  /** Vanguard related-party loan sample escalated to FND-2026-033 (Spec §8.2). */
+  vanguardLoanSampleId: LOAN_SAMPLE_ID_BY_REF['LNG-2026-011'],
 } as const

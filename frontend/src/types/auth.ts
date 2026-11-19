@@ -120,6 +120,11 @@ export type DemoAction =
   // Off-site surveillance & early warnings (Spec §6.1/§6.4, Phase 3A)
   | 'create-analyst-review'
   | 'manage-alerts'
+  // Prudential supervision (Spec §8, Phase 3B)
+  | 'review-prudential'
+  | 'approve-prudential'
+  | 'run-stress-test'
+  | 'manage-indicator-thresholds'
 
 export type DemoScope = 'authority' | 'department' | 'team' | 'portfolio' | 'institution'
 

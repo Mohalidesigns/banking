@@ -9,6 +9,7 @@ import { findingRepository } from '@/mocks/repositories/findingRepository'
 import { libraryRepository } from '@/mocks/repositories/libraryRepository'
 import { notificationRepository } from '@/mocks/repositories/notificationRepository'
 import { planRepository } from '@/mocks/repositories/planRepository'
+import { prudentialRepository } from '@/mocks/repositories/prudentialRepository'
 import { remediationRepository } from '@/mocks/repositories/remediationRepository'
 import { returnsRepository } from '@/mocks/repositories/returnsRepository'
 import { riskAssessmentRepository } from '@/mocks/repositories/riskAssessmentRepository'
@@ -21,6 +22,7 @@ export function resetAllDemoData(): void {
   findingRepository.reset()
   libraryRepository.reset()
   planRepository.reset()
+  prudentialRepository.reset()
   remediationRepository.reset()
   returnsRepository.reset()
   riskAssessmentRepository.reset()
