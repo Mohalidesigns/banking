@@ -434,6 +434,7 @@ export function InstitutionProfilePage() {
                 id: a.id,
                 label: `${a.indicator} — ${a.currentValue} vs ${a.threshold}`,
                 badge: <StatusBadge status={a.status} tone={a.status === 'Escalated' ? 'overdue' : 'fieldwork'} />,
+                link: `/app/early-warnings?alert=${a.id}`,
               })),
               ...correctiveActions
                 .filter((c) => c.status !== 'Closed' && c.status !== 'Validated')
@@ -441,13 +442,25 @@ export function InstitutionProfilePage() {
                   id: c.id,
                   label: `${c.reference} — ${c.title} (due ${formatDate(c.dueDate)})`,
                   badge: <StatusBadge status={c.status} tone={c.status === 'Overdue' ? 'overdue' : 'planning'} />,
+                  link: undefined as string | undefined,
                 })),
             ]}
             keyOf={(x) => x.id}
             empty="No active alerts or actions"
             render={(x) => (
               <div className="flex items-center gap-3 py-2.5">
-                <span className="min-w-0 flex-1 truncate text-xs text-ink">{x.label}</span>
+                {x.link ? (
+                  <button
+                    type="button"
+                    className="min-w-0 flex-1 cursor-pointer truncate text-left text-xs text-primary hover:underline"
+                    onClick={() => navigate(x.link!)}
+                    title="Open the early-warning alert detail"
+                  >
+                    {x.label}
+                  </button>
+                ) : (
+                  <span className="min-w-0 flex-1 truncate text-xs text-ink">{x.label}</span>
+                )}
                 {x.badge}
               </div>
             )}

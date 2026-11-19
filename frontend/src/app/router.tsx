@@ -29,6 +29,10 @@ import { EvidenceRepositoryPage } from '@/features/evidence/EvidenceRepositoryPa
 import { FindingDetailPage } from '@/features/findings/FindingDetailPage'
 import { FindingsRegisterPage } from '@/features/findings/FindingsRegisterPage'
 import { RemediationPage } from '@/features/remediation/RemediationPage'
+import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
+import { ReturnSubmissionDetailPage } from '@/features/returns/ReturnSubmissionDetailPage'
+import { SurveillancePage } from '@/features/surveillance/SurveillancePage'
+import { EarlyWarningsPage } from '@/features/early-warnings/EarlyWarningsPage'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { InstitutionPortalLayout } from '@/layouts/InstitutionPortalLayout'
 import { RegulatorLayout } from '@/layouts/RegulatorLayout'
@@ -123,7 +127,11 @@ export const router = createBrowserRouter([
       },
 
       // Surveillance & risk
-      { path: 'surveillance', ...moduleRoute('Off-Site Surveillance', 3) },
+      {
+        path: 'surveillance',
+        handle: { breadcrumb: 'Off-Site Surveillance', phase: 3 } satisfies RouteHandle,
+        Component: SurveillancePage,
+      },
       {
         path: 'risk-based-supervision',
         handle: { breadcrumb: 'Risk-Based Supervision', phase: 2 } satisfies RouteHandle,
@@ -144,7 +152,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Risk Assessment Detail', phase: 2 } satisfies RouteHandle,
         Component: RiskAssessmentDetailPage,
       },
-      { path: 'early-warnings', ...moduleRoute('Early Warning Alerts', 3) },
+      {
+        path: 'early-warnings',
+        handle: { breadcrumb: 'Early Warning Alerts', phase: 3 } satisfies RouteHandle,
+        Component: EarlyWarningsPage,
+      },
       {
         path: 'supervisory-plans',
         handle: { breadcrumb: 'Supervisory Plans', phase: 2 } satisfies RouteHandle,
@@ -242,9 +254,21 @@ export const router = createBrowserRouter([
       { path: 'regulatory/frameworks', ...moduleRoute('Regulatory Frameworks', 4) },
       { path: 'regulatory/obligations', ...moduleRoute('Regulatory Obligations', 4) },
       { path: 'regulatory/correspondence', ...moduleRoute('Regulatory Correspondence', 4) },
-      { path: 'returns', ...moduleRoute('Regulatory Returns', 3) },
-      { path: 'returns/:submissionId', ...moduleRoute('Submission Detail', 3) },
-      { path: 'submission-monitoring', ...moduleRoute('Submission Monitoring', 3) },
+      {
+        path: 'returns',
+        handle: { breadcrumb: 'Regulatory Returns', phase: 3 } satisfies RouteHandle,
+        Component: ReturnsDashboardPage,
+      },
+      {
+        path: 'returns/:submissionId',
+        handle: { breadcrumb: 'Submission Detail', phase: 3 } satisfies RouteHandle,
+        Component: ReturnSubmissionDetailPage,
+      },
+      {
+        path: 'submission-monitoring',
+        handle: { breadcrumb: 'Submission Monitoring', phase: 3 } satisfies RouteHandle,
+        element: <ReturnsDashboardPage initialView="register" initialTitle="Submission Monitoring" />,
+      },
 
       // Supervisory action
       { path: 'enforcement', ...moduleRoute('Enforcement Cases', 5) },
