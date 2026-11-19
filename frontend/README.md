@@ -42,7 +42,7 @@ Session state (demo user, jurisdiction, sidebar/nav-group state) persists
 in `localStorage` under `atheris-reg-prototype-session`. Clear that key to
 reset the demo session.
 
-## What is built (Phase 1 + Phase 2 + Phase 3A + Phase 3B)
+## What is built (Phase 1 + Phase 2 + Phase 3A + Phase 3B + Phase 4A)
 
 - **App shell** — navy sidebar with the full Spec §3.2 nav tree (role-aware,
   with live actionable queue counts), topbar with global search (⌘K),
@@ -162,6 +162,49 @@ reset the demo session.
   LCR Q3 2026 = 104.2 → EWA-2026-011). Threshold edits are gated by
   `manage-indicator-thresholds` and bump the demo rule version.
   `?indicator=CODE` deep-links an indicator.
+- **Regulatory Frameworks** (`/app/regulatory/frameworks`) — §10.1
+  framework library (eight fictional MBA instruments: citation, category,
+  jurisdiction, issuing authority, version, publication/effective dates,
+  status, source documents) with the six detail tabs (Overview ·
+  Requirements · Applicability · Mappings · Documents · Version history).
+  Requirement detail carries every §10.1 field (reference, text, legal
+  source, effective period, institution categories, supervisory domain,
+  evidence expected, mapped examination procedures, related obligations)
+  plus live story anchors (e.g. MBA/AML/2023 §6.3 → EXM-2026-014 →
+  FND-2026-101 → CAP-2026-003). Simulated framework upload with a **Demo AI
+  extraction** pass: extracted drafts are permanently labelled "Demo AI
+  response" and stay visually separate from approved regulatory content
+  until a gated approve/reject decision. `?framework=CODE&requirement=ID`
+  deep-links a requirement. Framework citations match the examination
+  library's `regulatoryMapping` references, and every requirement carries a
+  `SupervisoryDomain` — the reuse anchors for the §9 specialist domains
+  (Phase 4B/4C) and the Phase-4 acceptance (a specialist examination mapped
+  to regulatory requirements).
+- **Regulatory Obligations** (`/app/regulatory/obligations`) — §10.2
+  register with every spec column (applicable institutions, responsible
+  department, effective date, reporting frequency, evidence/return
+  requirement, compliance status, last/next review with overdue badges)
+  plus obligation detail (source framework/requirement deep links,
+  per-institution compliance with story anchors — e.g. OBL-2026-004 STR:
+  Meridian Non-Compliant via FND-2026-101/CAP-2026-003, DIR-2026-004 as a
+  Phase-5 chip), the gated **applicability editor**, per-institution status
+  verification, review recording and a full change history.
+  `?obligation=REF` deep-links an obligation; overdue reviews surface on
+  the Command Centre upcoming-deadlines card.
+- **Regulatory Correspondence** (`/app/regulatory/correspondence`) — §10.3
+  official register (institution, reference, type, direction, dates,
+  subject, related examination/finding/directive refs, authorised sender/
+  recipient, status, attachments) with a letter-preview detail, thread
+  history and the full **compose → review → approve → send-demo** workflow:
+  drafts with a related-record picker and simulated attachments, submit for
+  review (notifies the approval tier), request changes, approve (records the
+  authoriser) and a confirm-guarded simulated dispatch. The prototype never
+  sends real communications — every dispatch is labelled "Sent (demo)" with
+  the honesty note in the thread, toast and confirm dialog. Incoming
+  threads (e.g. Meridian's CAP-2026-003 progress update) support
+  log-response & close. Gating: `manage-correspondence` (examiner tier+,
+  legal) vs `approve-correspondence` (approval tier only).
+  `?correspondence=REF` and `?institution=ID` deep links resolve.
 - **Coherent demo dataset** — eight fictional institutions (Meridian
   Commercial Bank, Northstar Merchant Bank, Unity Non-Interest Bank,
   Crestline Payment Bank, Aurora Savings & Loans, Delta Microfinance,
@@ -214,7 +257,8 @@ src/
 │                   examinations/, library/, evidence/, findings/,
 │                   remediation/, returns/, surveillance/, early-warnings/,
 │                   prudential/ (capital, credit, liquidity, stress-testing,
-│                   indicators), errors/
+│                   indicators), regulatory/ (frameworks, obligations,
+│                   correspondence, RelationChip), errors/
 ├── hooks/          useMediaQuery (responsive shell)
 ├── layouts/        RegulatorLayout, AuthLayout, InstitutionPortalLayout
 ├── mocks/          fixtures/ + repositories/ (never imported by components)
@@ -226,13 +270,14 @@ src/
 │   │               LibraryService, PlanService, RiskAssessmentService,
 │   │               RemediationService, ReturnsService, SurveillanceService,
 │   │               PrudentialService (CapitalAdequacy/CreditQuality/
-│   │               LiquidityTreasury/StressTesting/IndicatorCatalogue)
+│   │               LiquidityTreasury/StressTesting/IndicatorCatalogue),
+│   │               RegulatoryService (Framework/Obligation/Correspondence)
 │   └── mock/       Mock* implementations over the repositories
 ├── store/          sessionStore, notificationStore, uiStore, navCountStore
 ├── styles/         tokens.css, index.css
 └── types/          auth.ts, common.ts, institution.ts, supervision.ts,
                     examination.ts, finding.ts, returns.ts, surveillance.ts,
-                    prudential.ts (§8.1–§8.5 domain contracts)
+                    prudential.ts (§8.1–§8.5), regulatory.ts (§10.1–§10.3)
 ```
 
 **Rule (Spec §18.3):** components import service *interfaces* from
@@ -246,20 +291,36 @@ A future `Api*Service` (Spring Boot) slots in without redesigning screens.
 - **<768px:** sidebar becomes an overlay drawer (topbar menu trigger,
   Escape/backdrop closes); grids stack; tables scroll horizontally.
 
-## Known boundaries after Phase 3B
+## Known boundaries after Phase 4A
 
-- All five prudential screens (Spec §8.1–§8.5) are live; **Journey B (§22)
-  is demonstrable end-to-end**. Stress-test outputs are illustrative demo
-  calculations and are labelled as never being official regulatory results.
-- Global search and dashboard deep-links to Phase 4+ modules (specialist
-  domains, enforcement detail and later) land on designed placeholders
-  until their phase; capital-breach chips pointing at `ENF-…` land on the
-  Enforcement placeholder (Phase 5).
+- All five prudential screens (Spec §8.1–§8.5) and all three regulatory
+  administration screens (Spec §10.1–§10.3) are live. **Journey B (§22)
+  is demonstrable end-to-end**; the Phase-4 acceptance (§21) — a specialist
+  examination mapped to regulatory requirements — is wired on the §10 side:
+  EXM-2026-014 (AML) maps to MBA/AML/2023 §6.3/§4.1 requirements, and the
+  Crestline cyber exam (EXM-2026-005) to MBA/CYB/2025 §5.2. The §9
+  specialist screens themselves are the remaining half (Phase 4B/4C).
+- **The six specialist domains (§9.1–§9.6) remain designed placeholders**
+  until Phase 4B (shared domain page pattern + governance §9.1, ERM §9.2,
+  cybersecurity §9.3) and Phase 4C (AML §9.4 — anchors EXM-2026-014/
+  FND-2026-101, operations §9.5, consumer protection §9.6). They reuse the
+  Phase-4A data layer: requirements carry `SupervisoryDomain` keys and
+  `relatedObligationRefs`/`mappedProcedureRefs` for exactly this purpose.
+- Directive (`DIR-…`) and enforcement (`ENF-…`) references across the new
+  screens are **Phase-5 placeholder chips** — labelled, never link targets.
+- Framework upload, AI extraction, attachment downloads and correspondence
+  dispatch are all simulated; AI-extracted requirements are labelled
+  "Demo AI response" until approved in-session. No real files are stored
+  and no real communications are ever sent.
+- Global search and dashboard deep-links to Phase 5+ modules (enforcement
+  detail, reports, intelligence) land on designed placeholders until their
+  phase.
 - Indicator readings for NSFR/PC/DC/FXOP/LEV use seeded four-period demo
   histories; only CAR/LCR/NPL derive from the full eight-quarter snapshot
   series.
 - Portal screens remain Phase 6 placeholders; portal roles only switch the
-  layout and navigation visibility.
+  layout and navigation visibility. Institution roles are refused every
+  regulatory mutation (`assertRegulator`).
 - The JS bundle exceeds 500 kB (Recharts weight); code-splitting is
   scheduled for the Phase 7 hardening pass.
 

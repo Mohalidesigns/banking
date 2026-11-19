@@ -506,3 +506,135 @@ ref and running the effect only on `[open]`. Regression-covered by
   anchors for the AML and cybersecurity domains.
 - Consider the Phase-7 code-splitting pass if the bundle keeps growing.
 
+---
+
+## Phase 4A — Regulatory administration (19 Nov 2026)
+
+First chunk of Spec §21 Phase 4: §10.1 Regulatory Frameworks, §10.2
+Regulatory Obligations, §10.3 Regulatory Correspondence plus their data
+layer. The six §9 specialist domains are chunks 4B/4C and remain designed
+placeholders. Six units, one commit each (`a0cdcd3`…docs); a host restart
+mid-chunk cost nothing (commit-per-unit recovery worked as designed).
+
+**Built:**
+- **Data layer** (`a0cdcd3`) — `types/regulatory.ts` (frameworks,
+  requirements with `SupervisoryDomain` keys for §9 reuse, obligations with
+  per-institution compliance, correspondence with the full status machine;
+  `FrameworkMapping` doubles as the cross-module relation type),
+  `regulatory.fixture.ts` (8 fictional MBA frameworks whose citations match
+  the examination library's `regulatoryMapping` refs — MBA/PRU/2024 (+2021
+  superseded), MBA/AML/2023, MBA/GOV/2024, MBA/CYB/2025, MBA/CPC/2025,
+  MBA/NIB/2023, MBA/PSB/2026 consultation draft shipping labelled
+  "Demo AI response" extracted requirements; ~25 requirements; 12
+  obligations discharging through MPR-09/MPR-04/QAR-02 with per-institution
+  statuses anchored to the live story — Vanguard Non-Compliant ↔
+  SUB-2026-0143/EWA-2026-008/ENF-2026-002, Meridian STR Non-Compliant ↔
+  FND-2026-101/CAP-2026-003, Northstar Partial ↔ SUB-2026-0144/
+  EWA-2026-011/EXM-2026-024; 10 correspondence threads incl. the
+  DIR-2026-002 acknowledgement matching the Northstar profile document),
+  `regulatoryRepository` (mutable session state, simulated upload +
+  `simulateAiExtraction`, workflow transitions with thread events, reset),
+  `RegulatoryService` contracts (Framework/Obligation/Correspondence) and
+  role-gated `MockRegulatoryService` (assertRegulator + 4 new DemoActions:
+  `manage-frameworks`, `manage-obligations`, `manage-correspondence`,
+  `approve-correspondence` — ALL/APPROVAL tiers + legal officer
+  compose/manage but never approve; examiners/principal get
+  `manage-correspondence` only). Registered in `demoDataReset`;
+  `storyRefs.ts` gained framework/obligation/correspondence maps,
+  `REQUIREMENT_ID_BY_CITATION` and `REGULATORY_STORY` anchors.
+- **Regulatory Frameworks** (`a0e4f9f`, §10.1) — library register
+  (citation, category, jurisdiction, authority, version, dates, status,
+  AI-draft pill) + detail with the six spec tabs (Overview · Requirements ·
+  Applicability · Mappings · Documents · Version history). Requirement
+  drawer carries every §10.1 field incl. evidence expected, mapped library
+  procedures, related obligations and story-anchor chips; AI drafts get a
+  purple "Demo AI response" banner + gated approve/reject with review note;
+  simulated upload modal with AI-extraction toggle; version publishing
+  appends demo history. `?framework=CODE&requirement=ID` deep-links.
+- **Regulatory Obligations** (`3803c11`, §10.2) — register with all spec
+  columns (worst-case compliance rollup, overdue-review badges, framework
+  and return-code chips) + detail (source requirement deep links into the
+  framework drawer, per-institution compliance with anchors — CAP links,
+  DIR/ENF Phase-5 chips, gated applicability editor (add/remove +
+  mandatory reason → change history), status verification, review
+  recording (defaults +90d), full change history. `?obligation=REF`.
+- **Regulatory Correspondence** (`81541d0`, §10.3) — register (type,
+  direction, dates, subject, related chips, parties, status, attachments) +
+  letter-preview detail (fictional MBA letterhead, sender/recipient blocks,
+  authorised-by, attachments with confidentiality + simulated download,
+  related records, thread history) and the full compose → review → approve
+  → send-demo workflow: compose modal with institution-scoped
+  related-record picker and simulated attachments; submit for review
+  (pushes an `approval-required` notification); request changes; approve
+  (records authoriser); confirm-guarded **simulated** send — every surface
+  states no real communication is sent (§10.3); incoming threads support
+  log-response & close. `?correspondence=REF`, `?institution=ID`.
+- **Cross-wiring** (`8360da9`) — global search gained a Regulatory group
+  (3 screens + 8 frameworks + 12 obligations + 10 threads, `Library` icon);
+  Command Centre upcoming-deadlines now includes obligation reviews
+  (overdue/≤7d → new `obligation-review` UpcomingItem kind linking
+  `?obligation=`); institution-profile Documents tab deep-links to the
+  correspondence register filtered to that institution.
+- **Tests + docs** (`c5874e9`, docs) — `regulatoryWorkflow.test.ts`
+  (18 service-level tests: upload/AI-extraction distinction, requirement
+  decisions, versioning, applicability/review/status mutations, full
+  correspondence lifecycle incl. invalid-transition returns and
+  notification push, §19 gating matrix incl. institution-role refusal) and
+  three page-flow suites (6+6+7: library/tabs/drawer/AI-approval/upload
+  flow, register/anchors/Phase-5-chip/gating/review flow, register/letter
+  preview/send-demo honesty/gating/compose flow) — using
+  `getAllByText` for header+body duplicates and explicit `unmount()`
+  between double renders (3A lessons applied).
+
+**Bug found and fixed while testing (`RegulatoryCorrespondencePage.tsx`,
+`c5874e9`):** the workflow helper toasted success *before* `finally`
+released the `busy` state, so the next workflow button was still disabled
+in the render where the confirmation appeared (tests clicked a disabled
+button; users would see the same dead moment). `run()` now releases `busy`
+before toasting. Test-side hardening: `findByRole` + `waitFor(enabled)`
+before workflow clicks.
+
+**Verified (real output, 19 Nov 2026):**
+- `npm run build` → tsc clean; ✓ built (>500 kB Recharts advisory
+  unchanged, deferred to Phase 7).
+- `npm run lint` → oxlint: **0 errors, 66 warnings** — baseline 53 + 13 new
+  `set-state-in-effect` React-Compiler advisories on the new pages'
+  standard async-load pattern (same documented class as 2A/2B/3A/3B).
+- `npm test` → **27 files, 156 tests, all passing** (119 prior + 37 new).
+
+**Decisions / deviations:**
+- No new libraries. `FrameworkMappingKind` gained `return-submission`,
+  `alert` and `corrective-action` so relation chips are typed honestly
+  instead of reusing `finding` for non-findings.
+- One `RegulatoryService.ts` contract file with three interfaces — matches
+  the `PrudentialService.ts` granularity precedent.
+- DIR-/ENF- refs resolve to non-interactive labelled chips (`Lock` icon,
+  Phase-5 note) — referenceable, never broken links, per the brief.
+- Procedure-mapping chips navigate to the plain Examination Library (the
+  library page has no `?search=` param yet — a cheap 4B/7 enhancement).
+- Correspondence detail loads the institution via `institutionService`
+  rather than importing fixtures (components never import fixtures).
+
+**Next chunk owes (Phase 4B/4C — specialist domains, Spec §21/§9):**
+- **4B recommendation:** build the shared §9 specialist page pattern once
+  (dashboard · assessment register · assessment/exam detail · checklist &
+  procedures · evidence · findings · report · history) and instantiate
+  Governance (§9.1), ERM (§9.2) and Cybersecurity (§9.3); **4C:** AML
+  (§9.4), Operations (§9.5), Consumer Protection (§9.6). Swap the
+  `specialist/*` `moduleRoute(...)` placeholders only.
+- The §10 layer is built for this: filter requirements by
+  `SupervisoryDomain` ('governance'/'erm'/'cybersecurity'/'aml'/
+  'operations'/'consumer-protection') to drive each domain's obligation and
+  evidence checklists; `mappedProcedureRefs` match library citations
+  (MBA/GOV/2024 §2.1, MBA/CYB/2025 §3.1/§5.2, MBA/AML/2023 §4.1/§6.3,
+  MBA/NIB/2023 §4.4, MBA/OPS/2026 §2.1); ready anchors: Governance ←
+  FND-2026-109/037/118 + EXM-2026-021; Cyber ← EXM-2026-005 +
+  FND-2026-066/062 + CAP-2026-008; AML ← EXM-2026-014 + FND-2026-101/107 +
+  CAP-2026-003 + DIR-2026-004 (chip). The Phase-4 acceptance (specialist
+  examination mapped to regulatory requirements) closes by rendering each
+  domain's assessments against those requirement records.
+- Reuse `RelationChip` for cross-module refs and the 4A gating pattern
+  (new `DemoAction`s per domain if needed); extend `storyRefs`/
+  `demoDataReset` as before. Consider the Phase-7 code-splitting pass if
+  the bundle keeps growing.
+
