@@ -89,7 +89,7 @@ const sum = (values: number[]): number => values.reduce((a, b) => a + b, 0)
 
 const CHRONOLOGICAL_LABELS = [
   'Q4 2024', 'Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026', 'Q2 2026', 'Q3 2026',
-  'July 2026', 'August 2026', 'September 2026', 'October 2026',
+  'July 2026', 'August 2026', 'September 2026', 'October 2026', 'November 2026',
 ]
 const labelOrder = (label: string): number => {
   const i = CHRONOLOGICAL_LABELS.indexOf(label)

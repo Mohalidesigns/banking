@@ -26,6 +26,15 @@ export function Drawer({ open, onClose, title, children, footer, width = '480px'
   const restoreFocusRef = useRef<HTMLElement | null>(null)
   const titleId = useId()
 
+  // Callers pass inline arrow onClose props; keeping the latest one in a ref
+  // stops the focus/keydown effect from re-running (and stealing focus back
+  // to the first focusable — the X close button) on every parent re-render
+  // of a controlled form inside the drawer. Same fix as Modal (Phase 2B).
+  const onCloseRef = useRef(onClose)
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
+
   useEffect(() => {
     if (!open) return
     restoreFocusRef.current = document.activeElement as HTMLElement | null
@@ -36,7 +45,7 @@ export function Drawer({ open, onClose, title, children, footer, width = '480px'
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault()
-        onClose()
+        onCloseRef.current()
         return
       }
       if (event.key === 'Tab' && panel) {
@@ -62,7 +71,7 @@ export function Drawer({ open, onClose, title, children, footer, width = '480px'
       document.removeEventListener('keydown', onKeyDown)
       restoreFocusRef.current?.focus()
     }
-  }, [open, onClose])
+  }, [open])
 
   if (!open) return null
 

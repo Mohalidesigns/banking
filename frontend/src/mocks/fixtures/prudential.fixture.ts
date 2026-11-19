@@ -120,6 +120,13 @@ const cap = (s: CapSeed): CapitalSubmissionRow => ({
  * (SUB-2026-0141) is overdue, so its latest capital row is September.
  */
 export const CAPITAL_SUBMISSIONS: CapitalSubmissionRow[] = [
+  // November 2026 — Vanguard resubmission after the SUB-2026-0143 rejection
+  cap({
+    institutionId: INST_IDS.vanguard, periodLabel: 'November 2026', returnCode: 'MPR-09',
+    cet1: '88.2', tier1: '96.8', tier2: '18.4', total: '121.9', rwa: '1904.7', car: '6.4',
+    status: 'Awaiting Review', receivedAt: isoDateTime(-2, 16, 45),
+    note: 'Resubmission after the SUB-2026-0143 rejection: reconciliation corrected (Tier 1 + Tier 2 = total capital) but the reported CAR remains below the 10% demo minimum. Awaiting reviewer decision.',
+  }),
   // October 2026 — filed
   cap({
     institutionId: INST_IDS.vanguard, periodLabel: 'October 2026', returnCode: 'MPR-09',
