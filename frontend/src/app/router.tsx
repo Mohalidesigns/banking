@@ -34,6 +34,7 @@ import { CreditAssetQualityPage } from '@/features/prudential/CreditAssetQuality
 import { LiquidityTreasuryPage } from '@/features/prudential/LiquidityTreasuryPage'
 import { StressTestingPage } from '@/features/prudential/StressTestingPage'
 import { PrudentialIndicatorsPage } from '@/features/prudential/PrudentialIndicatorsPage'
+import { RegulatoryCorrespondencePage } from '@/features/regulatory/RegulatoryCorrespondencePage'
 import { RegulatoryFrameworksPage } from '@/features/regulatory/RegulatoryFrameworksPage'
 import { RegulatoryObligationsPage } from '@/features/regulatory/RegulatoryObligationsPage'
 import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
@@ -288,7 +289,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Regulatory Obligations', phase: 4 } satisfies RouteHandle,
         Component: RegulatoryObligationsPage,
       },
-      { path: 'regulatory/correspondence', ...moduleRoute('Regulatory Correspondence', 4) },
+      {
+        path: 'regulatory/correspondence',
+        handle: { breadcrumb: 'Regulatory Correspondence', phase: 4 } satisfies RouteHandle,
+        Component: RegulatoryCorrespondencePage,
+      },
       {
         path: 'returns',
         handle: { breadcrumb: 'Regulatory Returns', phase: 3 } satisfies RouteHandle,
