@@ -45,6 +45,11 @@ const ALL_ACTIONS: DemoAction[] = [
   'approve-assessment',
   'manage-plans',
   'approve-plans',
+  'review-submission',
+  'approve-submission',
+  'manage-return-templates',
+  'create-analyst-review',
+  'manage-alerts',
 ]
 
 const WORK_ACTIONS: DemoAction[] = ['view', 'manage-work-queue', 'add-note']
@@ -71,6 +76,10 @@ const REVIEW_ACTIONS: DemoAction[] = [
   'manage-remediation',
   'validate-remediation',
   'submit-assessment',
+  // Phase 3A — off-site surveillance and returns review tier
+  'review-submission',
+  'create-analyst-review',
+  'manage-alerts',
 ]
 
 /** Approval tier: team lead and above may approve results/findings/closure. */
@@ -91,6 +100,13 @@ const APPROVAL_ACTIONS: DemoAction[] = [
   'close-remediation',
   'submit-assessment',
   'manage-plans',
+  // Phase 3A — team lead and above also accept/reject returns and manage
+  // return templates and early-warning alerts.
+  'review-submission',
+  'approve-submission',
+  'manage-return-templates',
+  'create-analyst-review',
+  'manage-alerts',
 ]
 
 type ProfileSeed = Omit<RolePermissionProfile, 'role' | 'label'>
@@ -209,16 +225,32 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'prudential-analyst': {
     portal: false,
     visibleNavSections: ['overview', 'surveillance', 'prudential', 'institutions'],
-    allowedActions: ['view', 'export', 'add-note'],
+    allowedActions: [
+      'view',
+      'export',
+      'add-note',
+      // Phase 3A — the analyst tier owns off-site surveillance workflows
+      'review-submission',
+      'create-analyst-review',
+      'manage-alerts',
+    ],
     scope: 'portfolio',
     canApprove: false,
     canExport: true,
-    restrictedAreas: ['Examination fieldwork', 'Enforcement actions'],
+    restrictedAreas: ['Examination fieldwork', 'Enforcement actions', 'Return acceptance/rejection'],
   },
   'risk-analyst': {
     portal: false,
     visibleNavSections: ['overview', 'surveillance', 'institutions'],
-    allowedActions: ['view', 'export', 'add-note', 'submit-assessment', 'upload-evidence'],
+    allowedActions: [
+      'view',
+      'export',
+      'add-note',
+      'submit-assessment',
+      'upload-evidence',
+      'create-analyst-review',
+      'manage-alerts',
+    ],
     scope: 'portfolio',
     canApprove: false,
     canExport: true,

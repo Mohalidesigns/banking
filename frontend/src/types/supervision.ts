@@ -83,8 +83,20 @@ export interface SupervisoryFinding {
 
 export type ReturnStatus = 'Submitted' | 'Due Soon' | 'Overdue' | 'In Review' | 'Accepted' | 'Rejected'
 
+/** Supervisory review state of a submission (Spec §11.1 column, Phase 3A).
+ *  Kept separate from `status` (the timeliness lifecycle) so the register
+ *  can show both, e.g. Submitted + Awaiting Review. */
+export type ReturnReviewStatus =
+  | 'Awaiting Review'
+  | 'Under Review'
+  | 'Accepted'
+  | 'Rejected'
+  | 'Returned for Correction'
+
 export interface ReturnSubmission {
   id: string
+  /** Submission reference, e.g. SUB-2026-0144 (Spec §11.1, Phase 3A). */
+  reference: string
   /** Return template code, e.g. MPR-09 */
   returnCode: string
   returnName: string
@@ -95,10 +107,14 @@ export interface ReturnSubmission {
   dueDate: string
   submittedAt?: string
   status: ReturnStatus
+  /** Submission version number (Spec §11.1 column). */
+  version: number
   validation: 'Passed' | 'Warnings' | 'Errors' | 'Not Run'
+  /** Review workflow state (Spec §11.1 column). */
+  reviewStatus: ReturnReviewStatus
 }
 
-export type AlertStatus = 'Open' | 'Acknowledged' | 'Escalated' | 'Resolved'
+export type AlertStatus = 'Open' | 'Acknowledged' | 'Escalated' | 'Resolved' | 'Dismissed'
 
 export interface EarlyWarningAlert {
   id: string
@@ -190,7 +206,8 @@ export interface EnforcementCase {
   summary: string
 }
 
-/** My Work queue item types (Spec §5.3 — eight item types). */
+/** My Work queue item types (Spec §5.3 — eight item types, plus the
+ *  returns-validation queue surfaced in Phase 3A). */
 export type WorkItemType =
   | 'examination'
   | 'procedure'
@@ -200,6 +217,7 @@ export type WorkItemType =
   | 'report-approval'
   | 'corrective-action'
   | 'information-request'
+  | 'return-validation'
 
 export const WORK_ITEM_TYPE_LABELS: Record<WorkItemType, string> = {
   examination: 'Assigned examination',
@@ -210,6 +228,7 @@ export const WORK_ITEM_TYPE_LABELS: Record<WorkItemType, string> = {
   'report-approval': 'Report awaiting approval',
   'corrective-action': 'Corrective action awaiting validation',
   'information-request': 'Information request follow-up',
+  'return-validation': 'Return awaiting validation',
 }
 
 export type WorkItemStatus = 'Open' | 'In Progress' | 'Completed'

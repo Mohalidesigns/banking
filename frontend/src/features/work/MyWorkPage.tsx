@@ -8,6 +8,7 @@ import {
   Clock,
   FileCheck,
   FileSearch,
+  FileSpreadsheet,
   FolderSearch,
   Mail,
   MessageSquarePlus,
@@ -51,6 +52,7 @@ const TYPE_ICONS: Record<WorkItemType, typeof ClipboardList> = {
   'report-approval': FileCheck,
   'corrective-action': Repeat,
   'information-request': Briefcase,
+  'return-validation': FileSpreadsheet,
 }
 
 const TYPE_OPTIONS = (Object.keys(WORK_ITEM_TYPE_LABELS) as WorkItemType[]).map((t) => ({

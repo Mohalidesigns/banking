@@ -21,6 +21,7 @@ import type {
   Examination,
   RiskAssessment,
   ReturnSubmission,
+  ReturnReviewStatus,
   SupervisoryFinding,
   SupervisoryPlan,
   WatchlistEntry,
@@ -276,8 +277,17 @@ export const isOpenFinding = (f: SupervisoryFinding): boolean => f.status !== 'C
 // Return submissions (ids for the two search-fixture records kept)
 // ---------------------------------------------------------------------------
 
+const REVIEW_FROM_STATUS: Record<ReturnSubmission['status'], ReturnReviewStatus> = {
+  Submitted: 'Awaiting Review',
+  'Due Soon': 'Awaiting Review',
+  Overdue: 'Awaiting Review',
+  'In Review': 'Under Review',
+  Accepted: 'Accepted',
+  Rejected: 'Rejected',
+}
+
 const ret = (
-  _n: number,
+  n: number,
   id: string,
   returnCode: string,
   returnName: string,
@@ -289,6 +299,7 @@ const ret = (
   submittedOffsetDays?: number,
 ): ReturnSubmission => ({
   id,
+  reference: `SUB-2026-${String(140 + n).padStart(4, '0')}`,
   returnCode,
   returnName,
   institutionId,
@@ -296,7 +307,9 @@ const ret = (
   dueDate: isoDay(dueOffsetDays),
   submittedAt: submittedOffsetDays === undefined ? undefined : isoDateTime(submittedOffsetDays, 14, 30),
   status,
+  version: status === 'Rejected' || validation === 'Errors' ? 2 : 1,
   validation,
+  reviewStatus: REVIEW_FROM_STATUS[status],
 })
 
 export const RETURN_SUBMISSIONS: ReturnSubmission[] = [

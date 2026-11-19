@@ -113,6 +113,13 @@ export type DemoAction =
   | 'approve-assessment'
   | 'manage-plans'
   | 'approve-plans'
+  // Regulatory returns (Spec §11, Phase 3A)
+  | 'review-submission'
+  | 'approve-submission'
+  | 'manage-return-templates'
+  // Off-site surveillance & early warnings (Spec §6.1/§6.4, Phase 3A)
+  | 'create-analyst-review'
+  | 'manage-alerts'
 
 export type DemoScope = 'authority' | 'department' | 'team' | 'portfolio' | 'institution'
 
