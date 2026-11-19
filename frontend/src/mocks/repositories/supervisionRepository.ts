@@ -3,13 +3,12 @@
  * slices; Phase 2B delegates examinations, findings, corrective actions,
  * risk assessments and plans to the mutable workflow repositories so every
  * 2A screen (Command Centre, profile tabs, queue counts) stays live with
- * 2B workflow mutations. Returns, alerts, enforcement and watchlist remain
- * fixture-backed (their workflows land in Phases 3/5).
+ * 2B workflow mutations. Phase 3A does the same for returns (returns
+ * repository) and alerts (surveillance repository). Enforcement and
+ * watchlist remain fixture-backed (their workflows land in Phase 5).
  */
 import {
-  EARLY_WARNING_ALERTS,
   ENFORCEMENT_CASES,
-  RETURN_SUBMISSIONS,
   WATCHLIST,
 } from '@/mocks/fixtures/supervision.fixture'
 import { examinationRepository } from '@/mocks/repositories/examinationRepository'
@@ -17,6 +16,8 @@ import { findingRepository } from '@/mocks/repositories/findingRepository'
 import { planRepository } from '@/mocks/repositories/planRepository'
 import { remediationRepository } from '@/mocks/repositories/remediationRepository'
 import { riskAssessmentRepository } from '@/mocks/repositories/riskAssessmentRepository'
+import { returnsRepository } from '@/mocks/repositories/returnsRepository'
+import { surveillanceRepository } from '@/mocks/repositories/surveillanceRepository'
 import type {
   CorrectiveAction,
   EarlyWarningAlert,
@@ -77,29 +78,32 @@ export const supervisionRepository = {
   },
 
   returns(): ReturnSubmission[] {
-    return RETURN_SUBMISSIONS.map((r) => ({ ...r }))
+    return returnsRepository.base()
   },
 
   returnsByInstitution(institutionId: string): ReturnSubmission[] {
-    return RETURN_SUBMISSIONS.filter((r) => r.institutionId === institutionId)
-      .map((r) => ({ ...r }))
+    return returnsRepository
+      .base()
+      .filter((r) => r.institutionId === institutionId)
       .sort((a, b) => b.dueDate.localeCompare(a.dueDate))
   },
 
   overdueReturns(): ReturnSubmission[] {
-    return RETURN_SUBMISSIONS.filter((r) => r.status === 'Overdue')
+    return returnsRepository.overdue()
   },
 
   alerts(): EarlyWarningAlert[] {
-    return EARLY_WARNING_ALERTS.map((a) => ({ ...a }))
+    return surveillanceRepository.alertBase()
   },
 
   alertsByInstitution(institutionId: string): EarlyWarningAlert[] {
-    return EARLY_WARNING_ALERTS.filter((a) => a.institutionId === institutionId)
+    return surveillanceRepository.alertBase().filter((a) => a.institutionId === institutionId)
   },
 
   openAlerts(): EarlyWarningAlert[] {
-    return EARLY_WARNING_ALERTS.filter((a) => a.status === 'Open' || a.status === 'Escalated')
+    return surveillanceRepository
+      .alertBase()
+      .filter((a) => a.status === 'Open' || a.status === 'Escalated')
   },
 
   riskAssessments(): RiskAssessment[] {

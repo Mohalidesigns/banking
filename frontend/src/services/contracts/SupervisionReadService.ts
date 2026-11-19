@@ -28,7 +28,8 @@ export interface SupervisionReadService {
 }
 
 /** Sidebar actionable queue counts (Spec §3.2), wired to the mock data.
- *  Phase 2B adds the findings-review and evidence-review queues. */
+ *  Phase 2B adds the findings-review and evidence-review queues;
+ *  Phase 3A adds the returns-review queue. */
 export interface NavCounts {
   myWork: number
   earlyWarnings: number
@@ -39,6 +40,8 @@ export interface NavCounts {
   findingsReview: number
   /** Evidence items awaiting review. */
   evidenceReview: number
+  /** Return submissions awaiting/under supervisory review (Phase 3A). */
+  returnsReview: number
 }
 
 export interface QueueCountsService {

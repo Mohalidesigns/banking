@@ -619,6 +619,9 @@ export const WORK_ITEMS: WorkItem[] = [
   wi(11, 'management-response', 'Assess Crestline response to FND-2026-066 API risk register', INST_IDS.crestline, 'FND-2026-066', `/app/findings/${demoUuid(22, 63)}`, 'Medium', 9, 'Open', 'Amara Osei', AMARA),
   wi(12, 'evidence-review', 'Review Vanguard capital restoration evidence batch 2', INST_IDS.vanguard, 'CAP-2026-007', `/app/evidence?highlight=${demoUuid(60, 9)}`, 'Critical', 10, 'Open', 'Amara Osei', AMARA),
   wi(13, 'report-approval', 'Sign off Q3 portfolio review pack for Director briefing', INST_IDS.aurora, undefined, '/app/reports', 'Low', 12, 'Open', 'Amara Osei', AMARA),
+  // Returns validation queue (Phase 3A — Spec §11.1/§11.3 review workflow)
+  wi(16, 'return-validation', 'Validate Northstar MPR-04 October submission (LCR warnings)', INST_IDS.northstar, 'SUB-2026-0144', `/app/returns/${demoUuid(23, 4)}`, 'High', 1, 'Open', 'Amara Osei', AMARA),
+  wi(17, 'return-validation', 'Chase and validate Meridian MPR-09 October return (overdue)', INST_IDS.meridian, 'SUB-2026-0141', '/app/returns/sub-mpr09-meridian-2026-10', 'Critical', -1, 'Open', 'Amara Osei', AMARA),
   // Completed (history)
   wi(14, 'procedure', 'Complete CDD sampling procedure — EXM-2026-014', INST_IDS.meridian, 'EXM-2026-014', `/app/examinations/${demoUuid(21, 14)}/workspace`, 'High', -4, 'Completed', 'Amara Osei', AMARA, [
     { id: demoUuid(31, 2), author: 'Amara Osei', at: isoDateTime(-4, 15, 30), text: 'Sampling completed; exceptions escalated to draft findings. Demo note.' },
