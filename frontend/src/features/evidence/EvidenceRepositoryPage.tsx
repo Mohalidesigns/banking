@@ -65,7 +65,8 @@ export function EvidenceRepositoryPage() {
   const [items, setItems] = useState<EvidenceItem[] | null>(null)
   const [institutions, setInstitutions] = useState<Institution[]>([])
   const [findings, setFindings] = useState<FindingDetail[]>([])
-  const [search, setSearch] = useState('')
+  // ?search= deep links (e.g. loan-sample evidence chips, Phase 3B).
+  const [search, setSearch] = useState(searchParams.get('search') ?? '')
   const [fInstitution, setFInstitution] = useState('')
   const [fConf, setFConf] = useState('')
   const [fReview, setFReview] = useState('')
