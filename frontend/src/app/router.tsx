@@ -35,6 +35,7 @@ import { LiquidityTreasuryPage } from '@/features/prudential/LiquidityTreasuryPa
 import { StressTestingPage } from '@/features/prudential/StressTestingPage'
 import { PrudentialIndicatorsPage } from '@/features/prudential/PrudentialIndicatorsPage'
 import { RegulatoryFrameworksPage } from '@/features/regulatory/RegulatoryFrameworksPage'
+import { RegulatoryObligationsPage } from '@/features/regulatory/RegulatoryObligationsPage'
 import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
 import { ReturnSubmissionDetailPage } from '@/features/returns/ReturnSubmissionDetailPage'
 import { SurveillancePage } from '@/features/surveillance/SurveillancePage'
@@ -282,7 +283,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Regulatory Frameworks', phase: 4 } satisfies RouteHandle,
         Component: RegulatoryFrameworksPage,
       },
-      { path: 'regulatory/obligations', ...moduleRoute('Regulatory Obligations', 4) },
+      {
+        path: 'regulatory/obligations',
+        handle: { breadcrumb: 'Regulatory Obligations', phase: 4 } satisfies RouteHandle,
+        Component: RegulatoryObligationsPage,
+      },
       { path: 'regulatory/correspondence', ...moduleRoute('Regulatory Correspondence', 4) },
       {
         path: 'returns',
