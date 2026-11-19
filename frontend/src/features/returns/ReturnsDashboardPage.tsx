@@ -8,6 +8,7 @@ import {
   CircleX,
   ClipboardCheck,
   Download,
+  FileSpreadsheet,
   Hourglass,
   Inbox,
   Layers,
@@ -40,6 +41,7 @@ import type {
 import { formatDate, formatRelativeTime } from '@/utils/datetime'
 import { exportCsv } from '@/utils/exportCsv'
 import { cx } from '@/utils/cx'
+import { ReturnDefinitionsView, ReturnTemplateDesigner } from '@/features/returns/ReturnTemplateDesignerPage'
 
 /**
  * Returns dashboard (Spec §11.1): six KPI cards plus five views —
@@ -51,7 +53,7 @@ import { cx } from '@/utils/cx'
  * has no dead end. Demo data only.
  */
 
-export type ReturnsViewId = 'register' | 'calendar' | 'compliance' | 'types' | 'exceptions'
+export type ReturnsViewId = 'register' | 'calendar' | 'compliance' | 'types' | 'exceptions' | 'templates'
 
 const STATUS_TONES: Record<string, StatusTone> = {
   Submitted: 'active',
@@ -112,6 +114,10 @@ export function ReturnsDashboardPage({
   )
   const [fReview, setFReview] = useState(searchParams.get('review') ?? '')
   const [fValidation, setFValidation] = useState('')
+  /** Template designer (Spec §11.2) renders inside this route: ?template=<id>. */
+  const [designerId, setDesignerId] = useState<string | null>(
+    searchParams.get('view') === 'designer' ? searchParams.get('template') : null,
+  )
 
   const load = useCallback(async () => {
     const [dash, subs, instPage] = await Promise.all([
@@ -398,6 +404,21 @@ export function ReturnsDashboardPage({
     [],
   )
 
+  // Full-page template designer (Spec §11.2) — same registered route,
+  // deep-linkable via /app/returns?view=designer&template=<definitionId>.
+  if (designerId) {
+    return (
+      <ReturnTemplateDesigner
+        definitionId={designerId}
+        onBack={() => {
+          setDesignerId(null)
+          setView('templates')
+          setSearchParams({ view: 'templates' }, { replace: true })
+        }}
+      />
+    )
+  }
+
   const kpis = data?.kpis
 
   const calendarView = (
@@ -614,6 +635,19 @@ export function ReturnsDashboardPage({
                     emptyTitle="No validation exceptions"
                     emptyDescription="Every submitted demo return currently passes the illustrative rule engine."
                     onRetry={() => void load()}
+                  />
+                ),
+              },
+              {
+                id: 'templates',
+                label: 'Return definitions',
+                icon: <FileSpreadsheet className="h-3.5 w-3.5" aria-hidden="true" />,
+                content: (
+                  <ReturnDefinitionsView
+                    onOpenDesigner={(id) => {
+                      setDesignerId(id)
+                      setSearchParams({ view: 'designer', template: id })
+                    }}
                   />
                 ),
               },
