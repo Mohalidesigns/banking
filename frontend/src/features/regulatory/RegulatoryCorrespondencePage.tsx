@@ -659,18 +659,25 @@ function CorrespondenceDetailView({ referenceOrId, onBack }: { referenceOrId: st
 
   const run = async (fn: () => Promise<unknown>, successTitle: string, successBody: string, fallback: string) => {
     setBusy(true)
+    let outcome: 'success' | 'unavailable' | 'error' = 'error'
     try {
       const updated = await fn()
       if (updated) {
         await load()
-        toast.success(successTitle, successBody)
+        outcome = 'success'
       } else {
-        toast.warning('Demo action not available', 'This workflow step does not apply to the current status (demo state machine).')
+        outcome = 'unavailable'
       }
     } catch (err) {
       guard(err, fallback)
     } finally {
+      // Release busy BEFORE the toast so the next workflow button is enabled
+      // in the same render the confirmation appears.
       setBusy(false)
+    }
+    if (outcome === 'success') toast.success(successTitle, successBody)
+    else if (outcome === 'unavailable') {
+      toast.warning('Demo action not available', 'This workflow step does not apply to the current status (demo state machine).')
     }
   }
 
@@ -1154,7 +1161,7 @@ function CorrespondenceDetailView({ referenceOrId, onBack }: { referenceOrId: st
         onConfirm={() => void confirmSend()}
         title={`Send ${record.reference} (simulated)?`}
         message="This marks the letter as sent in the prototype session and records the dispatch in the thread. NO real communication is sent — the prototype never dispatches anything (Spec §10.3)."
-        confirmLabel="Send (demo)"
+        confirmLabel="Confirm simulated send"
         variant="primary"
         loading={busy}
       />

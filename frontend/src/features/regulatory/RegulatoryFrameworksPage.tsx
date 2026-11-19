@@ -142,12 +142,13 @@ function LibraryView() {
     let cancelled = false
     if (!frameworks) return
     void (async () => {
-      const next: Record<string, number> = {}
-      for (const f of frameworks) {
-        const reqs = await frameworkService.listRequirements(f.id)
-        next[f.id] = reqs.filter((r) => r.status === 'AI-Extracted Draft').length
-      }
-      if (!cancelled) setCounts(next)
+      const perFramework = await Promise.all(
+        frameworks.map(async (f) => {
+          const reqs = await frameworkService.listRequirements(f.id)
+          return [f.id, reqs.filter((r) => r.status === 'AI-Extracted Draft').length] as const
+        }),
+      )
+      if (!cancelled) setCounts(Object.fromEntries(perFramework))
     })()
     return () => {
       cancelled = true

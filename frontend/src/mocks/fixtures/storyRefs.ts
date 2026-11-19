@@ -99,6 +99,9 @@ export const STORY = {
 
 // Phase 4A — regulatory administration ref lookups (Spec §10).
 
+/** Named Phase-4A regulatory story anchors (also spread into STORY above). */
+export { REGULATORY_STORY }
+
 /** Regulatory framework code (MBA/…) -> framework id. */
 export { FRAMEWORK_ID_BY_CODE }
 
