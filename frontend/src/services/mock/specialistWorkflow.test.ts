@@ -118,6 +118,38 @@ describe('Specialist service reads (§9 pattern)', () => {
     expect(await specialistService.detail('CYBA-1999-999')).toBeUndefined()
   })
 
+  it('resolves the AML acceptance citations — AMLA-2026-001 ↔ EXM-2026-014 ↔ MBA/AML/2023 (Phase-4 close-out)', async () => {
+    const detail = await specialistService.detail('AMLA-2026-001')
+    expect(detail).toBeDefined()
+    // §6.3 and §4.1 resolve to §10.1 requirement records with drawer links.
+    const req63 = detail!.requirements.find((r) => r.citation === 'MBA/AML/2023 §6.3')
+    expect(req63).toBeDefined()
+    expect(req63!.requirementId).toBeTruthy()
+    expect(req63!.title).toBe('Transaction monitoring obligations')
+    expect(req63!.link).toContain('/app/regulatory/frameworks?framework=MBA%2FAML%2F2023')
+    expect(req63!.link).toContain('requirement=')
+    const req41 = detail!.requirements.find((r) => r.citation === 'MBA/AML/2023 §4.1')
+    expect(req41!.requirementId).toBeTruthy()
+    expect(req41!.title).toBe('Customer due diligence')
+    // The §7 examination renders alongside as a navigable relation.
+    const exam = detail!.assessment.relations.find((r) => r.targetRef === 'EXM-2026-014')
+    expect(exam?.link).toContain('/app/examinations/')
+    // Story anchors survive the join; DIR-2026-004 stays a labelled Phase-5 chip.
+    expect(detail!.assessment.relations.some((r) => r.targetRef === 'FND-2026-101')).toBe(true)
+    expect(detail!.assessment.relations.some((r) => r.targetRef === 'FND-2026-107')).toBe(true)
+    expect(detail!.assessment.relations.some((r) => r.targetRef === 'CAP-2026-003')).toBe(true)
+    const dir = detail!.assessment.relations.find((r) => r.targetRef === 'DIR-2026-004')
+    expect(dir).toBeDefined()
+    expect(dir!.link).toBeUndefined()
+    expect(dir!.note).toBeTruthy()
+    // Pattern part 8 — the 2025 full assessment is the history row.
+    expect(detail!.history.map((h) => h.reference)).toContain('AMLA-2025-003')
+    // Checklist findings link the confirmed monitoring gaps.
+    const aml01 = detail!.checklist.find((c) => c.code === 'AML-01')
+    expect(aml01!.status).toBe('Deficient')
+    expect(aml01!.findingRefs).toContain('FND-2026-101')
+  })
+
   it('filters domain findings by the domain categories', async () => {
     const gov = await specialistService.domainFindings('governance')
     const refs = gov.map((f) => f.reference)
