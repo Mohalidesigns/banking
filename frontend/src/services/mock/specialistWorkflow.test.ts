@@ -32,14 +32,24 @@ describe('Specialist service reads (§9 pattern)', () => {
     resetAllDemoData()
   })
 
-  it('exposes domain configs for the three 4B domains and none for 4C domains yet', async () => {
-    for (const d of ['governance', 'erm', 'cybersecurity'] as const) {
+  it('exposes domain configs for the 4B domains plus AML (4C), none for the remaining 4C domains yet', async () => {
+    for (const d of ['governance', 'erm', 'cybersecurity', 'aml'] as const) {
       const spec = await specialistService.domainSpec(d)
       expect(spec).toBeDefined()
       expect(spec!.submodules.length).toBeGreaterThan(0)
       expect(spec!.checklistTemplates.length).toBeGreaterThan(0)
     }
-    expect(await specialistService.domainSpec('aml')).toBeUndefined()
+    // §9.4 submodules and the LIB-AML-002-mirroring templates are configured.
+    const aml = await specialistService.domainSpec('aml')
+    expect(aml!.libraryProgrammeCode).toBe('LIB-AML-002')
+    expect(aml!.checklistTemplates.map((t) => t.code)).toEqual([
+      'AML-01',
+      'AML-02',
+      'AML-03',
+      'AML-04',
+      'AML-05',
+      'AML-06',
+    ])
     expect(await specialistService.domainSpec('operations')).toBeUndefined()
     expect(await specialistService.domainSpec('consumer-protection')).toBeUndefined()
   })

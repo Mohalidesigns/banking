@@ -39,6 +39,7 @@ import { RegulatoryFrameworksPage } from '@/features/regulatory/RegulatoryFramew
 import { CorporateGovernancePage } from '@/features/specialist/CorporateGovernancePage'
 import { EnterpriseRiskPage } from '@/features/specialist/EnterpriseRiskPage'
 import { CybersecurityPage } from '@/features/specialist/CybersecurityPage'
+import { AmlPage } from '@/features/specialist/AmlPage'
 import { RegulatoryObligationsPage } from '@/features/regulatory/RegulatoryObligationsPage'
 import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
 import { ReturnSubmissionDetailPage } from '@/features/returns/ReturnSubmissionDetailPage'
@@ -289,7 +290,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'IT & Cybersecurity', phase: 4 } satisfies RouteHandle,
         Component: CybersecurityPage,
       },
-      { path: 'specialist/aml', ...moduleRoute('AML/CFT/CPF', 4) },
+      {
+        path: 'specialist/aml',
+        handle: { breadcrumb: 'AML/CFT/CPF', phase: 4 } satisfies RouteHandle,
+        Component: AmlPage,
+      },
       { path: 'specialist/operations', ...moduleRoute('Operations & Internal Controls', 4) },
       { path: 'specialist/consumer-protection', ...moduleRoute('Consumer Protection', 4) },
 

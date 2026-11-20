@@ -11,11 +11,14 @@
  *   maturity assessment (operational resilience ↔ FND-2026-062).
  * - Cyber: Crestline maturity assessment alongside EXM-2026-005
  *   (FND-2026-066 → CAP-2026-008), Meridian 2025 thematic history.
+ * Phase 4C adds AML/CFT/CPF (§9.4 — Meridian targeted assessment alongside
+ * EXM-2026-014 → FND-2026-101/107 → CAP-2026-003, templates mirroring
+ * LIB-AML-002 AML-01…06), operations (§9.5) and consumer protection (§9.6).
  * Checklist templates mirror the examination library programmes
- * (LIB-GOV-001 GOV-01…04, LIB-CYB-001 CYB-01…04) and cite §10.1
- * requirements so the Phase-4 acceptance mapping renders both directions.
- * All data is fictional demo content (Spec §17.5). AML/operations/consumer
- * protection domain configs are added by Phase 4C.
+ * (LIB-GOV-001 GOV-01…04, LIB-CYB-001 CYB-01…04, LIB-AML-002 AML-01…06)
+ * and cite §10.1 requirements so the Phase-4 acceptance mapping renders
+ * both directions. All data is fictional demo content (Spec §17.5); AML
+ * sample cases are fictional and anonymised (Spec §9.4).
  */
 import { demoUuid, isoDay } from '@/mocks/fixtures/demoIds'
 import { INST_IDS } from '@/mocks/fixtures/institutions.fixture'
@@ -411,6 +414,117 @@ export const SPECIALIST_DOMAINS: Partial<Record<SupervisoryDomain, SpecialistDom
       'Other',
     ],
   },
+
+  aml: {
+    domain: 'aml',
+    label: 'AML/CFT/CPF',
+    specRef: '§9.4',
+    route: '/app/specialist/aml',
+    refPrefix: 'AMLA',
+    intro:
+      'Supervision of ML/TF/PF risk assessment, CDD/KYC/EDD, beneficial ownership, PEP and sanctions screening, transaction monitoring, suspicious transaction reporting, correspondent banking, AML governance and training, and independent AML review (Spec §9.4). All sample case data is fictional and anonymised.',
+    libraryProgrammeCode: 'LIB-AML-002',
+    findingCategories: ['AML/CFT'],
+    submodules: [
+      { key: 'ml-tf-pf-risk', label: 'ML/TF/PF risk assessment', description: 'Business-wide money-laundering, terrorist-financing and proliferation-financing risk assessment.' },
+      { key: 'cdd-kyc-edd', label: 'CDD/KYC/EDD', description: 'Customer due diligence at onboarding, periodic refresh and enhanced due diligence for high-risk relationships.' },
+      { key: 'beneficial-ownership', label: 'Beneficial ownership', description: 'Identification and validation of beneficial owners at onboarding and on change events.' },
+      { key: 'pep-sanctions', label: 'PEP and sanctions screening', description: 'Screening triggers, demo watchlist coverage and hit-resolution discipline.' },
+      { key: 'transaction-monitoring', label: 'Transaction monitoring', description: 'Rule inventory, calibration governance and alert handling timeliness.' },
+      { key: 'str-reporting', label: 'Suspicious transaction reporting', description: 'STR pipeline quality, filing timelines and no-file rationale.' },
+      { key: 'correspondent-banking', label: 'Correspondent banking', description: 'Due diligence on correspondent relationships and payable-through arrangements.' },
+      { key: 'aml-governance-training', label: 'AML governance and training', description: 'Compliance function standing, board reporting and staff training currency.' },
+      { key: 'independent-aml-review', label: 'Independent AML review', description: 'Annual independent audit of the AML/CFT control framework.' },
+    ],
+    checklistTemplates: [
+      {
+        code: 'AML-01',
+        submoduleKey: 'transaction-monitoring',
+        title: 'Transaction monitoring rule coverage',
+        objective: 'Confirm the monitoring rule inventory covers the institution\u2019s declared high-risk scenarios with evidenced thresholds.',
+        procedureQuestion:
+          'Do transaction monitoring rules cover all high-risk scenarios in the institution\u2019s risk assessment, and are thresholds evidenced and tuned?',
+        testSteps: ['Obtain the rule inventory and the business-wide AML risk assessment.', 'Map each declared high-risk scenario to at least one monitoring rule.', 'Review tuning records for the last four demo quarters.', 'Re-perform monitoring on a seeded test population (demo data).'],
+        method: 'Re-performance and document review',
+        sample: 'All monitoring rules; 4 quarters of tuning records',
+        priority: 'High',
+        criteriaRef: 'MBA/AML/2023 §6.3',
+        requirementCitations: ['MBA/AML/2023 §6.3'],
+        expectedEvidence: ['Rule inventory export', 'Risk assessment extract', 'Tuning committee minutes', 'Test-run output'],
+      },
+      {
+        code: 'AML-02',
+        submoduleKey: 'transaction-monitoring',
+        title: 'Monitoring alert handling timeliness',
+        objective: 'Test whether alerts are reviewed and dispositioned within the demo 5-business-day standard.',
+        procedureQuestion: 'Are monitoring alerts assigned, investigated and dispositioned within policy timelines, with rationale documented?',
+        testSteps: ['Extract the alert queue for the review period (demo system report).', 'Sample alerts across severity bands.', 'Recompute handling time from alert creation to disposition.', 'Inspect disposition rationale for completeness.'],
+        method: 'Attribute sampling',
+        sample: '40 alerts (demo sample size)',
+        priority: 'High',
+        criteriaRef: 'MBA/AML/2023 §6.3',
+        requirementCitations: ['MBA/AML/2023 §6.3'],
+        expectedEvidence: ['Alert queue extract', 'Disposition records', 'Analyst workload report'],
+      },
+      {
+        code: 'AML-03',
+        submoduleKey: 'cdd-kyc-edd',
+        title: 'CDD periodic refresh backlog',
+        objective: 'Verify periodic CDD refresh is performed on schedule for each risk tier and any backlog is remediated.',
+        procedureQuestion: 'Is the periodic refresh completed within the demo cycles (1/3/5 years by risk tier), and is any backlog tracked and remediated?',
+        testSteps: ['Obtain the refresh tracker by risk tier.', 'Sample high-risk customers overdue for refresh.', 'Check remediation plans and board reporting of the backlog.'],
+        method: 'Attribute sampling',
+        sample: '60 customer files (demo sample size)',
+        priority: 'High',
+        criteriaRef: 'MBA/AML/2023 §4.1',
+        requirementCitations: ['MBA/AML/2023 §4.1'],
+        expectedEvidence: ['Refresh tracker', 'Customer file sample', 'Backlog remediation plan'],
+      },
+      {
+        code: 'AML-04',
+        submoduleKey: 'pep-sanctions',
+        title: 'Sanctions screening effectiveness',
+        objective: 'Confirm screening runs at onboarding, on list updates and periodically over the customer base.',
+        procedureQuestion: 'Are customers and counterparties screened against current demo sanctions lists at the required triggers, and are true matches escalated correctly?',
+        testSteps: ['Inspect screening system trigger configuration.', 'Re-perform screening for a sample of customers against the demo list.', 'Review hit-resolution records for false-positive rationale.'],
+        method: 'Re-performance',
+        sample: '25 customers plus 10 list-update events',
+        priority: 'High',
+        criteriaRef: 'MBA/AML/2024 §2.2',
+        requirementCitations: ['MBA/AML/2023 §2.2 (2024 amendment)'],
+        expectedEvidence: ['Screening configuration', 'Hit-resolution log', 'List-update audit trail'],
+      },
+      {
+        code: 'AML-05',
+        submoduleKey: 'str-reporting',
+        title: 'STR quality and timeliness',
+        objective: 'Assess whether suspicious transaction reports are filed within the demo standard with complete narratives.',
+        procedureQuestion: 'Are STRs filed on time with sufficient narrative quality, and is the decision not to file documented?',
+        testSteps: ['Obtain the STR register for the review period.', 'Sample filed STRs and assess narrative completeness against the demo quality rubric.', 'Sample escalated cases not filed and inspect the documented rationale.'],
+        method: 'Attribute sampling',
+        sample: '15 STRs (demo sample size)',
+        priority: 'High',
+        criteriaRef: 'MBA/AML/2024 §2.2',
+        requirementCitations: ['MBA/AML/2023 §2.2 (2024 amendment)'],
+        expectedEvidence: ['STR register', 'Filed STR samples', 'No-file rationale records'],
+      },
+      {
+        code: 'AML-06',
+        submoduleKey: 'cdd-kyc-edd',
+        title: 'High-risk customer enhanced due diligence',
+        objective: 'Verify EDD is applied and documented for PEPs and other high-risk relationships.',
+        procedureQuestion: 'Do high-risk and PEP relationships carry documented EDD, senior-management approval and source-of-wealth evidence?',
+        testSteps: ['Extract the high-risk/PEP population from the demo CRM.', 'Sample relationships and inspect EDD documentation.', 'Confirm senior-management sign-off records.'],
+        method: 'Attribute sampling',
+        sample: '20 high-risk relationships',
+        priority: 'Medium',
+        criteriaRef: 'MBA/AML/2023 §4.1',
+        requirementCitations: ['MBA/AML/2023 §4.1', 'MBA/AML/2023 §5.1'],
+        expectedEvidence: ['PEP register', 'EDD file samples', 'Approval records'],
+      },
+    ],
+    evidenceKinds: ['Policy', 'Register extract', 'Report', 'Minutes', 'Other'],
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -450,7 +564,7 @@ interface ReportSeed {
 interface AssessmentSeed {
   n: number
   reference: string
-  domain: 'governance' | 'erm' | 'cybersecurity'
+  domain: 'governance' | 'erm' | 'cybersecurity' | 'aml' | 'operations' | 'consumer-protection'
   inst: keyof typeof INST_IDS
   title: string
   type: SpecialistAssessmentType
@@ -967,6 +1081,154 @@ const SEEDS: AssessmentSeed[] = [
     evidence: [],
     report: { status: 'Not Started', executiveSummary: '', sections: [] },
   },
+
+  // ---- AML/CFT/CPF (§9.4) — appended by Phase 4C so the deterministic
+  // demoUuid sequence above never shifts. All sample case data is fictional
+  // and anonymised (Spec §9.4/§17.5). ---------------------------------------
+  {
+    n: 12,
+    reference: 'AMLA-2026-001',
+    domain: 'aml',
+    inst: 'meridian',
+    title: 'AML/CFT programme assessment — Meridian Commercial Bank',
+    type: 'Targeted Review',
+    status: 'In Progress',
+    periodCovered: 'Jan–Sep 2026',
+    startOffset: -40,
+    targetOffset: 12,
+    leadName: 'Hauwa Sadiq',
+    teamNames: ['Chuka Eze', 'Nkechi Balogun'],
+    scopeSummary:
+      'Specialist AML/CFT assessment running alongside targeted examination EXM-2026-014 (fieldwork in progress). Validates remediation of the transaction-monitoring gaps confirmed as FND-2026-101 under the overdue corrective action plan CAP-2026-003 (escalated by corrective directive DIR-2026-004, shown as a labelled Phase-5 chip), and covers the CDD refresh backlog raised as FND-2026-107. All sampled case data is fictional and anonymised.',
+    examinationRef: 'EXM-2026-014',
+    citations: ['MBA/AML/2023 §6.3', 'MBA/AML/2023 §4.1', 'MBA/AML/2023 §2.2 (2024 amendment)'],
+    anchors: [
+      ['EXM-2026-014', 'Meridian AML/CFT targeted examination (in fieldwork)'],
+      ['FND-2026-101', 'Meridian AML transaction monitoring gaps — 14 unreported patterns (demo sample)'],
+      ['FND-2026-107', 'Meridian CDD refresh backlog — 2,300 high-risk customers (demo figure)'],
+      ['CAP-2026-003', 'Meridian AML corrective action plan (overdue)'],
+      ['DIR-2026-004', 'Corrective directive: AML remediation (Phase 5 label)'],
+    ],
+    lastActivityOffset: 0,
+    checklist: {
+      'AML-01': {
+        status: 'Deficient',
+        assessorName: 'Hauwa Sadiq',
+        assessedOffset: -18,
+        note: 'Rule inventory covers 18 of 22 declared high-risk scenarios; structured deposits below the demo reporting threshold are still not captured, and Q2 2026 tuning records are missing. Same condition as FND-2026-101; remediation under CAP-2026-003 remains overdue.',
+        findingRefs: ['FND-2026-101'],
+      },
+      'AML-02': { status: 'In Progress', assessorName: 'Chuka Eze' },
+      'AML-03': {
+        status: 'Deficient',
+        assessorName: 'Nkechi Balogun',
+        assessedOffset: -9,
+        note: 'Periodic refresh overdue for 2,300 high-risk customers (demo figure); backlog remediation plan lacks board-level milestones. Raised as FND-2026-107 during EXM-2026-014 fieldwork.',
+        findingRefs: ['FND-2026-107'],
+      },
+      'AML-04': { status: 'In Progress', assessorName: 'Hauwa Sadiq' },
+    },
+    evidence: [
+      { name: 'Transaction monitoring rule inventory with calibration parameters', kind: 'Register extract', status: 'Insufficient', requestedOffset: -35, receivedOffset: -25, providedBy: 'AML Compliance (demo)', sizeKb: 640, reviewNote: 'Below-threshold structured-deposit coverage absent — reconciled against the declared high-risk scenarios (demo).' },
+      { name: 'CDD periodic refresh tracker by risk tier', kind: 'Register extract', status: 'Reviewed', requestedOffset: -35, receivedOffset: -22, providedBy: 'AML Compliance (demo)', sizeKb: 380, reviewNote: 'Backlog of 2,300 high-risk customers confirmed (demo figure).' },
+      { name: 'Sanctions screening logs and hit-resolution records', kind: 'Register extract', status: 'Received', requestedOffset: -30, receivedOffset: -8, providedBy: 'Financial Crime Unit (demo)', sizeKb: 520 },
+      { name: 'STR register with filing timelines (Jan–Sep 2026)', kind: 'Register extract', status: 'Received', requestedOffset: -30, receivedOffset: -6, providedBy: 'MLRO (demo)', sizeKb: 210 },
+      { name: 'CAP-2026-003 remediation milestone plan', kind: 'Report', status: 'Requested', requestedOffset: -12, dueOffset: -2 },
+    ],
+    report: {
+      status: 'Draft',
+      executiveSummary:
+        'Draft (demo): monitoring rule coverage and the CDD refresh backlog remain deficient, consistent with FND-2026-101 and FND-2026-107 raised during EXM-2026-014 fieldwork. Remediation under CAP-2026-003 is overdue. Conclusions are coordinated with the examination report; all sampled case data is fictional and anonymised.',
+      sections: [
+        { heading: 'Scope and methodology', body: 'Targeted AML/CFT assessment against MBA/AML/2023 using the LIB-AML-002 v2.2 programme, coordinated with EXM-2026-014 fieldwork (58% complete, demo figure). Attribute sampling and re-performance over fictional, anonymised case data only.', citations: ['MBA/AML/2023 §6.3', 'MBA/AML/2023 §4.1'] },
+        { heading: 'Transaction monitoring (draft)', body: 'Rules cover 18 of 22 declared high-risk scenarios; structured deposits below the demo reporting threshold are not captured. The condition was first raised as FND-2026-101 in EXM-2025-031 and persists in this cycle.', citations: ['MBA/AML/2023 §6.3'] },
+        { heading: 'Customer due diligence (draft)', body: 'Periodic refresh is overdue for 2,300 high-risk customers (demo figure); the backlog is tracked under FND-2026-107 and the overdue CAP-2026-003 milestone plan.', citations: ['MBA/AML/2023 §4.1'] },
+      ],
+      reviewerName: 'Tunde Bakare',
+    },
+  },
+  {
+    n: 13,
+    reference: 'AMLA-2026-002',
+    domain: 'aml',
+    inst: 'crestline',
+    title: 'ML/TF risk assessment and AML governance review — Crestline Payment Bank',
+    type: 'Thematic Review',
+    status: 'Planned',
+    periodCovered: 'Q4 2026',
+    startOffset: 15,
+    targetOffset: 55,
+    leadName: 'Hauwa Sadiq',
+    teamNames: ['Nkechi Balogun'],
+    scopeSummary:
+      'Planned thematic review in the Q4 2026 cycle (AML & cyber resilience), focused on the agent-network ML/TF risk profile and risk-based customer classification for e-money customers. Agent onboarding control gaps (FND-2026-062, operations domain) are in scope for their AML training and due-diligence implications — a cross-department referral handled with the Operations & Internal Controls assessment.',
+    citations: ['MBA/AML/2023 §5.1', 'MBA/AML/2023 §4.1'],
+    anchors: [
+      ['OBL-2026-006', 'Annual AML/CFT compliance report obligation'],
+      ['FND-2026-062', 'Crestline agent network onboarding controls (AML training context — operations referral)'],
+    ],
+    lastActivityOffset: -5,
+    checklist: {},
+    evidence: [
+      { name: 'Business-wide ML/TF/PF risk assessment (2026)', kind: 'Policy', status: 'Requested', requestedOffset: -6, dueOffset: 12 },
+      { name: 'Agent AML training certification records', kind: 'Report', status: 'Requested', requestedOffset: -6, dueOffset: 12 },
+    ],
+    report: { status: 'Not Started', executiveSummary: '', sections: [] },
+  },
+  {
+    n: 14,
+    reference: 'AMLA-2025-003',
+    domain: 'aml',
+    inst: 'meridian',
+    title: 'AML/CFT full assessment 2025 — Meridian Commercial Bank',
+    type: 'Full Assessment',
+    status: 'Completed',
+    periodCovered: 'FY 2025',
+    startOffset: -330,
+    targetOffset: -250,
+    completedOffset: -240,
+    leadName: 'Hauwa Sadiq',
+    teamNames: ['Chuka Eze'],
+    scopeSummary:
+      'Full AML/CFT assessment completed alongside comprehensive examination EXM-2025-031. Concluded Needs Improvement: below-threshold structuring detection gaps were raised as FND-2026-101 with remediation agreed under CAP-2026-003; the historic KYC backlog (FND-2025-077) was closed after validation.',
+    conclusion: 'Needs Improvement',
+    maturityScore: 2,
+    examinationRef: 'EXM-2025-031',
+    citations: ['MBA/AML/2023 §6.3', 'MBA/AML/2023 §4.1'],
+    anchors: [
+      ['EXM-2025-031', 'Meridian comprehensive examination (first surfaced the monitoring gaps)'],
+      ['FND-2026-101', 'AML transaction monitoring gaps — first raised in this cycle (High)'],
+      ['FND-2025-077', 'KYC remediation backlog (closed 2025)'],
+      ['CAP-2026-003', 'Meridian AML corrective action plan'],
+    ],
+    lastActivityOffset: -240,
+    checklist: {
+      'AML-01': { status: 'Deficient', assessorName: 'Hauwa Sadiq', assessedOffset: -280, note: 'Structured deposits below the demo reporting threshold not captured by any rule; first identification of the condition later confirmed as FND-2026-101.', findingRefs: ['FND-2026-101'] },
+      'AML-02': { status: 'Satisfactory', assessorName: 'Chuka Eze', assessedOffset: -275 },
+      'AML-03': { status: 'Deficient', assessorName: 'Hauwa Sadiq', assessedOffset: -272, note: 'Historic KYC refresh backlog identified; cleared and validated before closure of FND-2025-077.', findingRefs: ['FND-2025-077'] },
+      'AML-04': { status: 'Satisfactory', assessorName: 'Chuka Eze', assessedOffset: -268, note: 'Screening triggers and hit resolution within the demo standard.' },
+      'AML-05': { status: 'Satisfactory', assessorName: 'Hauwa Sadiq', assessedOffset: -262, note: 'STRs filed within the demo standard; narratives meet the quality rubric.' },
+      'AML-06': { status: 'Satisfactory', assessorName: 'Chuka Eze', assessedOffset: -258 },
+    },
+    evidence: [
+      { name: 'Transaction monitoring rule inventory (2025)', kind: 'Register extract', status: 'Insufficient', requestedOffset: -325, receivedOffset: -310, providedBy: 'AML Compliance (demo)', sizeKb: 590, reviewNote: 'Coverage gap against declared high-risk scenarios — basis of FND-2026-101.' },
+      { name: 'STR register FY2025 with filing timelines', kind: 'Register extract', status: 'Reviewed', requestedOffset: -325, receivedOffset: -305, providedBy: 'MLRO (demo)', sizeKb: 240 },
+    ],
+    report: {
+      status: 'Issued (demo)',
+      executiveSummary:
+        'The AML/CFT control framework at Meridian Commercial Bank was assessed as Needs Improvement (demo maturity 2 — Developing). Screening and STR disciplines operate within demo standards, but monitoring rule coverage missed below-threshold structuring; the condition was raised as FND-2026-101 with remediation mandated under CAP-2026-003. The historic KYC backlog (FND-2025-077) was closed after validation.',
+      sections: [
+        { heading: 'Scope and methodology', body: 'Full AML/CFT assessment against MBA/AML/2023 using the LIB-AML-002 v2.0 programme for FY 2025, coordinated with EXM-2025-031. All sampled case data is fictional and anonymised.', citations: ['MBA/AML/2023 §6.3', 'MBA/AML/2023 §4.1'] },
+        { heading: 'Transaction monitoring', body: 'The rule inventory did not capture structured deposits below the demo reporting threshold; 14 suspicious patterns in the sample period went unreported. Assessed Deficient; raised as FND-2026-101 (High).', citations: ['MBA/AML/2023 §6.3'] },
+        { heading: 'Customer due diligence', body: 'The historic KYC refresh backlog was cleared and validated during the assessment; FND-2025-077 closed. Refresh timeliness for high-risk customers remains a monitoring priority.', citations: ['MBA/AML/2023 §4.1'] },
+        { heading: 'Recommendations', body: '1) Extend monitoring rules to below-threshold structuring typologies. 2) Evidence semi-annual rule calibration reviews. 3) Track remediation under CAP-2026-003 with quarterly compliance-committee reporting.' },
+      ],
+      issuedOffset: -238,
+      issuedByName: 'Tunde Bakare',
+      reviewerName: 'Hauwa Sadiq',
+    },
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -1105,4 +1367,6 @@ export const SPECIALIST_STORY = {
   vanguardErmHistoryId: SPECIALIST_ASSESSMENT_ID_BY_REF['ERMA-2025-003'],
   /** Crestline cyber maturity assessment alongside EXM-2026-005 (§9.3). */
   crestlineCyberAssessmentId: SPECIALIST_ASSESSMENT_ID_BY_REF['CYBA-2026-001'],
+  /** Meridian AML assessment alongside EXM-2026-014 ↔ MBA/AML/2023 §6.3/§4.1 (§9.4, Phase-4 acceptance). */
+  meridianAmlAssessmentId: SPECIALIST_ASSESSMENT_ID_BY_REF['AMLA-2026-001'],
 } as const
