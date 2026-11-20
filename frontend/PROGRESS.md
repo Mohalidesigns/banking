@@ -781,3 +781,146 @@ attempt died on a provider timeout with nothing committed).
   assistant) per Spec §21; consider the Phase-7 code-splitting pass if the
   bundle keeps growing.
 
+---
+
+## Phase 4C — Specialist domains: AML / operations / consumer protection; Phase 4 complete (20 Nov 2026)
+
+Final chunk of Spec §21 Phase 4: the shared §9 pattern instantiated for
+AML/CFT/CPF (§9.4), Operations & Internal Controls (§9.5) and Consumer
+Protection (§9.6), plus the Phase-4 acceptance close-out on the AML side.
+Six units, one commit each (`3cac4c3`…docs), committed at fine cadence per
+the brief (provider infrastructure has killed six agents on this project;
+AML text is the highest content-filter risk, so the AML unit was banked
+first).
+
+**Built:**
+- **AML/CFT/CPF** (`3cac4c3`, §9.4) — `aml` domain config in
+  `SPECIALIST_DOMAINS`: nine §9.4 submodules (ML/TF/PF risk assessment,
+  CDD/KYC/EDD, beneficial ownership, PEP & sanctions screening,
+  transaction monitoring, STR, correspondent banking, AML governance &
+  training, independent AML review), checklist templates AML-01…06
+  mirroring LIB-AML-002 v2.2 (criteria refs match the library programme's
+  `regulatoryMapping` so `?search=` chips land filtered), requirement
+  citations MBA/AML/2023 §4.1/§5.1/§6.3 + §2.2 (2024 amendment). Three
+  seeds appended (n12–14, deterministic demoUuid sequence unshifted):
+  **AMLA-2026-001** (Meridian targeted review alongside EXM-2026-014,
+  anchors FND-2026-101/107 → CAP-2026-003, DIR-2026-004 as the labelled
+  non-link Phase-5 chip; AML-01/AML-03 concluded Deficient with the
+  findings linked; overdue CAP milestone-plan evidence request),
+  AMLA-2026-002 (Crestline Q4 thematic anchored to OBL-2026-006 +
+  FND-2026-062 cross-domain referral), AMLA-2025-003 (Meridian 2025 full
+  assessment history alongside EXM-2025-031, Needs Improvement, first
+  identification of FND-2026-101). All AML sample-case text states
+  fictional/anonymised (Spec §9.4). `AmlPage` wrapper (ScanSearch icon) +
+  router swap; the 4B workflow test asserting `domainSpec('aml')` is
+  undefined was updated in the same commit.
+- **Operations & Internal Controls** (`d604764`, §9.5) — ten §9.5
+  submodules, templates OPS-01…06 mirroring LIB-OPS-001 (OPS-01 is the
+  library procedure verbatim; criteriaRef MBA/OPS/2026 §2.1 = the
+  programme's regulatoryMapping). Seeds n15–18: **OPSA-2026-001**
+  (Crestline, FND-2026-062 agent network, OPS-02 Deficient, citations
+  resolve to the AI-drafted MBA/PSB/2026 §2.3 record while MBA/OPS/2026
+  §2.1 renders the honest "not in the §10.1 demo library" label),
+  OPSA-2026-002 (Northstar, FND-2026-091 mandate escalation via
+  EXM-2026-009), OPSA-2026-003 (Delta, FND-2026-051 branch cash limits),
+  OPSA-2025-004 (Vanguard 2025 history, FND-2026-039, CAP-2026-007 /
+  ENF-2026-002 chip). `OperationsPage` (ClipboardCheck) + router swap.
+- **Consumer Protection** (`2b16f54`, §9.6) — eight §9.6 submodules; NO
+  library programme exists, so templates CPC-01…07 cite the MBA/CPC/2025
+  requirements directly (§2.1 complaints, §3.1 fees, §4.2 fair
+  treatment/consumer lending) plus MBA/NIB/2023 §3.2 for non-interest
+  banks; the intro documents the §9.6 cross-department referral/ownership
+  rule. Seeds n19–21: **CPA-2026-001** (Crestline review anchored to
+  OBL-2026-007 Partial — Q3 report late, agent-dispute theme — with the
+  §9.5/§9.4 referrals named in scope; CPC-01 Deficient), CPA-2026-002
+  (Unity market conduct planned alongside EXM-2026-021, OBL-2026-012),
+  CPA-2025-003 (Meridian Satisfactory 2025 thematic history).
+  `ConsumerProtectionPage` (HeartHandshake) + router swap.
+- **Cross-wiring / acceptance close-out** (`78783c7`) — global search
+  Specialist group gained the three new screens (the ten new assessments
+  flow automatically from `SPECIALIST_ASSESSMENTS`); institution-profile
+  Risk tab "Specialist supervision (§9)" card now deep-links all six
+  registers pre-filtered by `?institution=`; `SPECIALIST_STORY` gained
+  `meridianAmlAssessmentId` / `crestlineOperationsAssessmentId` /
+  `crestlineConsumerReviewId`. One minimal pattern-component change
+  (justified per brief): the `SpecialistDomainPage` "domain not
+  configured" ErrorState copy still said AML/ops/CP "ship in Phase 4C" —
+  updated to past tense; no structural change. Types, repository, service
+  contract and mock service were NOT touched — the 4B machinery is fully
+  domain-generic as promised.
+- **Tests** (`745bd95`) — `SpecialistDomains4C.test.tsx` (9 page-flow
+  tests: three dashboards incl. §9.4–§9.6 submodule inventories and
+  anonymised-data labelling, AML register→detail, the **Phase-4 acceptance
+  click-through** (MBA/AML/2023 §6.3 → frameworks drawer with
+  `requirement=` param), story anchors with DIR-2026-004 asserted as a
+  labelled non-button chip, LIB-AML-002 checklist mirroring + criteria
+  chip → filtered library, history tab, operations resolved-vs-uncatalogued
+  citation honesty, consumer-protection OBL-2026-007 anchor) + one new
+  service-level acceptance test in `specialistWorkflow.test.ts`
+  (AMLA-2026-001 ↔ EXM-2026-014 ↔ MBA/AML/2023 §6.3/§4.1 with links,
+  DIR-2026-004 link-less note, history + checklist findingRefs) and the
+  all-six-domains config assertion. 4B plural-query/unmount lessons
+  applied throughout.
+- **Docs** (this commit) — README "What is built" → Phase 4 complete, all
+  six specialist domains described, structure tree updated, "Known
+  boundaries after Phase 4" (incl. the MBA/OPS/2026 citation gap and the
+  consumer-protection library no-results note); PROGRESS 4C entry.
+
+**Verified (real output, 20 Nov 2026):**
+- `npm run build` → tsc clean; ✓ built (>500 kB Recharts advisory
+  unchanged, deferred to Phase 7).
+- `npm run lint` → oxlint: **0 errors, 75 warnings** — exactly the
+  documented 4B baseline; 4C added no new advisories (no new
+  effects/components with set-state patterns beyond the reused views).
+- `npm test` → **30 files, 194 tests, all passing** (184 prior + 10 new:
+  9 page-flow + 1 service-level acceptance).
+
+**Phase-4 acceptance evidence (§21):** AMLA-2026-001 (Meridian AML/CFT
+programme assessment) renders alongside EXM-2026-014 against the
+MBA/AML/2023 §6.3 (transaction monitoring) and §4.1 (customer due
+diligence) requirement records with two-way deep links into the §10.1
+frameworks drawer — same shape as the 4B cyber acceptance (CYBA-2026-001 ↔
+MBA/CYB/2025). Proven by: service test "resolves the AML acceptance
+citations — AMLA-2026-001 ↔ EXM-2026-014 ↔ MBA/AML/2023 (Phase-4
+close-out)" and page test "resolves MBA/AML/2023 §6.3 into the §10.1
+frameworks drawer (Phase-4 acceptance, AML side)". The §10.1 side already
+carried the reverse anchors (requirement §6.3 → EXM-2026-014/FND-2026-101/
+CAP-2026-003/DIR-2026-004 chips) since 4A.
+
+**Decisions / deviations:**
+- No new libraries; no changes to `types/specialist.ts`,
+  `specialistRepository`, `SpecialistService`/mock or the pattern views
+  (single justified copy fix above).
+- `AssessmentSeed['domain']` union widened to all six domains (fixture-
+  internal interface, not a shared type).
+- MBA/OPS/2026 has no framework/requirement record in the 4A §10.1
+  library; rather than mutate the 4A fixture, operations templates keep
+  MBA/OPS/2026 §2.1 as the library-matching criteriaRef (chip → filtered
+  library) and use it as an honestly-labelled unresolved requirement
+  citation, while OPS-02/03 resolve through the AI-drafted MBA/PSB/2026
+  §2.3/§3.1 records (whose own anchors already point at FND-2026-062).
+  Documented in README boundaries; a Phase 5/7 pass may add the framework.
+- Consumer-protection criteria chips cite MBA/CPC/2025 directly; the
+  library opens in its designed no-results state (no programme exists for
+  §9.6) — noted in README boundaries.
+- One seed-ordering note: all 4C seeds were APPENDED (n12–21) so the
+  deterministic demoUuid sequence and every existing story anchor kept
+  their ids; `SPECIALIST_STORY` only gained keys.
+
+**Next chunk owes (Phase 5 — enforcement, intelligence and reports; Spec §21):**
+- Enforcement cases + detail, supervisory directives (DIR-2026-002/004
+  chips become live targets), sanctions & penalties, corrective action
+  plans register (CAP-2026-002/003/007/008 exist in fixtures), supervisory
+  reports, industry intelligence, peer benchmarking, systemic risk, AI
+  assistant (labelled "Demo AI response" per §17.4). Swap the Phase-5
+  `moduleRoute(...)` placeholders only.
+- Journeys C and E (§22) must be demonstrable at the end of Phase 5. The
+  fixture anchors are ready: ENF-2026-001/002, DIR-2026-002/004, the CAP
+  population, Vanguard restructuring story, and the Q4 2026 thematic cycle
+  (AML & cyber resilience) for intelligence/report content.
+- `relationFromRef`/`relationFor` in `regulatory.fixture.ts` currently
+  force `link: undefined` for directive/enforcement kinds (Phase-5 label) —
+  Phase 5 replaces that with real routes; every chip already carries the
+  refs it needs.
+- Consider the Phase-7 code-splitting pass if the bundle keeps growing.
+

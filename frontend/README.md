@@ -42,7 +42,7 @@ Session state (demo user, jurisdiction, sidebar/nav-group state) persists
 in `localStorage` under `atheris-reg-prototype-session`. Clear that key to
 reset the demo session.
 
-## What is built (Phase 1 + Phase 2 + Phase 3A + Phase 3B + Phase 4A + Phase 4B)
+## What is built (Phase 1 + Phase 2 + Phase 3A + Phase 3B + Phase 4 — complete)
 
 - **App shell** — navy sidebar with the full Spec §3.2 nav tree (role-aware,
   with live actionable queue counts), topbar with global search (⌘K),
@@ -210,21 +210,37 @@ reset the demo session.
   register · assessment detail · checklist & procedures · evidence ·
   findings · report · historical assessments) built once in
   `src/features/specialist/` and parameterized by a `SpecialistDomainSpec`
-  config delivered through `SpecialistService`. Live domains:
-  **Corporate Governance** (§9.1, `/app/specialist/governance`), **Enterprise
-  Risk Management** (§9.2, `/app/specialist/erm`) and **IT & Cybersecurity**
-  (§9.3, `/app/specialist/cybersecurity`, with the §9.3 domain-specific
-  evidence kinds: policy, architecture diagram, access review, vulnerability
-  report, incident log, SOC alert, DR test, third-party assurance).
-  Checklists mirror the examination library programmes (LIB-GOV-001,
-  LIB-CYB-001) and cite §10.1 requirements — the **Phase-4 acceptance** is
-  demonstrable: CYBA-2026-001 (Crestline, alongside EXM-2026-005,
-  FND-2026-066 → CAP-2026-008) renders against MBA/CYB/2025 §3.1/§5.2/§6.1
-  requirement records with two-way deep links; governance carries
+  config delivered through `SpecialistService`. **All six domains are
+  live:** Corporate Governance (§9.1, `/app/specialist/governance`),
+  Enterprise Risk Management (§9.2, `/app/specialist/erm`), IT &
+  Cybersecurity (§9.3, `/app/specialist/cybersecurity`, with the §9.3
+  domain-specific evidence kinds: policy, architecture diagram, access
+  review, vulnerability report, incident log, SOC alert, DR test,
+  third-party assurance), **AML/CFT/CPF** (§9.4, `/app/specialist/aml`),
+  **Operations & Internal Controls** (§9.5, `/app/specialist/operations`)
+  and **Consumer Protection** (§9.6, `/app/specialist/consumer-protection`,
+  with cross-department referral notes where a complaint theme is owned by
+  another supervisory department).
+  Checklists mirror the examination library programmes where they exist
+  (LIB-GOV-001, LIB-CYB-001, LIB-AML-002 AML-01…06, LIB-OPS-001); consumer
+  protection has no library programme and cites the MBA/CPC/2025
+  requirements directly. The **Phase-4 acceptance** is demonstrable on two
+  domains: CYBA-2026-001 (Crestline, alongside EXM-2026-005,
+  FND-2026-066 → CAP-2026-008) renders against MBA/CYB/2025 §3.1/§5.2/§6.1,
+  and AMLA-2026-001 (Meridian, alongside EXM-2026-014, FND-2026-101/107 →
+  CAP-2026-003, DIR-2026-004 as a labelled Phase-5 chip) renders against
+  the MBA/AML/2023 §6.3/§4.1 requirement records — both with two-way deep
+  links into the §10.1 frameworks drawer. Governance carries
   GOVA-2026-001/002 (Unity EXM-2026-021 + FND-2026-118, Meridian
   FND-2026-109) and Vanguard's Unsatisfactory 2025 history (FND-2026-037);
   ERM carries the Northstar review aligned to EWA-2026-011 → EXM-2026-024
-  and Vanguard's 2025 full assessment (FND-2026-035/030). Workflows:
+  and Vanguard's 2025 full assessment (FND-2026-035/030); operations
+  carries OPSA-2026-001/002/003 (Crestline FND-2026-062 agent network,
+  Northstar FND-2026-091 mandate escalation, Delta FND-2026-051 branch
+  cash) plus Vanguard's 2025 history (FND-2026-039); consumer protection
+  carries CPA-2026-001 (Crestline, anchored to OBL-2026-007 Partial),
+  CPA-2026-002 (Unity market conduct, coordinated with EXM-2026-021) and
+  Meridian's Satisfactory 2025 thematic. Workflows:
   create assessment (checklist generated from chosen submodules), start /
   submit for review, record checklist conclusions, request/receive/review
   evidence (simulated), report Draft → In Review → **Issued (demo)** with
@@ -291,7 +307,8 @@ src/
 │                   indicators), regulatory/ (frameworks, obligations,
 │                   correspondence, RelationChip), specialist/ (shared §9
 │                   pattern: domain page, dashboard, register, detail,
-│                   panels; governance/ERM/cyber instances), errors/
+│                   panels; all six domain instances — governance, ERM,
+│                   cyber, AML, operations, consumer protection), errors/
 ├── hooks/          useMediaQuery (responsive shell)
 ├── layouts/        RegulatorLayout, AuthLayout, InstitutionPortalLayout
 ├── mocks/          fixtures/ + repositories/ (never imported by components)
@@ -326,23 +343,28 @@ A future `Api*Service` (Spring Boot) slots in without redesigning screens.
 - **<768px:** sidebar becomes an overlay drawer (topbar menu trigger,
   Escape/backdrop closes); grids stack; tables scroll horizontally.
 
-## Known boundaries after Phase 4B
+## Known boundaries after Phase 4
 
 - All five prudential screens (Spec §8.1–§8.5), all three regulatory
-  administration screens (Spec §10.1–§10.3) and the first three specialist
-  domains (§9.1 governance, §9.2 ERM, §9.3 cybersecurity) are live.
-  **Journey B (§22) is demonstrable end-to-end**, and the **Phase-4
-  acceptance (§21) — a specialist examination mapped to regulatory
-  requirements — is demonstrable**: CYBA-2026-001 runs alongside
-  EXM-2026-005 and renders its checklist, evidence and report against the
-  MBA/CYB/2025 §3.1/§5.2/§6.1 requirement records (two-way deep links
-  between the assessment and the §10.1 frameworks drawer).
-- **Three specialist domains remain designed placeholders until Phase 4C:**
-  AML (§9.4 — anchors EXM-2026-014/FND-2026-101/CAP-2026-003/DIR-2026-004),
-  operations (§9.5) and consumer protection (§9.6). 4C only adds their
-  `SpecialistDomainSpec` configs + fixtures and swaps the remaining
-  `specialist/*` `moduleRoute(...)` placeholders — the shared pattern,
-  types, service and repository are domain-generic already.
+  administration screens (Spec §10.1–§10.3) and **all six specialist
+  domains (§9.1–§9.6)** are live — Phase 4 is complete. **Journey B (§22)
+  is demonstrable end-to-end**, and the **Phase-4 acceptance (§21) — a
+  specialist examination mapped to regulatory requirements — is
+  demonstrable on two domains**: CYBA-2026-001 alongside EXM-2026-005
+  against MBA/CYB/2025 §3.1/§5.2/§6.1, and AMLA-2026-001 alongside
+  EXM-2026-014 against MBA/AML/2023 §6.3/§4.1 (two-way deep links between
+  each assessment and the §10.1 frameworks drawer).
+- MBA/OPS/2026 §2.1 is cited by the operations checklist templates (it is
+  the LIB-OPS-001 programme mapping) but has **no requirement record in the
+  §10.1 demo library** — the assessment detail labels it "Citation not in
+  the §10.1 demo library — reference label only" (designed, never a broken
+  link). The resolvable operations citations are the AI-drafted
+  MBA/PSB/2026 §2.3/§3.1 records. A Phase 5/7 pass could add an
+  MBA/OPS/2026 framework if full resolution is wanted.
+- Consumer protection has no examination-library programme; its checklist
+  templates cite MBA/CPC/2025 §2.1/§3.1/§4.2 and MBA/NIB/2023 §3.2
+  directly. Criteria chips for those citations land on the library's
+  designed no-results state.
 - Specialist maturity scores, submodule coverage scores and dashboard
   trends are demo heuristics, labelled illustrative; report issuance is
   simulated ("Issued (demo)") and evidence receipt is a session-only
