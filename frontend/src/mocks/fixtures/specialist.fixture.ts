@@ -11,9 +11,12 @@
  *   maturity assessment (operational resilience ↔ FND-2026-062).
  * - Cyber: Crestline maturity assessment alongside EXM-2026-005
  *   (FND-2026-066 → CAP-2026-008), Meridian 2025 thematic history.
- * Phase 4C adds AML/CFT/CPF (§9.4 — Meridian targeted assessment alongside
- * EXM-2026-014 → FND-2026-101/107 → CAP-2026-003, templates mirroring
- * LIB-AML-002 AML-01…06), operations (§9.5) and consumer protection (§9.6).
+ * Phase 4C completes the six domains: AML/CFT/CPF (§9.4 — Meridian targeted
+ * assessment alongside EXM-2026-014 → FND-2026-101/107 → CAP-2026-003,
+ * templates mirroring LIB-AML-002 AML-01…06), operations (§9.5 — templates
+ * mirroring LIB-OPS-001, anchored to FND-2026-062/091/051/039) and
+ * consumer protection (§9.6 — no library programme; templates cite the
+ * MBA/CPC/2025 requirements directly, anchored to OBL-2026-007).
  * Checklist templates mirror the examination library programmes
  * (LIB-GOV-001 GOV-01…04, LIB-CYB-001 CYB-01…04, LIB-AML-002 AML-01…06)
  * and cite §10.1 requirements so the Phase-4 acceptance mapping renders
@@ -53,7 +56,7 @@ export const maturityFor = (score: number): SpecialistMaturity => ({
 })
 
 // ---------------------------------------------------------------------------
-// Domain configuration (Spec §9.1–§9.3 submodules; 4C adds the rest).
+// Domain configuration (Spec §9.1–§9.6 submodules).
 // The config interfaces live in types/specialist.ts so components consume
 // them via the service contract, never from fixtures (Spec §18.3).
 // ---------------------------------------------------------------------------
@@ -632,6 +635,128 @@ export const SPECIALIST_DOMAINS: Partial<Record<SupervisoryDomain, SpecialistDom
         criteriaRef: 'MBA/OPS/2026 §2.1',
         requirementCitations: ['MBA/OPS/2026 §2.1'],
         expectedEvidence: ['Internal audit plan', 'Audit finding tracker', 'Operational loss register'],
+      },
+    ],
+    evidenceKinds: ['Policy', 'Register extract', 'Report', 'Minutes', 'Other'],
+  },
+
+  'consumer-protection': {
+    domain: 'consumer-protection',
+    label: 'Consumer Protection',
+    specRef: '§9.6',
+    route: '/app/specialist/consumer-protection',
+    refPrefix: 'CPA',
+    intro:
+      'Supervision of customer complaints, complaint resolution, fees and charges, customer disclosures, digital channel disputes, customer consent and privacy, fair treatment and consumer lending (Spec §9.6). Supports referral and ownership across departments — complaint themes owned by another supervisory department (e.g. agent-network operations under §9.5) are referred with a documented cross-domain note. No examination-library programme exists for this domain yet; checklist templates cite the MBA/CPC/2025 framework requirements directly.',
+    findingCategories: ['Consumer Protection'],
+    submodules: [
+      { key: 'customer-complaints', label: 'Customer complaints', description: 'Complaint intake, registration and acknowledgement discipline.' },
+      { key: 'complaint-resolution', label: 'Complaint resolution', description: 'Resolution against the demo 5-business-day standard and root-cause analysis.' },
+      { key: 'fees-charges', label: 'Fees and charges', description: 'Tariff publication, disclosure at account opening and change notification.' },
+      { key: 'customer-disclosures', label: 'Customer disclosures', description: 'Key-facts statements and product-term transparency.' },
+      { key: 'digital-channel-disputes', label: 'Digital channel disputes', description: 'Dispute handling for app, USSD and agent-channel transactions.' },
+      { key: 'consent-privacy', label: 'Customer consent and privacy', description: 'Consent capture, data-sharing disclosures and privacy complaint handling.' },
+      { key: 'fair-treatment', label: 'Fair treatment', description: 'Plain-language terms, suitability and fair outcomes for retail customers.' },
+      { key: 'consumer-lending', label: 'Consumer lending', description: 'Suitability assessment and responsible-lending practices for retail credit.' },
+    ],
+    checklistTemplates: [
+      {
+        code: 'CPC-01',
+        submoduleKey: 'customer-complaints',
+        title: 'Complaint handling timeliness',
+        objective: 'Test that retail complaints are acknowledged within one business day and resolved within the demo 5-business-day standard.',
+        procedureQuestion: 'Does the complaint register evidence acknowledgement within one business day and resolution within five (demo standards), with quarterly root-cause reporting?',
+        testSteps: ['Obtain the complaint register for the period.', 'Sample complaints across channels.', 'Recompute acknowledgement and resolution timelines.', 'Inspect the quarterly root-cause report.'],
+        method: 'Attribute sampling and re-computation',
+        sample: '40 complaints (demo sample size)',
+        priority: 'High',
+        criteriaRef: 'MBA/CPC/2025 §2.1',
+        requirementCitations: ['MBA/CPC/2025 §2.1'],
+        expectedEvidence: ['Complaint register with timestamps', 'Root-cause analysis reports', 'Quarterly complaint report'],
+      },
+      {
+        code: 'CPC-02',
+        submoduleKey: 'complaint-resolution',
+        title: 'Complaint resolution quality and SLA breaches',
+        objective: 'Assess resolution quality, repeat-complaint handling and the SLA breach register.',
+        procedureQuestion: 'Are SLA breaches logged with reasons, and do repeat complaints trigger root-cause escalation (demo standard)?',
+        testSteps: ['Inspect the SLA breach register.', 'Sample repeat complaints.', 'Trace root-cause escalation records.'],
+        method: 'Inspection and sampling',
+        sample: 'All breaches plus 15 repeat complaints',
+        priority: 'Medium',
+        criteriaRef: 'MBA/CPC/2025 §2.1',
+        requirementCitations: ['MBA/CPC/2025 §2.1'],
+        expectedEvidence: ['SLA breach register', 'Repeat-complaint log', 'Escalation records'],
+      },
+      {
+        code: 'CPC-03',
+        submoduleKey: 'fees-charges',
+        title: 'Fee and charge disclosure',
+        objective: 'Verify fees are disclosed in the standard demo tariff format at account opening and on the public website, with 30-day change notice.',
+        procedureQuestion: 'Do account-opening packs and the website carry the current tariff schedule, and were fee changes notified 30 days in advance (demo standard)?',
+        testSteps: ['Obtain the published tariff schedules.', 'Sample account-opening disclosure packs.', 'Trace change-notification evidence for fee changes in the period.'],
+        method: 'Inspection and sampling',
+        sample: '20 account-opening packs; all fee changes',
+        priority: 'High',
+        criteriaRef: 'MBA/CPC/2025 §3.1',
+        requirementCitations: ['MBA/CPC/2025 §3.1'],
+        expectedEvidence: ['Published tariff schedules', 'Account-opening disclosure samples', 'Customer change-notification evidence'],
+      },
+      {
+        code: 'CPC-04',
+        submoduleKey: 'digital-channel-disputes',
+        title: 'Digital channel dispute handling',
+        objective: 'Test dispute resolution for app, USSD and agent-channel transactions against the demo timelines.',
+        procedureQuestion: 'Are digital-channel disputes resolved within the demo standard, with provisional credits applied where required and root causes fed back to channel owners?',
+        testSteps: ['Extract the digital-dispute queue for the period.', 'Sample disputes across channels.', 'Inspect resolution timelines and provisional-credit records.', 'Trace root-cause feedback to channel owners.'],
+        method: 'Attribute sampling',
+        sample: '30 disputes (demo sample size)',
+        priority: 'High',
+        criteriaRef: 'MBA/CPC/2025 §2.1',
+        requirementCitations: ['MBA/CPC/2025 §2.1'],
+        expectedEvidence: ['Dispute queue extract', 'Provisional-credit records', 'Root-cause feedback log'],
+      },
+      {
+        code: 'CPC-05',
+        submoduleKey: 'fair-treatment',
+        title: 'Fair treatment and product transparency',
+        objective: 'Verify product terms carry the standard demo key-facts statement and marketing material is approved.',
+        procedureQuestion: 'Do retail products present plain-language key-facts statements, and does the marketing approval log evidence pre-publication review (demo standard)?',
+        testSteps: ['Obtain the product register and key-facts templates.', 'Sample marketing material approvals.', 'Inspect suitability records for credit and investment-linked products.'],
+        method: 'Inspection and sampling',
+        sample: 'All retail products; 15 marketing items',
+        priority: 'Medium',
+        criteriaRef: 'MBA/CPC/2025 §4.2',
+        requirementCitations: ['MBA/CPC/2025 §4.2'],
+        expectedEvidence: ['Key-facts statement samples', 'Suitability assessment records', 'Marketing material approval log'],
+      },
+      {
+        code: 'CPC-06',
+        submoduleKey: 'consumer-lending',
+        title: 'Consumer lending suitability',
+        objective: 'Test that retail credit products carry documented suitability assessments and responsible-lending checks.',
+        procedureQuestion: 'Do sampled consumer-lending files evidence suitability assessment, affordability checks and plain-language terms before disbursement (demo standard)?',
+        testSteps: ['Extract the consumer-lending population.', 'Sample disbursed facilities.', 'Inspect suitability and affordability records.'],
+        method: 'Attribute sampling',
+        sample: '25 consumer-lending files (demo sample size)',
+        priority: 'High',
+        criteriaRef: 'MBA/CPC/2025 §4.2',
+        requirementCitations: ['MBA/CPC/2025 §4.2'],
+        expectedEvidence: ['Lending file samples', 'Suitability assessment records', 'Affordability computation sheets'],
+      },
+      {
+        code: 'CPC-07',
+        submoduleKey: 'customer-disclosures',
+        title: 'Investment account risk disclosure (non-interest banks)',
+        objective: 'For non-interest banks, verify profit-displacement and risk-sharing disclosures at onboarding and on methodology changes.',
+        procedureQuestion: 'Do investment account holders receive the documented profit-displacement and risk-sharing disclosure at onboarding and on any methodology change (demo standard)?',
+        testSteps: ['Obtain disclosure templates and the acknowledgement log.', 'Sample investment account openings.', 'Check the methodology change log for re-disclosure.'],
+        method: 'Inspection and sampling',
+        sample: '20 investment accounts',
+        priority: 'Medium',
+        criteriaRef: 'MBA/NIB/2023 §3.2',
+        requirementCitations: ['MBA/NIB/2023 §3.2'],
+        expectedEvidence: ['Disclosure templates and signed acknowledgements', 'Profit-sharing methodology change log'],
       },
     ],
     evidenceKinds: ['Policy', 'Register extract', 'Report', 'Minutes', 'Other'],
@@ -1517,6 +1642,128 @@ const SEEDS: AssessmentSeed[] = [
       reviewerName: 'Chuka Eze',
     },
   },
+
+  // ---- Consumer protection (§9.6) — appended by Phase 4C. No examination
+  // library programme exists for this domain; templates cite the MBA/CPC/2025
+  // framework requirements directly. -----------------------------------------
+  {
+    n: 19,
+    reference: 'CPA-2026-001',
+    domain: 'consumer-protection',
+    inst: 'crestline',
+    title: 'Consumer protection review — Crestline Payment Bank',
+    type: 'Thematic Review',
+    status: 'In Progress',
+    periodCovered: 'Q3–Q4 2026',
+    startOffset: -20,
+    targetOffset: 18,
+    leadName: 'Lerato Mokoena',
+    teamNames: ['Daniel Adeyemi'],
+    scopeSummary:
+      'Thematic review prompted by the Partial compliance status on obligation OBL-2026-007: the Q3 2026 complaint report was filed six business days late (demo) and flagged an agent-dispute theme. Covers digital-channel dispute handling and complaint resolution for the agent-network model. Cross-department referrals: agent-network operational controls are owned by the §9.5 assessment OPSA-2026-001, and the AML training implications were referred to §9.4 (AMLA-2026-002).',
+    citations: ['MBA/CPC/2025 §2.1', 'MBA/CPC/2025 §3.1'],
+    anchors: [
+      ['OBL-2026-007', 'Quarterly consumer complaint report — Q3 2026 filed late (Partial, demo)'],
+      ['FND-2026-062', 'Crestline agent network onboarding controls (agent-dispute theme referral)'],
+    ],
+    lastActivityOffset: 0,
+    checklist: {
+      'CPC-01': {
+        status: 'Deficient',
+        assessorName: 'Lerato Mokoena',
+        assessedOffset: -8,
+        note: 'Q3 2026 complaint report filed six business days after the demo deadline; the agent-dispute theme lacks root-cause analysis. Obligation OBL-2026-007 marked Partial.',
+      },
+      'CPC-04': { status: 'In Progress', assessorName: 'Daniel Adeyemi' },
+    },
+    evidence: [
+      { name: 'Complaint register extract Q3 2026 with timestamps', kind: 'Register extract', status: 'Reviewed', requestedOffset: -18, receivedOffset: -12, providedBy: 'Customer Care (demo)', sizeKb: 380, reviewNote: 'Acknowledgement within one business day evidenced; resolution timelines exceeded for the agent-dispute cohort (demo).' },
+      { name: 'Root-cause analysis report Q3 2026', kind: 'Report', status: 'Insufficient', requestedOffset: -18, receivedOffset: -10, providedBy: 'Customer Care (demo)', sizeKb: 220, reviewNote: 'Agent-dispute theme flagged but not analysed; filed six business days late (demo).' },
+      { name: 'Published tariff schedule (agent transactions)', kind: 'Policy', status: 'Received', requestedOffset: -14, receivedOffset: -5, providedBy: 'Products (demo)', sizeKb: 160 },
+    ],
+    report: {
+      status: 'Draft',
+      executiveSummary:
+        'Draft (demo): complaint reporting timeliness is deficient (OBL-2026-007 Partial) and the agent-dispute theme lacks root-cause analysis; digital-channel dispute testing is in progress. Operational ownership of agent-network controls sits with the §9.5 assessment (referral documented).',
+      sections: [
+        { heading: 'Scope and methodology', body: 'Thematic review against MBA/CPC/2025 §2.1/§3.1 covering complaint handling, resolution quality and digital-channel disputes for Q3–Q4 2026. No examination-library programme exists for this domain; requirement citations are applied directly.', citations: ['MBA/CPC/2025 §2.1'] },
+        { heading: 'Complaint handling (draft)', body: 'The Q3 2026 quarterly report was filed six business days late and the agent-dispute theme was not root-cause analysed; obligation OBL-2026-007 is marked Partial for Crestline.', citations: ['MBA/CPC/2025 §2.1'] },
+      ],
+      reviewerName: 'Amara Osei',
+    },
+  },
+  {
+    n: 20,
+    reference: 'CPA-2026-002',
+    domain: 'consumer-protection',
+    inst: 'unity',
+    title: 'Market conduct assessment — Unity Non-Interest Bank',
+    type: 'Full Assessment',
+    status: 'Planned',
+    periodCovered: 'Q4 2026',
+    startOffset: 12,
+    targetOffset: 50,
+    leadName: 'Lerato Mokoena',
+    teamNames: ['Aisha Yusuf'],
+    scopeSummary:
+      'Planned market conduct assessment coordinated with governance examination EXM-2026-021: investment-account risk disclosures (MBA/NIB/2023 §3.2), fair treatment and product transparency for non-interest retail products. Disclosure testing is sequenced with the Shariah governance procedures in the examination to avoid duplicate information requests.',
+    examinationRef: 'EXM-2026-021',
+    citations: ['MBA/CPC/2025 §4.2', 'MBA/NIB/2023 §3.2'],
+    anchors: [
+      ['EXM-2026-021', 'Planned governance examination — Unity Non-Interest Bank (coordination)'],
+      ['OBL-2026-012', 'Non-interest banking disclosure obligation'],
+    ],
+    lastActivityOffset: -4,
+    checklist: {},
+    evidence: [
+      { name: 'Investment account disclosure templates and acknowledgement log', kind: 'Register extract', status: 'Requested', requestedOffset: -5, dueOffset: 10 },
+      { name: 'Key-facts statements for retail products', kind: 'Policy', status: 'Requested', requestedOffset: -5, dueOffset: 10 },
+    ],
+    report: { status: 'Not Started', executiveSummary: '', sections: [] },
+  },
+  {
+    n: 21,
+    reference: 'CPA-2025-003',
+    domain: 'consumer-protection',
+    inst: 'meridian',
+    title: 'Complaint handling thematic 2025 — Meridian Commercial Bank',
+    type: 'Thematic Review',
+    status: 'Completed',
+    periodCovered: 'H2 2025',
+    startOffset: -300,
+    targetOffset: -230,
+    completedOffset: -220,
+    leadName: 'Lerato Mokoena',
+    teamNames: ['Daniel Adeyemi'],
+    scopeSummary:
+      'Thematic review of complaint handling and fee disclosure for H2 2025. Concluded Satisfactory: acknowledgement and resolution timelines met the demo standards, with a recommendation to automate tariff change-notification evidence.',
+    conclusion: 'Satisfactory',
+    maturityScore: 4,
+    citations: ['MBA/CPC/2025 §2.1', 'MBA/CPC/2025 §3.1'],
+    anchors: [],
+    lastActivityOffset: -220,
+    checklist: {
+      'CPC-01': { status: 'Satisfactory', assessorName: 'Lerato Mokoena', assessedOffset: -260, note: 'Acknowledgement within one business day and resolution within five evidenced across the sample (demo).' },
+      'CPC-02': { status: 'Satisfactory', assessorName: 'Daniel Adeyemi', assessedOffset: -255 },
+      'CPC-03': { status: 'Satisfactory', assessorName: 'Lerato Mokoena', assessedOffset: -250, note: 'Tariff published and disclosed at account opening; recommendation recorded to automate 30-day change-notification evidence.' },
+    },
+    evidence: [
+      { name: 'Complaint register extract H2 2025', kind: 'Register extract', status: 'Reviewed', requestedOffset: -295, receivedOffset: -285, providedBy: 'Customer Care (demo)', sizeKb: 340 },
+      { name: 'Tariff schedules and change notifications', kind: 'Policy', status: 'Reviewed', requestedOffset: -295, receivedOffset: -280, providedBy: 'Products (demo)', sizeKb: 180 },
+    ],
+    report: {
+      status: 'Issued (demo)',
+      executiveSummary:
+        'Complaint handling and fee disclosure at Meridian Commercial Bank were assessed as Satisfactory (demo maturity 4 — Managed). Timelines met the demo standards across the sample; one recommendation recorded on automating tariff change-notification evidence.',
+      sections: [
+        { heading: 'Scope and methodology', body: 'Thematic review against MBA/CPC/2025 §2.1/§3.1 for H2 2025 using requirement-based templates (no library programme for this domain).', citations: ['MBA/CPC/2025 §2.1', 'MBA/CPC/2025 §3.1'] },
+        { heading: 'Recommendations', body: 'Automate retention of the 30-day fee-change notification evidence within the customer-communication platform.' },
+      ],
+      issuedOffset: -218,
+      issuedByName: 'Amara Osei',
+      reviewerName: 'Lerato Mokoena',
+    },
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -1659,4 +1906,6 @@ export const SPECIALIST_STORY = {
   meridianAmlAssessmentId: SPECIALIST_ASSESSMENT_ID_BY_REF['AMLA-2026-001'],
   /** Crestline operational-controls assessment (FND-2026-062 agent network) (§9.5). */
   crestlineOperationsAssessmentId: SPECIALIST_ASSESSMENT_ID_BY_REF['OPSA-2026-001'],
+  /** Crestline consumer-protection review (OBL-2026-007 Partial, agent-dispute theme) (§9.6). */
+  crestlineConsumerReviewId: SPECIALIST_ASSESSMENT_ID_BY_REF['CPA-2026-001'],
 } as const

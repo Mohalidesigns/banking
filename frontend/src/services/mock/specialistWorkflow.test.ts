@@ -32,8 +32,15 @@ describe('Specialist service reads (§9 pattern)', () => {
     resetAllDemoData()
   })
 
-  it('exposes domain configs for the 4B domains plus AML and operations (4C), none for consumer protection yet', async () => {
-    for (const d of ['governance', 'erm', 'cybersecurity', 'aml', 'operations'] as const) {
+  it('exposes domain configs for all six §9 domains (4B + 4C)', async () => {
+    for (const d of [
+      'governance',
+      'erm',
+      'cybersecurity',
+      'aml',
+      'operations',
+      'consumer-protection',
+    ] as const) {
       const spec = await specialistService.domainSpec(d)
       expect(spec).toBeDefined()
       expect(spec!.submodules.length).toBeGreaterThan(0)
@@ -61,7 +68,10 @@ describe('Specialist service reads (§9 pattern)', () => {
       'OPS-05',
       'OPS-06',
     ])
-    expect(await specialistService.domainSpec('consumer-protection')).toBeUndefined()
+    // §9.6 has no library programme — templates cite MBA/CPC/2025 directly.
+    const cp = await specialistService.domainSpec('consumer-protection')
+    expect(cp!.libraryProgrammeCode).toBeUndefined()
+    expect(cp!.checklistTemplates.every((t) => t.requirementCitations.length > 0)).toBe(true)
   })
 
   it('joins register rows with institution labels and checklist progress', async () => {

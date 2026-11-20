@@ -41,6 +41,7 @@ import { EnterpriseRiskPage } from '@/features/specialist/EnterpriseRiskPage'
 import { CybersecurityPage } from '@/features/specialist/CybersecurityPage'
 import { AmlPage } from '@/features/specialist/AmlPage'
 import { OperationsPage } from '@/features/specialist/OperationsPage'
+import { ConsumerProtectionPage } from '@/features/specialist/ConsumerProtectionPage'
 import { RegulatoryObligationsPage } from '@/features/regulatory/RegulatoryObligationsPage'
 import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
 import { ReturnSubmissionDetailPage } from '@/features/returns/ReturnSubmissionDetailPage'
@@ -301,7 +302,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Operations & Internal Controls', phase: 4 } satisfies RouteHandle,
         Component: OperationsPage,
       },
-      { path: 'specialist/consumer-protection', ...moduleRoute('Consumer Protection', 4) },
+      {
+        path: 'specialist/consumer-protection',
+        handle: { breadcrumb: 'Consumer Protection', phase: 4 } satisfies RouteHandle,
+        Component: ConsumerProtectionPage,
+      },
 
       // Regulatory administration
       {
