@@ -186,24 +186,24 @@ class SpecialistRepository {
   }
 
   private transition(
-    id: string,
+    referenceOrId: string,
     from: SpecialistAssessment['status'],
     to: SpecialistAssessment['status'],
   ): SpecialistAssessment | undefined {
-    const a = this.assessments.find((x) => x.id === id)
+    const a = this.getAssessment(referenceOrId)
     if (!a || a.status !== from) return undefined
     a.status = to
-    this.touch(id)
+    this.touch(a.id)
     return a
   }
 
   /** Report status machine — returns undefined on an invalid transition. */
   transitionReport(
-    assessmentId: string,
+    referenceOrId: string,
     to: SpecialistReportStatus,
     actorName: string,
   ): SpecialistAssessment | undefined {
-    const a = this.assessments.find((x) => x.id === assessmentId)
+    const a = this.getAssessment(referenceOrId)
     if (!a) return undefined
     const allowed = REPORT_FLOW[a.report.status] ?? []
     if (!allowed.includes(to)) return undefined
@@ -213,34 +213,34 @@ class SpecialistRepository {
       a.report.issuedByName = actorName
     }
     if (to === 'In Review' && !a.report.reviewerName) a.report.reviewerName = actorName
-    this.touch(assessmentId)
+    this.touch(a.id)
     return a
   }
 
   saveReportDraft(
-    assessmentId: string,
+    referenceOrId: string,
     executiveSummary: string,
   ): SpecialistAssessment | undefined {
-    const a = this.assessments.find((x) => x.id === assessmentId)
+    const a = this.getAssessment(referenceOrId)
     if (!a || (a.report.status !== 'Not Started' && a.report.status !== 'Draft')) return undefined
     a.report.executiveSummary = executiveSummary
     a.report.status = 'Draft'
-    this.touch(assessmentId)
+    this.touch(a.id)
     return a
   }
 
   completeAssessment(
-    id: string,
+    referenceOrId: string,
     conclusion: SpecialistConclusion,
     maturityScore: number,
   ): SpecialistAssessment | undefined {
-    const a = this.assessments.find((x) => x.id === id)
+    const a = this.getAssessment(referenceOrId)
     if (!a || (a.status !== 'In Progress' && a.status !== 'In Review')) return undefined
     a.status = 'Completed'
     a.completedDate = isoDay(0)
     a.conclusion = conclusion
     a.maturity = maturityFor(maturityScore)
-    this.touch(id)
+    this.touch(a.id)
     return a
   }
 

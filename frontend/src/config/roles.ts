@@ -306,7 +306,17 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'cybersecurity-specialist': {
     portal: false,
     visibleNavSections: ['overview', 'examinations', 'specialist'],
-    allowedActions: ['view', 'export', 'add-note', 'record-fieldwork', 'upload-evidence', 'raise-finding'],
+    allowedActions: [
+      'view',
+      'export',
+      'add-note',
+      'record-fieldwork',
+      'upload-evidence',
+      'raise-finding',
+      // Phase 4B — domain specialists record checklist conclusions and
+      // evidence reviews in their specialist domains (never manage/approve).
+      'record-specialist-checklist',
+    ],
     scope: 'authority',
     canApprove: false,
     canExport: true,
@@ -315,7 +325,17 @@ const seeds: Record<DemoRole, ProfileSeed> = {
   'aml-specialist': {
     portal: false,
     visibleNavSections: ['overview', 'examinations', 'specialist'],
-    allowedActions: ['view', 'export', 'add-note', 'record-fieldwork', 'upload-evidence', 'raise-finding'],
+    allowedActions: [
+      'view',
+      'export',
+      'add-note',
+      'record-fieldwork',
+      'upload-evidence',
+      'raise-finding',
+      // Phase 4B — domain specialists record checklist conclusions and
+      // evidence reviews in their specialist domains (never manage/approve).
+      'record-specialist-checklist',
+    ],
     scope: 'authority',
     canApprove: false,
     canExport: true,
