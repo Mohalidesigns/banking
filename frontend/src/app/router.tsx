@@ -37,6 +37,7 @@ import { PrudentialIndicatorsPage } from '@/features/prudential/PrudentialIndica
 import { RegulatoryCorrespondencePage } from '@/features/regulatory/RegulatoryCorrespondencePage'
 import { RegulatoryFrameworksPage } from '@/features/regulatory/RegulatoryFrameworksPage'
 import { CorporateGovernancePage } from '@/features/specialist/CorporateGovernancePage'
+import { EnterpriseRiskPage } from '@/features/specialist/EnterpriseRiskPage'
 import { RegulatoryObligationsPage } from '@/features/regulatory/RegulatoryObligationsPage'
 import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
 import { ReturnSubmissionDetailPage } from '@/features/returns/ReturnSubmissionDetailPage'
@@ -277,7 +278,11 @@ export const router = createBrowserRouter([
         handle: { breadcrumb: 'Corporate Governance', phase: 4 } satisfies RouteHandle,
         Component: CorporateGovernancePage,
       },
-      { path: 'specialist/erm', ...moduleRoute('Enterprise Risk Management', 4) },
+      {
+        path: 'specialist/erm',
+        handle: { breadcrumb: 'Enterprise Risk Management', phase: 4 } satisfies RouteHandle,
+        Component: EnterpriseRiskPage,
+      },
       { path: 'specialist/cybersecurity', ...moduleRoute('IT & Cybersecurity', 4) },
       { path: 'specialist/aml', ...moduleRoute('AML/CFT/CPF', 4) },
       { path: 'specialist/operations', ...moduleRoute('Operations & Internal Controls', 4) },
