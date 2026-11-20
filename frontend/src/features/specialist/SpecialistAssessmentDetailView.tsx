@@ -775,7 +775,7 @@ export function SpecialistAssessmentDetailView({
                 loading={busy}
                 onClick={() => void run('Submitted for review', () => specialistService.submitForReview(assessment.id, actor))}
               >
-                Submit for review
+                Submit assessment for review
               </Button>
             )}
             {(assessment.status === 'In Progress' || assessment.status === 'In Review') && canApprove && (
