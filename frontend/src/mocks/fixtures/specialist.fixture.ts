@@ -26,6 +26,7 @@ import type {
   SpecialistAssessment,
   SpecialistAssessmentStatus,
   SpecialistAssessmentType,
+  SpecialistDomainSpec,
   SpecialistChecklistItem,
   SpecialistConclusion,
   SpecialistEvidenceItem,
@@ -49,50 +50,16 @@ export const maturityFor = (score: number): SpecialistMaturity => ({
 })
 
 // ---------------------------------------------------------------------------
-// Domain configuration (Spec §9.1–§9.3 submodules; 4C adds the rest)
+// Domain configuration (Spec §9.1–§9.3 submodules; 4C adds the rest).
+// The config interfaces live in types/specialist.ts so components consume
+// them via the service contract, never from fixtures (Spec §18.3).
 // ---------------------------------------------------------------------------
 
-export interface SpecialistChecklistTemplate {
-  code: string
-  submoduleKey: string
-  title: string
-  objective: string
-  procedureQuestion: string
-  testSteps: string[]
-  method: string
-  sample: string
-  priority: 'High' | 'Medium' | 'Low'
-  /** Examination-library / rulebook citation the item is tested against. */
-  criteriaRef: string
-  /** §10.1 requirement citations discharged by this item. */
-  requirementCitations: string[]
-  expectedEvidence: string[]
-}
-
-export interface SpecialistSubmodule {
-  key: string
-  label: string
-  description: string
-}
-
-export interface SpecialistDomainSpec {
-  domain: SupervisoryDomain
-  label: string
-  /** Spec section, e.g. "§9.1". */
-  specRef: string
-  route: string
-  /** Assessment reference prefix, e.g. GOVA-2026-001. */
-  refPrefix: string
-  intro: string
-  /** Examination library programme whose procedures the checklist mirrors. */
-  libraryProgrammeCode?: string
-  /** Finding categories surfaced on the pattern's findings panel. */
-  findingCategories: string[]
-  submodules: SpecialistSubmodule[]
-  checklistTemplates: SpecialistChecklistTemplate[]
-  /** Demo evidence kinds offered by the request-evidence form (§9.3). */
-  evidenceKinds: SpecialistEvidenceKind[]
-}
+export type {
+  SpecialistChecklistTemplate,
+  SpecialistDomainSpec,
+  SpecialistSubmodule,
+} from '@/types/specialist'
 
 export const SPECIALIST_DOMAINS: Partial<Record<SupervisoryDomain, SpecialistDomainSpec>> = {
   governance: {

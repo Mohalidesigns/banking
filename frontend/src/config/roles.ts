@@ -59,6 +59,10 @@ const ALL_ACTIONS: DemoAction[] = [
   'manage-obligations',
   'manage-correspondence',
   'approve-correspondence',
+  // Phase 4B — specialist supervisory domains (Spec §9)
+  'manage-specialist-assessments',
+  'record-specialist-checklist',
+  'approve-specialist-report',
 ]
 
 const WORK_ACTIONS: DemoAction[] = ['view', 'manage-work-queue', 'add-note']
@@ -69,6 +73,9 @@ const FIELDWORK_ACTIONS: DemoAction[] = [
   'upload-evidence',
   'raise-finding',
   'request-information',
+  // Phase 4B — examiners record specialist checklist conclusions and
+  // evidence receipts during fieldwork, but never manage or approve.
+  'record-specialist-checklist',
 ]
 
 /** Review tier: may review but never approve (Spec §19 canApprove = false). */
@@ -95,6 +102,10 @@ const REVIEW_ACTIONS: DemoAction[] = [
   // Phase 4A — examiners draft/review correspondence (e.g. information
   // requests raised during fieldwork) but never approve or send.
   'manage-correspondence',
+  // Phase 4B — review tier runs specialist assessments (create, evidence
+  // requests, checklist, draft reports) but never issues or completes them.
+  'manage-specialist-assessments',
+  'record-specialist-checklist',
 ]
 
 /** Approval tier: team lead and above may approve results/findings/closure. */
@@ -134,6 +145,11 @@ const APPROVAL_ACTIONS: DemoAction[] = [
   'manage-obligations',
   'manage-correspondence',
   'approve-correspondence',
+  // Phase 4B — approval tier issues specialist reports (demo) and records
+  // the final conclusion/maturity of an assessment (Spec §9).
+  'manage-specialist-assessments',
+  'record-specialist-checklist',
+  'approve-specialist-report',
 ]
 
 type ProfileSeed = Omit<RolePermissionProfile, 'role' | 'label'>

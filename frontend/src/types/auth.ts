@@ -130,6 +130,10 @@ export type DemoAction =
   | 'manage-obligations'
   | 'manage-correspondence'
   | 'approve-correspondence'
+  // Specialist supervisory domains (Spec §9, Phase 4B)
+  | 'manage-specialist-assessments'
+  | 'record-specialist-checklist'
+  | 'approve-specialist-report'
 
 export type DemoScope = 'authority' | 'department' | 'team' | 'portfolio' | 'institution'
 

@@ -115,7 +115,8 @@ export interface SpecialistInstitutionPosture {
   institutionName: string
   institutionCode: string
   riskRating: string
-  maturity: SpecialistMaturity
+  /** Latest completed assessment's demo maturity; absent until one completes. */
+  maturity?: SpecialistMaturity
   openAssessments: number
   openFindingCount: number
   /** Demo trend vs the previous cycle: 'Improving' | 'Stable' | 'Deteriorating'. */
@@ -316,4 +317,90 @@ export interface RequestEvidenceInput {
 
 export interface SpecialistReportDecisionInput {
   note: string
+}
+
+// ---------------------------------------------------------------------------
+// Domain configuration (Spec §9.1–§9.6 — static per-domain metadata that
+// parameterizes the shared page pattern; delivered by the service so
+// components never import fixtures)
+// ---------------------------------------------------------------------------
+
+export interface SpecialistSubmodule {
+  key: string
+  label: string
+  description: string
+}
+
+/** Checklist/procedure template mirroring an examination library procedure. */
+export interface SpecialistChecklistTemplate {
+  code: string
+  submoduleKey: string
+  title: string
+  objective: string
+  procedureQuestion: string
+  testSteps: string[]
+  method: string
+  sample: string
+  priority: 'High' | 'Medium' | 'Low'
+  /** Examination-library / rulebook citation the item is tested against. */
+  criteriaRef: string
+  /** §10.1 requirement citations discharged by this item. */
+  requirementCitations: string[]
+  expectedEvidence: string[]
+}
+
+export interface SpecialistDomainSpec {
+  domain: SupervisoryDomain
+  label: string
+  /** Spec section, e.g. "§9.1". */
+  specRef: string
+  route: string
+  /** Assessment reference prefix, e.g. GOVA-2026-001. */
+  refPrefix: string
+  intro: string
+  /** Examination library programme whose procedures the checklist mirrors. */
+  libraryProgrammeCode?: string
+  /** Finding categories surfaced on the pattern's findings panel. */
+  findingCategories: string[]
+  submodules: SpecialistSubmodule[]
+  checklistTemplates: SpecialistChecklistTemplate[]
+  /** Demo evidence kinds offered by the request-evidence form (§9.3). */
+  evidenceKinds: SpecialistEvidenceKind[]
+}
+
+// ---------------------------------------------------------------------------
+// Detail view (Spec §9 pattern parts 3–8 joined for one assessment)
+// ---------------------------------------------------------------------------
+
+/** A §10.1 requirement citation resolved for display (Phase-4 acceptance:
+ *  the specialist assessment renders against regulatory requirement records). */
+export interface SpecialistRequirementRef {
+  /** Full citation, e.g. "MBA/GOV/2024 §2.1". */
+  citation: string
+  /** Resolved requirement record — absent when the citation is not in the §10 library. */
+  requirementId?: string
+  title?: string
+  status?: string
+  /** Deep link into the Regulatory Frameworks drawer when resolved. */
+  link?: string
+}
+
+export interface SpecialistAssessmentDetail {
+  assessment: SpecialistAssessment
+  institution: {
+    id: string
+    name: string
+    code: string
+    category: string
+    riskRating: string
+  }
+  checklist: SpecialistChecklistItem[]
+  evidence: SpecialistEvidenceItem[]
+  /** Findings for this institution in the domain + raised from this checklist. */
+  findings: SpecialistFindingRow[]
+  /** §10.1 requirement records behind the assessment's citations. */
+  requirements: SpecialistRequirementRef[]
+  /** Pattern part 8 — completed assessments for the same institution+domain. */
+  history: SpecialistAssessmentRow[]
+  progress: { completed: number; total: number }
 }
