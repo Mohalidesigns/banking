@@ -42,7 +42,7 @@ Session state (demo user, jurisdiction, sidebar/nav-group state) persists
 in `localStorage` under `atheris-reg-prototype-session`. Clear that key to
 reset the demo session.
 
-## What is built (Phase 1 + Phase 2 + Phase 3A + Phase 3B + Phase 4A)
+## What is built (Phase 1 + Phase 2 + Phase 3A + Phase 3B + Phase 4A + Phase 4B)
 
 - **App shell** — navy sidebar with the full Spec §3.2 nav tree (role-aware,
   with live actionable queue counts), topbar with global search (⌘K),
@@ -205,6 +205,37 @@ reset the demo session.
   log-response & close. Gating: `manage-correspondence` (examiner tier+,
   legal) vs `approve-correspondence` (approval tier only).
   `?correspondence=REF` and `?institution=ID` deep links resolve.
+- **Specialist supervision — shared §9 pattern** (`/app/specialist/*`) —
+  the consistent eight-part page pattern (domain dashboard · assessment
+  register · assessment detail · checklist & procedures · evidence ·
+  findings · report · historical assessments) built once in
+  `src/features/specialist/` and parameterized by a `SpecialistDomainSpec`
+  config delivered through `SpecialistService`. Live domains:
+  **Corporate Governance** (§9.1, `/app/specialist/governance`), **Enterprise
+  Risk Management** (§9.2, `/app/specialist/erm`) and **IT & Cybersecurity**
+  (§9.3, `/app/specialist/cybersecurity`, with the §9.3 domain-specific
+  evidence kinds: policy, architecture diagram, access review, vulnerability
+  report, incident log, SOC alert, DR test, third-party assurance).
+  Checklists mirror the examination library programmes (LIB-GOV-001,
+  LIB-CYB-001) and cite §10.1 requirements — the **Phase-4 acceptance** is
+  demonstrable: CYBA-2026-001 (Crestline, alongside EXM-2026-005,
+  FND-2026-066 → CAP-2026-008) renders against MBA/CYB/2025 §3.1/§5.2/§6.1
+  requirement records with two-way deep links; governance carries
+  GOVA-2026-001/002 (Unity EXM-2026-021 + FND-2026-118, Meridian
+  FND-2026-109) and Vanguard's Unsatisfactory 2025 history (FND-2026-037);
+  ERM carries the Northstar review aligned to EWA-2026-011 → EXM-2026-024
+  and Vanguard's 2025 full assessment (FND-2026-035/030). Workflows:
+  create assessment (checklist generated from chosen submodules), start /
+  submit for review, record checklist conclusions, request/receive/review
+  evidence (simulated), report Draft → In Review → **Issued (demo)** with
+  simulated-dispatch honesty, and complete with conclusion + illustrative
+  maturity. Gating: `manage-specialist-assessments`,
+  `record-specialist-checklist` (also granted to the cyber/AML specialist
+  roles), `approve-specialist-report` (approval tier only; institution
+  roles refused everything). `?assessment=REF`, `?view=` and
+  `?institution=` deep links resolve; the examination library and findings
+  register gained `?search=` so requirement↔procedure and finding chips
+  land filtered.
 - **Coherent demo dataset** — eight fictional institutions (Meridian
   Commercial Bank, Northstar Merchant Bank, Unity Non-Interest Bank,
   Crestline Payment Bank, Aurora Savings & Loans, Delta Microfinance,
@@ -258,7 +289,9 @@ src/
 │                   remediation/, returns/, surveillance/, early-warnings/,
 │                   prudential/ (capital, credit, liquidity, stress-testing,
 │                   indicators), regulatory/ (frameworks, obligations,
-│                   correspondence, RelationChip), errors/
+│                   correspondence, RelationChip), specialist/ (shared §9
+│                   pattern: domain page, dashboard, register, detail,
+│                   panels; governance/ERM/cyber instances), errors/
 ├── hooks/          useMediaQuery (responsive shell)
 ├── layouts/        RegulatorLayout, AuthLayout, InstitutionPortalLayout
 ├── mocks/          fixtures/ + repositories/ (never imported by components)
@@ -271,13 +304,15 @@ src/
 │   │               RemediationService, ReturnsService, SurveillanceService,
 │   │               PrudentialService (CapitalAdequacy/CreditQuality/
 │   │               LiquidityTreasury/StressTesting/IndicatorCatalogue),
-│   │               RegulatoryService (Framework/Obligation/Correspondence)
+│   │               RegulatoryService (Framework/Obligation/Correspondence),
+│   │               SpecialistService (§9 domains)
 │   └── mock/       Mock* implementations over the repositories
 ├── store/          sessionStore, notificationStore, uiStore, navCountStore
 ├── styles/         tokens.css, index.css
 └── types/          auth.ts, common.ts, institution.ts, supervision.ts,
                     examination.ts, finding.ts, returns.ts, surveillance.ts,
-                    prudential.ts (§8.1–§8.5), regulatory.ts (§10.1–§10.3)
+                    prudential.ts (§8.1–§8.5), regulatory.ts (§10.1–§10.3),
+                    specialist.ts (§9, all six domains)
 ```
 
 **Rule (Spec §18.3):** components import service *interfaces* from
@@ -291,21 +326,27 @@ A future `Api*Service` (Spring Boot) slots in without redesigning screens.
 - **<768px:** sidebar becomes an overlay drawer (topbar menu trigger,
   Escape/backdrop closes); grids stack; tables scroll horizontally.
 
-## Known boundaries after Phase 4A
+## Known boundaries after Phase 4B
 
-- All five prudential screens (Spec §8.1–§8.5) and all three regulatory
-  administration screens (Spec §10.1–§10.3) are live. **Journey B (§22)
-  is demonstrable end-to-end**; the Phase-4 acceptance (§21) — a specialist
-  examination mapped to regulatory requirements — is wired on the §10 side:
-  EXM-2026-014 (AML) maps to MBA/AML/2023 §6.3/§4.1 requirements, and the
-  Crestline cyber exam (EXM-2026-005) to MBA/CYB/2025 §5.2. The §9
-  specialist screens themselves are the remaining half (Phase 4B/4C).
-- **The six specialist domains (§9.1–§9.6) remain designed placeholders**
-  until Phase 4B (shared domain page pattern + governance §9.1, ERM §9.2,
-  cybersecurity §9.3) and Phase 4C (AML §9.4 — anchors EXM-2026-014/
-  FND-2026-101, operations §9.5, consumer protection §9.6). They reuse the
-  Phase-4A data layer: requirements carry `SupervisoryDomain` keys and
-  `relatedObligationRefs`/`mappedProcedureRefs` for exactly this purpose.
+- All five prudential screens (Spec §8.1–§8.5), all three regulatory
+  administration screens (Spec §10.1–§10.3) and the first three specialist
+  domains (§9.1 governance, §9.2 ERM, §9.3 cybersecurity) are live.
+  **Journey B (§22) is demonstrable end-to-end**, and the **Phase-4
+  acceptance (§21) — a specialist examination mapped to regulatory
+  requirements — is demonstrable**: CYBA-2026-001 runs alongside
+  EXM-2026-005 and renders its checklist, evidence and report against the
+  MBA/CYB/2025 §3.1/§5.2/§6.1 requirement records (two-way deep links
+  between the assessment and the §10.1 frameworks drawer).
+- **Three specialist domains remain designed placeholders until Phase 4C:**
+  AML (§9.4 — anchors EXM-2026-014/FND-2026-101/CAP-2026-003/DIR-2026-004),
+  operations (§9.5) and consumer protection (§9.6). 4C only adds their
+  `SpecialistDomainSpec` configs + fixtures and swaps the remaining
+  `specialist/*` `moduleRoute(...)` placeholders — the shared pattern,
+  types, service and repository are domain-generic already.
+- Specialist maturity scores, submodule coverage scores and dashboard
+  trends are demo heuristics, labelled illustrative; report issuance is
+  simulated ("Issued (demo)") and evidence receipt is a session-only
+  simulation — nothing is stored or sent.
 - Directive (`DIR-…`) and enforcement (`ENF-…`) references across the new
   screens are **Phase-5 placeholder chips** — labelled, never link targets.
 - Framework upload, AI extraction, attachment downloads and correspondence
@@ -320,7 +361,7 @@ A future `Api*Service` (Spring Boot) slots in without redesigning screens.
   series.
 - Portal screens remain Phase 6 placeholders; portal roles only switch the
   layout and navigation visibility. Institution roles are refused every
-  regulatory mutation (`assertRegulator`).
+  regulatory and specialist mutation (`assertRegulator`).
 - The JS bundle exceeds 500 kB (Recharts weight); code-splitting is
   scheduled for the Phase 7 hardening pass.
 

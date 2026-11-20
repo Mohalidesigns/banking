@@ -638,3 +638,146 @@ before workflow clicks.
   `demoDataReset` as before. Consider the Phase-7 code-splitting pass if
   the bundle keeps growing.
 
+---
+
+## Phase 4B — Specialist domains: shared §9 pattern + governance/ERM/cyber (20 Nov 2026)
+
+Second chunk of Spec §21 Phase 4: the shared §9 page pattern built once and
+instantiated for Corporate Governance (§9.1), Enterprise Risk Management
+(§9.2) and IT & Cybersecurity (§9.3). Ten units, one commit each
+(`33017ea`…docs), committed at fine cadence per the brief (the previous 4B
+attempt died on a provider timeout with nothing committed).
+
+**Built:**
+- **Types** (`33017ea`) — `types/specialist.ts`: generic assessment /
+  checklist / evidence / findings-row / report / dashboard / history shapes
+  covering ALL six §9 domains so 4C reuses them unchanged; reuses the 4A
+  `FrameworkMapping` relation and `SupervisoryDomain` keys. Later extended
+  (unit 3) with the domain-config interfaces (`SpecialistDomainSpec`,
+  submodules, checklist templates) and `SpecialistAssessmentDetail` /
+  `SpecialistRequirementRef` so components consume config via the service,
+  never fixtures.
+- **Fixtures + repository** (`05622da`) — `specialist.fixture.ts`: domain
+  configs for governance (9 submodules, GOV-01…06 templates mirroring
+  LIB-GOV-001), ERM (8 submodules, ERM-01…06) and cyber (15 submodules,
+  CYB-01…06 mirroring LIB-CYB-001, §9.3 evidence kinds: policy,
+  architecture diagram, access review, vulnerability report, incident log,
+  SOC alert, DR test, third-party assurance); 11 story-anchored assessments
+  (GOVA-2026-001 Unity ↔ EXM-2026-021/FND-2026-118, GOVA-2026-002 Meridian
+  ↔ FND-2026-109/OBL-2026-008, GOVA-2025-003 Vanguard ↔ FND-2026-037/
+  CAP-2026-007/ENF-2026-002-chip, ERMA-2026-001 Northstar ↔ EWA-2026-011/
+  SUB-2026-0144/EXM-2026-024/FND-2026-087, ERMA-2025-003 Vanguard ↔
+  FND-2026-035/030, CYBA-2026-001 Crestline ↔ EXM-2026-005/FND-2026-066/
+  062/CAP-2026-008, plus completed history rows), seeded checklists,
+  evidence (incl. deliberately overdue requests) and reports. Three new
+  `domain: 'erm'` requirements appended to `regulatory.fixture.ts`
+  (MBA/PRU/2024 §2.1 ERM framework, §2.4 risk appetite/limits, §10.2
+  stress-testing governance — appended at the end so the deterministic
+  demoUuid sequence for existing requirements never shifts).
+  `specialistRepository` (mutable session state, lifecycle + report state
+  machines accepting reference-or-id, checklist generation from submodule
+  keys, reset) registered in `demoDataReset`; `storyRefs.ts` gained
+  `SPECIALIST_STORY` + `SPECIALIST_ASSESSMENT_ID_BY_REF`.
+- **Service contract + role-gated mock** (`b2c779a`) — `SpecialistService`
+  (domainSpec, dashboard, list, detail join, domainFindings + 12 mutations)
+  and `MockSpecialistService` over the repository with `assertRegulator`
+  gating; three new `DemoAction`s — `manage-specialist-assessments`
+  (review tier + approval), `record-specialist-checklist` (fieldwork tier
+  and above, later also granted to the cybersecurity-/aml-specialist role
+  seeds), `approve-specialist-report` (approval tier only). Detail joins
+  institution, checklist, evidence, findings, resolved §10.1 requirements
+  (citation → record → frameworks-drawer deep link: the Phase-4 acceptance)
+  and the §7 examination relation; notifications on create/submit/issue.
+- **Shared §9 pattern** (`db6eca9`) — `src/features/specialist/`:
+  `SpecialistDomainPage` (tabs Dashboard · Assessment register · Findings;
+  `?assessment=REF` swaps in the detail; `?view=` + `?institution=`
+  deep links), `SpecialistDashboardView` (5 KPI cards, demo maturity
+  distribution bar chart with illustrative labelling, submodule coverage,
+  institution posture table, story-anchor relations, §9.x submodule
+  inventory), `SpecialistRegisterView` (DataTable + filters + gated create
+  modal that generates the checklist from chosen submodules),
+  `SpecialistAssessmentDetailView` (parts 3–8: overview with resolved
+  requirement records, checklist grouped by submodule with conclusion
+  drawer + criteria/requirement/finding chips, evidence with overdue
+  marking and request/receive/review flows, findings, report with
+  Draft → In Review → Issued (demo) workflow and simulated-dispatch
+  honesty, history table), `panels.tsx` (shared FindingsTable,
+  RelationsPanel, tone helpers, `makeWorkflowRunner` which releases `busy`
+  BEFORE toasting — 4A `c5874e9` lesson applied).
+- **Domain instances + router swaps** (`030c6e9`, `7539c4e`, `3d55817`) —
+  `CorporateGovernancePage`, `EnterpriseRiskPage`, `CybersecurityPage`
+  (thin wrappers passing domain + icon); only the three `specialist/*`
+  `moduleRoute(...)` elements swapped, other specialist routes untouched.
+- **Cross-wiring** (`25e0f41`) — global search gained a Specialist group
+  (3 screens + 11 assessments, `ShieldCheck` icon); Examination Library
+  gained `?search=` (initialises its search box) so the 4A requirement
+  drawer's procedure chips and the specialist criteria chips land filtered
+  — requirement↔procedure mapping now works both directions; Findings
+  register gained `?search=`; institution-profile Risk tab gained a
+  "Specialist supervision (Spec §9)" card deep-linking the three registers
+  pre-filtered by `?institution=`.
+- **Tests** (`62ec925`, `1df9b29`) — `specialistWorkflow.test.ts`
+  (17 service-level tests: domain configs present/absent, register joins,
+  dashboard aggregates, Phase-4 acceptance requirement resolution,
+  domain-findings filtering, create gating + checklist generation +
+  history, lifecycle and report state machines incl. invalid-transition
+  `undefined` returns, evidence request/receive/review, §19 gating matrix
+  incl. institution-role refusal and review-tier-never-approves) and
+  `SpecialistDomainPage.test.tsx` (11 page-flow tests: three dashboards,
+  register→detail, requirement chip → frameworks drawer, criteria chip →
+  filtered library, story-anchor chips, overdue evidence, full report
+  workflow with honesty assertions, examiner conclusion recording,
+  read-only gating, create flow with generated checklist). Plural queries
+  for header+body duplicates and explicit `unmount()` between double
+  renders (3A lessons applied).
+
+**Bugs found and fixed while testing:**
+- `specialistRepository` lifecycle/report methods only matched by id while
+  the service contract documents reference-or-id — `start()` with
+  'GOVA-2026-001' silently returned undefined. All transitions now resolve
+  via `getAssessment(referenceOrId)` (`62ec925`).
+- Header and report-tab buttons were both named "Submit for review"
+  (assessment vs report handoff) — header renamed "Submit assessment for
+  review" (`1df9b29`).
+
+**Verified (real output, 20 Nov 2026):**
+- `npm run build` → tsc clean; ✓ built (>500 kB Recharts advisory
+  unchanged, deferred to Phase 7).
+- `npm run lint` → oxlint: **0 errors, 75 warnings** — baseline 66 + 9 new
+  `set-state-in-effect` React-Compiler advisories on the new views'
+  standard async-load pattern (same documented class as 2A–4A).
+- `npm test` → **29 files, 184 tests, all passing** (156 prior + 28 new).
+
+**Decisions / deviations:**
+- No new libraries.
+- The ERM domain needed `domain: 'erm'` requirements that the 4A fixture
+  did not carry; they were appended (not inserted) to
+  `REGULATORY_REQUIREMENTS` to keep the deterministic id sequence stable,
+  and cite MBA/PRU/2024 §2.1/§2.4/§10.2 (fictional demo citations).
+- Dashboard maturity distribution/submodule scores and posture trends are
+  documented demo heuristics (labelled illustrative in the UI), derived
+  from concluded checklist items — never presented as official ratings.
+- `supervisory-team-lead` is approval tier (carries APPROVAL_ACTIONS);
+  review-tier-never-approves assertions use `principal-examiner`.
+- Checklist "criteria" chips reuse the library programme citations; the
+  library now opens pre-filtered via `?search=`.
+
+**Next chunk owes (Phase 4C — completes Phase 4, Spec §21/§9):**
+- AML (§9.4 — anchors ready: EXM-2026-014 → FND-2026-101/107 →
+  CAP-2026-003, DIR-2026-004 chip; templates can mirror LIB-AML-002
+  AML-01…06), Operations (§9.5 — LIB-OPS-001, MBA/OPS/2026 §2.1,
+  FND-2026-062/091/051) and Consumer Protection (§9.6 — MBA/CPC/2025
+  requirements, OBL-2026-007). For each: add a `SpecialistDomainSpec` to
+  `SPECIALIST_DOMAINS`, seed assessments/checklists/evidence/reports in
+  `specialist.fixture.ts` (append at the end — deterministic ids), add a
+  thin page wrapper and swap its `specialist/*` `moduleRoute(...)`
+  placeholder. Types, repository, service, pattern components and tests
+  need no structural change; extend the page-test suite per domain.
+- Phase-4 acceptance close-out: render a specialist examination against
+  regulatory requirement records end-to-end (4B demonstrated it on
+  CYBA-2026-001 ↔ MBA/CYB/2025; 4C should show the AML side:
+  an AML assessment alongside EXM-2026-014 ↔ MBA/AML/2023 §6.3/§4.1).
+- Then Phase 5 (enforcement, reports, intelligence, peer benchmarking, AI
+  assistant) per Spec §21; consider the Phase-7 code-splitting pass if the
+  bundle keeps growing.
+
