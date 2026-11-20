@@ -36,6 +36,7 @@ import { StressTestingPage } from '@/features/prudential/StressTestingPage'
 import { PrudentialIndicatorsPage } from '@/features/prudential/PrudentialIndicatorsPage'
 import { RegulatoryCorrespondencePage } from '@/features/regulatory/RegulatoryCorrespondencePage'
 import { RegulatoryFrameworksPage } from '@/features/regulatory/RegulatoryFrameworksPage'
+import { CorporateGovernancePage } from '@/features/specialist/CorporateGovernancePage'
 import { RegulatoryObligationsPage } from '@/features/regulatory/RegulatoryObligationsPage'
 import { ReturnsDashboardPage } from '@/features/returns/ReturnsDashboardPage'
 import { ReturnSubmissionDetailPage } from '@/features/returns/ReturnSubmissionDetailPage'
@@ -271,7 +272,11 @@ export const router = createBrowserRouter([
       },
 
       // Specialist supervision
-      { path: 'specialist/governance', ...moduleRoute('Corporate Governance', 4) },
+      {
+        path: 'specialist/governance',
+        handle: { breadcrumb: 'Corporate Governance', phase: 4 } satisfies RouteHandle,
+        Component: CorporateGovernancePage,
+      },
       { path: 'specialist/erm', ...moduleRoute('Enterprise Risk Management', 4) },
       { path: 'specialist/cybersecurity', ...moduleRoute('IT & Cybersecurity', 4) },
       { path: 'specialist/aml', ...moduleRoute('AML/CFT/CPF', 4) },
