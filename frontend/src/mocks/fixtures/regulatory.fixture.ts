@@ -908,6 +908,58 @@ export const REGULATORY_REQUIREMENTS: RegulatoryRequirement[] = [
     anchors: [['FND-2026-066', 'Crestline API third-party risk register outdated']],
     extractionNote: AI_NOTE,
   }),
+  // Phase 4B — ERM rulebook requirements (Spec §9.2 reuse of the §10 layer).
+  // Appended at the end so existing requirement ids (demoUuid sequence) never
+  // shift; the ERM specialist domain filters REGULATORY_REQUIREMENTS by
+  // domain 'erm' and cites these references from its checklist templates.
+  req({
+    fwCode: 'MBA/PRU/2024',
+    reference: '§2.1',
+    title: 'Enterprise risk management framework',
+    text: 'A licensed bank must maintain a board-approved enterprise risk management framework covering all material risk types, operating a documented three-lines model, with an independent review of the framework at least annually (demo standard) reported to the Authority.',
+    effectiveFrom: iso(2024, 4, 1),
+    domain: 'erm',
+    evidence: ['ERM framework document with board approval', 'Risk governance structure chart', 'Annual independent review report', 'Enterprise risk register'],
+    procedures: [],
+    anchors: [
+      ['EXM-2026-024', 'Targeted liquidity examination — Northstar (ERM review context)'],
+      ['FND-2026-091', 'Northstar treasury mandate limit breaches not escalated'],
+    ],
+    approvedBy: 'Amara Osei',
+    approvedDaysAgo: 580,
+  }),
+  req({
+    fwCode: 'MBA/PRU/2024',
+    reference: '§2.4',
+    title: 'Risk appetite and limit framework',
+    text: 'The board must approve a quantified risk appetite statement with early-warning thresholds cascaded to business limits. Appetite or limit breaches must be escalated to ALCO and the board risk committee within 24 hours (demo standard) with recorded remediation.',
+    effectiveFrom: iso(2024, 4, 1),
+    domain: 'erm',
+    evidence: ['Risk appetite statement', 'Limit framework and cascade evidence', 'Breach log with escalation timestamps', 'ALCO and board risk committee minutes'],
+    procedures: [],
+    anchors: [
+      ['FND-2026-091', 'Northstar treasury limit breaches not escalated within the demo 24-hour standard'],
+      ['EWA-2026-011', 'Northstar LCR 104.2% amber alert — appetite early-warning threshold'],
+    ],
+    approvedBy: 'Amara Osei',
+    approvedDaysAgo: 580,
+  }),
+  req({
+    fwCode: 'MBA/PRU/2024',
+    reference: '§10.2',
+    title: 'Stress-testing governance',
+    text: 'Institutions must run a board-approved annual stress-testing programme including reverse stress tests, with results feeding capital planning and the contingency funding plan; scenario documentation and outcomes must be retained for supervisory inspection (demo standard).',
+    effectiveFrom: iso(2024, 4, 1),
+    domain: 'erm',
+    evidence: ['Board-approved scenario suite', 'Reverse stress test outputs', 'Stress results pack with ALCO/board minutes'],
+    procedures: ['MBA/PRU/2024 §9.4'],
+    anchors: [
+      ['FND-2026-035', 'Vanguard liquidity contingency plan untested for four quarters'],
+      ['EXM-2026-012', 'Comprehensive examination — Vanguard Regional Bank'],
+    ],
+    approvedBy: 'Amara Osei',
+    approvedDaysAgo: 580,
+  }),
 ]
 
 // ---------------------------------------------------------------------------

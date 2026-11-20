@@ -21,6 +21,10 @@ import {
   REGULATORY_STORY,
 } from '@/mocks/fixtures/regulatory.fixture'
 import {
+  SPECIALIST_ASSESSMENT_ID_BY_REF,
+  SPECIALIST_STORY,
+} from '@/mocks/fixtures/specialist.fixture'
+import {
   CORRECTIVE_ACTIONS,
   EARLY_WARNING_ALERTS,
   FINDINGS,
@@ -95,12 +99,21 @@ export const STORY = {
   // obligations, and the Crestline cyber draft used by the correspondence
   // compose/review/approve/send-demo workflow.
   ...REGULATORY_STORY,
+  // Phase 4B — specialist domain anchors (Spec §9): governance/ERM/cyber
+  // assessments aligned to the examinations, findings and alerts above.
+  ...SPECIALIST_STORY,
 } as const
 
 // Phase 4A — regulatory administration ref lookups (Spec §10).
 
 /** Named Phase-4A regulatory story anchors (also spread into STORY above). */
 export { REGULATORY_STORY }
+
+/** Named Phase-4B specialist domain story anchors (also spread into STORY). */
+export { SPECIALIST_STORY }
+
+/** Specialist assessment reference (GOVA-/ERMA-/CYBA-…) -> assessment id. */
+export { SPECIALIST_ASSESSMENT_ID_BY_REF }
 
 /** Regulatory framework code (MBA/…) -> framework id. */
 export { FRAMEWORK_ID_BY_CODE }

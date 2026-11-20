@@ -14,6 +14,7 @@ import { regulatoryRepository } from '@/mocks/repositories/regulatoryRepository'
 import { remediationRepository } from '@/mocks/repositories/remediationRepository'
 import { returnsRepository } from '@/mocks/repositories/returnsRepository'
 import { riskAssessmentRepository } from '@/mocks/repositories/riskAssessmentRepository'
+import { specialistRepository } from '@/mocks/repositories/specialistRepository'
 import { surveillanceRepository } from '@/mocks/repositories/surveillanceRepository'
 import { workQueueRepository } from '@/mocks/repositories/workQueueRepository'
 
@@ -28,6 +29,7 @@ export function resetAllDemoData(): void {
   remediationRepository.reset()
   returnsRepository.reset()
   riskAssessmentRepository.reset()
+  specialistRepository.reset()
   surveillanceRepository.reset()
   workQueueRepository.reset()
   notificationRepository.reset()
