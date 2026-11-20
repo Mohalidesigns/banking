@@ -48,7 +48,7 @@ export function SpecialistDomainPage({
         <PageHeader title="Specialist domain" subtitle="Configuration not available in this prototype build." />
         <ErrorState
           title="Domain not configured"
-          message={`The ${domain} specialist domain has no demo configuration yet. Domains are delivered per Spec §9 — governance, ERM and cybersecurity ship in Phase 4B; AML, operations and consumer protection in Phase 4C.`}
+          message={`The ${domain} specialist domain has no demo configuration. All six Spec §9 domains — governance, ERM, cybersecurity, AML, operations and consumer protection — are configured in this prototype build (Phase 4B/4C).`}
         />
       </div>
     )

@@ -761,8 +761,9 @@ export function InstitutionProfilePage() {
     <div className="flex flex-col gap-5">
       <SectionCard title="Specialist supervision (Spec §9)">
         <p className="text-[11px] text-ink-secondary">
-          Governance, enterprise risk management and IT & cybersecurity assessments for this
-          institution — deep links open the specialist registers (Phase 4B) pre-filtered to it.
+          All six §9 specialist domains — governance, ERM, IT & cybersecurity, AML/CFT/CPF,
+          operations and consumer protection — deep-link into their assessment registers
+          (Phase 4B/4C) pre-filtered to this institution.
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <Button size="sm" variant="outline" onClick={() => navigate(`/app/specialist/governance?view=assessments&institution=${encodeURIComponent(institutionId)}`)}>
@@ -773,6 +774,15 @@ export function InstitutionProfilePage() {
           </Button>
           <Button size="sm" variant="outline" onClick={() => navigate(`/app/specialist/cybersecurity?view=assessments&institution=${encodeURIComponent(institutionId)}`)}>
             IT & cybersecurity →
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => navigate(`/app/specialist/aml?view=assessments&institution=${encodeURIComponent(institutionId)}`)}>
+            AML/CFT/CPF →
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => navigate(`/app/specialist/operations?view=assessments&institution=${encodeURIComponent(institutionId)}`)}>
+            Operations & internal controls →
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => navigate(`/app/specialist/consumer-protection?view=assessments&institution=${encodeURIComponent(institutionId)}`)}>
+            Consumer protection →
           </Button>
         </div>
       </SectionCard>

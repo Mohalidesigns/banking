@@ -189,8 +189,9 @@ export const SEARCH_RECORDS: SearchResultItem[] = [
     subtitle: `${instName(c.institutionId)} · ${c.type} · ${c.status} · Demo correspondence`,
     path: `/app/regulatory/correspondence?correspondence=${encodeURIComponent(c.reference)}`,
   })),
-  // Phase 4B — specialist supervision (§9): the three live domain screens
-  // plus the seeded governance/ERM/cybersecurity assessments.
+  // Phase 4B/4C — specialist supervision (§9): the six live domain screens
+  // plus the seeded assessments (assessments flow automatically from the
+  // specialist fixture, including the Phase-4C AML/operations/consumer rows).
   {
     id: 'spec-governance',
     group: 'Specialist',
@@ -211,6 +212,27 @@ export const SEARCH_RECORDS: SearchResultItem[] = [
     title: 'IT & Cybersecurity',
     subtitle: 'Specialist supervision §9.3 · Illustrative demo module',
     path: '/app/specialist/cybersecurity',
+  },
+  {
+    id: 'spec-aml',
+    group: 'Specialist',
+    title: 'AML/CFT/CPF',
+    subtitle: 'Specialist supervision §9.4 · Illustrative demo module',
+    path: '/app/specialist/aml',
+  },
+  {
+    id: 'spec-operations',
+    group: 'Specialist',
+    title: 'Operations & Internal Controls',
+    subtitle: 'Specialist supervision §9.5 · Illustrative demo module',
+    path: '/app/specialist/operations',
+  },
+  {
+    id: 'spec-consumer-protection',
+    group: 'Specialist',
+    title: 'Consumer Protection',
+    subtitle: 'Specialist supervision §9.6 · Illustrative demo module',
+    path: '/app/specialist/consumer-protection',
   },
   ...SPECIALIST_ASSESSMENTS.map((a): SearchResultItem => ({
     id: a.id,
