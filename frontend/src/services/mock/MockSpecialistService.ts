@@ -1,3 +1,4 @@
+import { examinationRepository } from '@/mocks/repositories/examinationRepository'
 import { findingRepository } from '@/mocks/repositories/findingRepository'
 import { institutionRepository } from '@/mocks/repositories/institutionRepository'
 import { notificationRepository } from '@/mocks/repositories/notificationRepository'
@@ -85,6 +86,26 @@ class MockSpecialistService implements SpecialistService {
     const evidence = specialistRepository.evidenceFor(assessment.id)
     const categories = spec?.findingCategories ?? []
     const checklistFindingRefs = new Set(checklist.flatMap((c) => c.findingRefs))
+    // Resolve the linked §7 examination into a navigable relation so the
+    // detail view never dead-ends on a bare EXM- reference.
+    const relations = [...assessment.relations]
+    if (
+      assessment.examinationRef &&
+      !relations.some((r) => r.targetRef === assessment.examinationRef)
+    ) {
+      const exam = examinationRepository
+        .list()
+        .find((e) => e.reference === assessment.examinationRef)
+      if (exam) {
+        relations.unshift({
+          id: `exam-link-${exam.id}`,
+          kind: 'examination',
+          targetRef: exam.reference,
+          targetLabel: `${exam.type} examination — ${exam.status}`,
+          link: `/app/examinations/${exam.id}`,
+        })
+      }
+    }
     const findings = findingRepository
       .list()
       .filter(
@@ -94,7 +115,7 @@ class MockSpecialistService implements SpecialistService {
       )
       .map((f) => this.toFindingRow(f))
     return {
-      assessment,
+      assessment: { ...assessment, relations },
       institution: {
         id: assessment.institutionId,
         name: inst?.tradingName ?? 'Unknown institution',
