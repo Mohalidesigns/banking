@@ -11,6 +11,7 @@ export type SearchEntityGroup =
   | 'Reports'
   | 'Prudential'
   | 'Regulatory'
+  | 'Specialist'
 
 export interface SearchResultItem {
   id: string

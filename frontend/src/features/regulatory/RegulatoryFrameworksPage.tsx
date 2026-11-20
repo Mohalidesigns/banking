@@ -1136,9 +1136,9 @@ function FrameworkDetailView({
                     <button
                       key={ref}
                       type="button"
-                      title={`Opens the Examination Library — locate ${ref} (demo mapping).`}
+                      title={`Opens the Examination Library filtered to ${ref} (demo mapping).`}
                       className="cursor-pointer rounded-full bg-page px-2 py-0.5 font-mono text-[10px] font-semibold text-primary-surface hover:bg-tint-blue"
-                      onClick={() => navigate('/app/examination-library')}
+                      onClick={() => navigate(`/app/examination-library?search=${encodeURIComponent(ref)}`)}
                     >
                       {ref} →
                     </button>

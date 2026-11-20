@@ -341,7 +341,7 @@ export function SpecialistAssessmentDetailView({
                     <button
                       type="button"
                       className="cursor-pointer font-mono font-semibold text-primary-surface hover:underline"
-                      onClick={() => navigate(`/app/library?search=${encodeURIComponent(spec.libraryProgrammeCode!)}`)}
+                      onClick={() => navigate(`/app/examination-library?search=${encodeURIComponent(spec.libraryProgrammeCode!)}`)}
                     >
                       {spec.libraryProgrammeCode} →
                     </button>
@@ -406,7 +406,7 @@ export function SpecialistAssessmentDetailView({
                             type="button"
                             title={`Examination library criteria reference: ${item.criteriaRef}`}
                             className="cursor-pointer rounded-full bg-gray-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-gray-700 transition-colors hover:bg-tint-blue"
-                            onClick={() => navigate(`/app/library?search=${encodeURIComponent(item.criteriaRef)}`)}
+                            onClick={() => navigate(`/app/examination-library?search=${encodeURIComponent(item.criteriaRef)}`)}
                           >
                             {item.criteriaRef} →
                           </button>

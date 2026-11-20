@@ -65,7 +65,8 @@ export function SpecialistDomainPage({
     )
   }
 
-  const view = searchParams.get('view') ?? 'dashboard'
+  const institutionParam = searchParams.get('institution') ?? ''
+  const view = searchParams.get('view') ?? (institutionParam ? 'assessments' : 'dashboard')
   const setView = (next: string) => {
     setSearchParams(next === 'dashboard' ? {} : { view: next }, { replace: true })
   }
@@ -93,7 +94,9 @@ export function SpecialistDomainPage({
           {
             id: 'assessments',
             label: 'Assessment register',
-            content: <SpecialistRegisterView domain={domain} spec={spec} />,
+            content: (
+              <SpecialistRegisterView domain={domain} spec={spec} initialInstitutionId={institutionParam} />
+            ),
           },
           {
             id: 'findings',

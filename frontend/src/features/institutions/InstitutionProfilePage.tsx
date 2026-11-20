@@ -759,6 +759,23 @@ export function InstitutionProfilePage() {
 
   const riskTab = (
     <div className="flex flex-col gap-5">
+      <SectionCard title="Specialist supervision (Spec §9)">
+        <p className="text-[11px] text-ink-secondary">
+          Governance, enterprise risk management and IT & cybersecurity assessments for this
+          institution — deep links open the specialist registers (Phase 4B) pre-filtered to it.
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <Button size="sm" variant="outline" onClick={() => navigate(`/app/specialist/governance?view=assessments&institution=${encodeURIComponent(institutionId)}`)}>
+            Corporate governance →
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => navigate(`/app/specialist/erm?view=assessments&institution=${encodeURIComponent(institutionId)}`)}>
+            Enterprise risk management →
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => navigate(`/app/specialist/cybersecurity?view=assessments&institution=${encodeURIComponent(institutionId)}`)}>
+            IT & cybersecurity →
+          </Button>
+        </div>
+      </SectionCard>
       <SectionCard title="CAMELS-style Rating Dimensions (demo)">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {dimensions.map((d) => (

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router'
 import {
   BookOpen,
   ChevronDown,
@@ -67,7 +68,10 @@ export function ExaminationLibraryPage({
   const [programmes, setProgrammes] = useState<LibraryProgramme[] | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<TemplateStatus | ''>(initialStatus)
-  const [search, setSearch] = useState('')
+  const [searchParams] = useSearchParams()
+  // Phase 4B: ?search= deep-links (requirement ↔ procedure mapping chips from
+  // the Regulatory Frameworks drawer and the specialist checklist criteria).
+  const [search, setSearch] = useState(searchParams.get('search') ?? '')
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
   const [treeFilter, setTreeFilter] = useState<TreeFilter>({ level: 'none' })
   const [editorOpen, setEditorOpen] = useState(false)

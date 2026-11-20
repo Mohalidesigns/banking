@@ -12,6 +12,7 @@ import {
   Library,
   Search,
   SearchX,
+  ShieldCheck,
   TriangleExclamationPoint,
   X,
 } from 'lucide-react'
@@ -34,6 +35,7 @@ const groupIcons: Record<SearchEntityGroup, typeof Building> = {
   Reports: FileText,
   Prudential: Activity,
   Regulatory: Library,
+  Specialist: ShieldCheck,
 }
 
 export function GlobalSearchOverlay() {

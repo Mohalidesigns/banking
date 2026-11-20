@@ -10,6 +10,10 @@ import {
   REGULATORY_OBLIGATIONS,
 } from '@/mocks/fixtures/regulatory.fixture'
 import {
+  SPECIALIST_ASSESSMENTS,
+  SPECIALIST_DOMAINS,
+} from '@/mocks/fixtures/specialist.fixture'
+import {
   ENFORCEMENT_CASES,
   EXAMINATIONS,
   FINDINGS,
@@ -184,5 +188,35 @@ export const SEARCH_RECORDS: SearchResultItem[] = [
     title: `${c.reference} — ${c.subject}`,
     subtitle: `${instName(c.institutionId)} · ${c.type} · ${c.status} · Demo correspondence`,
     path: `/app/regulatory/correspondence?correspondence=${encodeURIComponent(c.reference)}`,
+  })),
+  // Phase 4B — specialist supervision (§9): the three live domain screens
+  // plus the seeded governance/ERM/cybersecurity assessments.
+  {
+    id: 'spec-governance',
+    group: 'Specialist',
+    title: 'Corporate Governance',
+    subtitle: 'Specialist supervision §9.1 · Illustrative demo module',
+    path: '/app/specialist/governance',
+  },
+  {
+    id: 'spec-erm',
+    group: 'Specialist',
+    title: 'Enterprise Risk Management',
+    subtitle: 'Specialist supervision §9.2 · Illustrative demo module',
+    path: '/app/specialist/erm',
+  },
+  {
+    id: 'spec-cybersecurity',
+    group: 'Specialist',
+    title: 'IT & Cybersecurity',
+    subtitle: 'Specialist supervision §9.3 · Illustrative demo module',
+    path: '/app/specialist/cybersecurity',
+  },
+  ...SPECIALIST_ASSESSMENTS.map((a): SearchResultItem => ({
+    id: a.id,
+    group: 'Specialist',
+    title: `${a.reference} — ${a.title}`,
+    subtitle: `${instName(a.institutionId)} · ${a.status} · Demo specialist assessment`,
+    path: `${SPECIALIST_DOMAINS[a.domain]?.route ?? '/app/specialist'}?assessment=${encodeURIComponent(a.reference)}`,
   })),
 ]

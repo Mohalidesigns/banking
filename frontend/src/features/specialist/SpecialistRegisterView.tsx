@@ -40,9 +40,12 @@ const STATUSES = ['Planned', 'In Progress', 'In Review', 'Completed']
 export function SpecialistRegisterView({
   domain,
   spec,
+  initialInstitutionId = '',
 }: {
   domain: SupervisoryDomain
   spec: SpecialistDomainSpec
+  /** Deep-link prefilter, e.g. from the institution profile (§9 links). */
+  initialInstitutionId?: string
 }) {
   const navigate = useNavigate()
   const actor = useActor()
@@ -52,7 +55,7 @@ export function SpecialistRegisterView({
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('')
   const [type, setType] = useState('')
-  const [institutionId, setInstitutionId] = useState('')
+  const [institutionId, setInstitutionId] = useState(initialInstitutionId)
   const [institutions, setInstitutions] = useState<Array<{ id: string; name: string; code: string }>>([])
   const [createOpen, setCreateOpen] = useState(false)
 

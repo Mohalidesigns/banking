@@ -62,7 +62,7 @@ export function FindingsRegisterPage() {
   const [findings, setFindings] = useState<FindingDetail[] | null>(null)
   const [institutions, setInstitutions] = useState<Institution[]>([])
   const [exams, setExams] = useState<ExaminationDetail[]>([])
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(searchParams.get('search') ?? '')
   const [fInstitution, setFInstitution] = useState(searchParams.get('institutionId') ?? '')
   const [fExamination, setFExamination] = useState(searchParams.get('examinationId') ?? '')
   const [fDomain, setFDomain] = useState('')
